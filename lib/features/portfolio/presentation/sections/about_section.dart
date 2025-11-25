@@ -24,8 +24,7 @@ class AboutSection extends StatelessWidget {
             children: [
               const CircleAvatar(
                 radius: 38,
-                backgroundImage: NetworkImage(
-                    'https://avatars.githubusercontent.com/u/10593757?v=4'),
+                backgroundImage: AssetImage('assets/profile/najeeb_pic.PNG'),
               ),
               const SizedBox(width: 32),
               Expanded(

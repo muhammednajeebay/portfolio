@@ -284,9 +284,8 @@ class HeroSection extends StatelessWidget {
                 ),
                 child: CircleAvatar(
                   radius: isMobile ? 70 : 96,
-                  backgroundImage: const NetworkImage(
-                    'https://avatars.githubusercontent.com/u/10593757?v=4',
-                  ),
+                  backgroundImage:
+                      const AssetImage('assets/profile/najeeb_pic.PNG'),
                 ),
               ),
             );
