@@ -91,7 +91,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final isMobile = MediaQuery.of(context).size.width < 800;
+    final isMobile = MediaQuery.of(context).size.width < 1024;
     return MotionBackground(
       scrollOffset: _scrollOffset,
       child: Scaffold(

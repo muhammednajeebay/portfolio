@@ -42,22 +42,30 @@ class AnimatedNavbar extends StatelessWidget {
         actions: isMobile
             ? null
             : [
-                ...labels.map(
-                  (label) => TextButton(
-                    onPressed: () => onTap(label),
-                    child: Text(label,
-                        style: TextStyle(
-                            color: Theme.of(context).colorScheme.primary,
-                            fontWeight: FontWeight.w500,
-                            fontSize: 16)),
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    children: [
+                      ...labels.map(
+                        (label) => TextButton(
+                          onPressed: () => onTap(label),
+                          child: Text(label,
+                              style: TextStyle(
+                                  color: Theme.of(context).colorScheme.primary,
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 16)),
+                        ),
+                      ),
+                      IconButton(
+                        icon: Icon(Icons.brightness_6,
+                            color: Theme.of(context).colorScheme.primary),
+                        onPressed: () =>
+                            context.read<ThemeCubit>().toggleTheme(),
+                      ),
+                      const SizedBox(width: 12),
+                    ],
                   ),
                 ),
-                IconButton(
-                  icon: Icon(Icons.brightness_6,
-                      color: Theme.of(context).colorScheme.primary),
-                  onPressed: () => context.read<ThemeCubit>().toggleTheme(),
-                ),
-                const SizedBox(width: 12),
               ],
       ),
     );
