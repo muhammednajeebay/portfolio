@@ -1,17 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
+import 'package:portfolio/router/app_router.dart';
 
-import 'core/theme/app_theme.dart';
-import 'core/theme/theme_cubit.dart';
-import 'features/portfolio/data/datasources/portfolio_local_data_source.dart';
-import 'features/portfolio/data/repositories/portfolio_repository_impl.dart';
-import 'features/portfolio/domain/usecases/get_experiences.dart';
-import 'features/portfolio/domain/usecases/get_projects.dart';
-import 'features/portfolio/domain/usecases/get_skills.dart';
-import 'features/portfolio/presentation/pages/home_page.dart';
+import 'package:portfolio/core/theme/app_theme.dart';
+import 'package:portfolio/core/theme/theme_cubit.dart';
+import 'package:portfolio/core/di/injection_container.dart' as di;
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await di.init();
   runApp(const AppEntry());
 }
 
@@ -20,37 +17,19 @@ class AppEntry extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Dependency Injection (Simple Manual DI for now)
-    final dataSource = PortfolioLocalDataSourceImpl();
-    final repository = PortfolioRepositoryImpl(localDataSource: dataSource);
-    final getProjects = GetProjects(repository);
-    final getSkills = GetSkills(repository);
-    final getExperiences = GetExperiences(repository);
+    final appRouter = di.sl<AppRouter>();
 
-    final router = GoRouter(
-      initialLocation: '/',
-      routes: [
-        GoRoute(
-          path: '/',
-          builder: (context, state) => HomePage(
-            getProjects: getProjects,
-            getSkills: getSkills,
-            getExperiences: getExperiences,
-          ),
-        ),
-      ],
-    );
     return BlocProvider(
-      create: (_) => ThemeCubit(),
+      create: (context) => ThemeCubit(),
       child: BlocBuilder<ThemeCubit, ThemeMode>(
         builder: (context, themeMode) {
           return MaterialApp.router(
-            debugShowCheckedModeBanner: false,
-            title: 'Flutter Portfolio',
-            theme: AppTheme.light,
-            darkTheme: AppTheme.dark,
+            title: 'Najeeb Portfolio',
+            theme: AppTheme.lightTheme,
+            darkTheme: AppTheme.darkTheme,
             themeMode: themeMode,
-            routerConfig: router,
+            debugShowCheckedModeBanner: false,
+            routerConfig: appRouter.router,
           );
         },
       ),

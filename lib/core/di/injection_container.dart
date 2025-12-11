@@ -1,0 +1,38 @@
+import 'package:get_it/get_it.dart';
+import 'package:portfolio/router/app_router.dart';
+import 'package:portfolio/shared/data/datasources/portfolio_local_data_source.dart';
+import 'package:portfolio/shared/data/repositories/portfolio_repository_impl.dart';
+import 'package:portfolio/shared/domain/repositories/portfolio_repository.dart';
+import 'package:portfolio/shared/domain/usecases/get_articles.dart';
+import 'package:portfolio/shared/domain/usecases/get_experiences.dart';
+import 'package:portfolio/shared/domain/usecases/get_open_source_projects.dart';
+import 'package:portfolio/shared/domain/usecases/get_projects.dart';
+import 'package:portfolio/shared/domain/usecases/get_skills.dart';
+
+final sl = GetIt.instance;
+
+Future<void> init() async {
+  // Features - Router
+  sl.registerLazySingleton<AppRouter>(() => AppRouter(
+        getProjects: sl(),
+        getSkills: sl(),
+        getExperiences: sl(),
+        getOpenSourceProjects: sl(),
+        getArticles: sl(),
+      ));
+
+  // Use cases
+  sl.registerLazySingleton(() => GetProjects(sl()));
+  sl.registerLazySingleton(() => GetSkills(sl()));
+  sl.registerLazySingleton(() => GetExperiences(sl()));
+  sl.registerLazySingleton(() => GetOpenSourceProjects(sl()));
+  sl.registerLazySingleton(() => GetArticles(sl()));
+
+  // Repository
+  sl.registerLazySingleton<PortfolioRepository>(
+      () => PortfolioRepositoryImpl(localDataSource: sl()));
+
+  // Data sources
+  sl.registerLazySingleton<PortfolioLocalDataSource>(
+      () => PortfolioLocalDataSourceImpl());
+}
