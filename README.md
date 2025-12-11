@@ -1,105 +1,190 @@
-# 🧾 Flutter Portfolio – Technical Overview
+# 🚀 Najeeb - Flutter Portfolio 
 
-Flutter Web single-page application that demonstrates advanced UI, motion, and deployment patterns. This README focuses on the technical aspects of the project only.
+<p align="center">
+  <img src="https://img.shields.io/badge/Flutter-3.x-blue?style=for-the-badge&logo=flutter" />
+  <img src="https://img.shields.io/badge/Dart-3.x-blue?style=for-the-badge&logo=dart" />
+  <img src="https://img.shields.io/badge/Clean%20Architecture-SOLID-orange?style=for-the-badge" />
+  <img src="https://img.shields.io/badge/Platform-Web%20%7C%20Android%20%7C%20iOS-green?style=for-the-badge" />
+</p>
 
----
-
-## 📚 Key Features
-
-- Animated landing page with hero, experience, projects, skills, and contact sections.
-- `MotionBackground` widget for dynamic gradient/glow animation that reacts to scroll.
-- `SectionContainer` + `visibility_detector` for scroll-based reveal animations.
-- `go_router` for hash-deeplinked navigation plus smooth scrolling.
-- `flutter_bloc` `ThemeCubit` driving monochrome light/dark inversion.
-- Local data source + domain use cases for clean, testable separation.
-- GitHub Actions workflow that builds, tests, and deploys to GitHub Pages.
+<p align="center">
+  <b>A minimal, elegant, and performance-engineered Flutter portfolio crafted to reflect high-standards of UI/UX, architecture, and animation design.</b>
+</p>
 
 ---
 
-## 🧱 Architecture Snapshot
+## 🎯 Overview
 
+This is not just a portfolio — it's a **technical art piece** designed to demonstrate:
+
+- **Engineering discipline**
+- **Architectural clarity**
+- **Scalable UI patterns**
+- **Animations that feel smooth and premium**
+- **Performance thinking in every layer**
+
+Built with **Clean Architecture**, responsive layouts, custom animations, and optimized rendering, this project represents how I approach professional Flutter development.
+
+---
+
+## 🎨 Design & Aesthetic Direction
+
+<p align="center"><b>Minimal. Elegant. Professional. Fast.</b></p>
+
+### ✨ Light Theme
+- Soft neutral background (`#F7F9FC`)
+- Professional colors with high readability
+- Clean spacing & airy layouts
+
+### 🌙 Dark Theme
+- Cinematic depth using `#0E1217 → #161B22`
+- Electric blue accents for a tech-forward vibe
+- High-contrast, premium feel
+
+---
+
+## 🧠 Architecture Diagram
+
+### Clean Architecture (Feature-first)
 ```
 lib/
-├── core/
-│   └── theme/
-│       ├── app_theme.dart        # Material 3 palettes + component theming
-│       └── theme_cubit.dart      # BLoC-based theme toggle
-├── features/
-│   └── portfolio/
-│       ├── data/
-│       │   ├── datasources/      # PortfolioLocalDataSourceImpl (seed data)
-│       │   ├── models/           # DTOs
-│       │   └── repositories/     # Repository implementation
-│       ├── domain/
-│       │   ├── entities/
-│       │   ├── repositories/     # Contracts
-│       │   └── usecases/         # GetProjects/GetSkills/GetExperiences
-│       └── presentation/
-│           ├── pages/            # HomePage entry
-│           ├── sections/         # Hero/About/Experience/Projects/Skills/Contact
-│           └── widgets/          # Navbar, dividers, motion background, cards
-└── main.dart                     # Manual DI + router bootstrap
+ ├── core/
+ │    ├── theme/
+ │    ├── utils/
+ │    └── widgets/
+ ├── data/
+ │    ├── datasources/
+ │    ├── models/
+ │    └── repositories/
+ ├── features/
+ │    ├── home/
+ │    ├── projects/
+ │    ├── experience/
+ │    ├── skills/
+ │    └── contact/
+ ├── router/
+ └── shared/
 ```
 
+### Flow
+```
+UI Widgets
+   ↓
+State / ViewModel
+   ↓
+Repositories
+   ↓
+Local Datasource
+```
+
+
+## 🔥 Key Features
+
+| Feature | Description |
+|---------|-------------|
+| **Dynamic Project Showcase** | Parallax cards, rich descriptions, GitHub links |
+| **Experience Timeline** | Clean animated timeline with roles, periods & achievements |
+| **Skill Matrix** | Curated skill groups reflecting real expertise |
+| **Dark/Light Mode** | Smooth theme transitions with custom colors |
+| **Custom Animations** | Staggered list reveals, fade+slide transitions, scale interactions |
+| **Performance Optimized** | Cached images, Lazy rendering, Stateless-first strategy |
+| **Clean Architecture** | Feature separation, local datasource, scalable patterns |
+
 ---
 
-## ⚙️ Tech Stack
+## 🛠️ Tech Stack
 
-- **Language:** Dart 3.x  
-- **Framework:** Flutter 3.24 (stable)  
-- **Routing:** `go_router`  
-- **State Management:** `flutter_bloc`, manual DI  
-- **Animation:** `flutter_animate`, custom painters  
-- **Utilities:** `visibility_detector`, `google_fonts`, `font_awesome_flutter`, `url_launcher`  
-- **Testing:** Flutter widget test (smoke test with `VisibilityDetectorController`)  
-- **CI/CD:** GitHub Actions → GitHub Pages deploy
+<div align="center">
+
+| Category | Tools |
+|----------|-------|
+| **Framework** | Flutter |
+| **Language** | Dart |
+| **Navigation** | GoRouter |
+| **State Mgmt** | Provider / BLoC (flexible) |
+| **Icons** | FontAwesome |
+| **Rendering** | CachedNetworkImage |
+| **Architecture** | Clean Architecture, MVVM |
+| **UI** | Custom transitions, responsive layout |
+
+</div>
 
 ---
 
-## 🚀 Getting Started
+## 📦 Local Data Source Structure
 
+All portfolio content is sourced from structured models:
+
+- `ProjectModel`
+- `SkillModel`
+- `ExperienceModel`
+
+This ensures easy expansion and maintainable UI rendering.
+
+---
+
+## 🤝 Contributing
+
+While this is a personal portfolio project, contributions that improve:
+
+- UI/UX
+- Documentation
+- Animation performance
+- Architectural patterns
+
+…are welcome and appreciated.
+
+---
+
+## 🚀 Running the Project
+
+### 1. Clone repository
 ```bash
-git clone https://github.com/<handle>/najeeb_portfolio.git
-cd najeeb_portfolio
+git clone https://github.com/muhammednajeebay/flutter_portfolio.git
+cd flutter_portfolio
+```
+
+### 2. Install dependencies
+```bash
 flutter pub get
-flutter run -d chrome
 ```
 
-### Build for Web
-
+### 3. Run the app
 ```bash
-flutter build web --release --base-href "/portfolio_/"
+flutter run
 ```
 
-### Run Tests
-
+### 4. Build for production
 ```bash
-flutter test
+flutter build web
+flutter build apk
 ```
 
 ---
 
-## 🧩 Customization Hooks
+## 🧭 Roadmap
 
-- **Theme & Palette:** `lib/core/theme/app_theme.dart`
-- **Personal copy / sections:** `lib/features/portfolio/presentation/sections/`
-- **Data:** `PortfolioLocalDataSourceImpl` or swap in a remote repository
-- **Animations:** `MotionBackground`, `hero_section.dart`, and `SectionContainer`
-
----
-
-## 📦 Deployment Workflow
-
-`.github/workflows/deploy.yml`
-
-1. Trigger: push to `prd` or manual dispatch  
-2. Steps: checkout → setup Flutter → `flutter pub get` → `flutter test` → `flutter build web --release`  
-3. Upload `build/web` as Pages artifact and deploy via `actions/deploy-pages`
-
-Ensure the `--base-href` matches your GitHub Pages subpath (e.g., `/portfolio_/`) to avoid blank screens.
+- [ ] Add interactive case-study screens with diagrams
+- [ ] Add Rive-powered micro-interactions
+- [ ] Integrate Medium articles dynamically
+- [ ] Implement analytics for project engagement
+- [ ] Add language selector for international visitors
 
 ---
 
-## 📄 License
+## 👨‍💻 Author
 
-Released under the [MIT License](LICENSE).
+**Muhammed Najeeb A Y**  
+*Flutter Developer | Architecture • Performance • UI Systems*
+
+- 🌐 Portfolio: [Your website link]
+- 🐙 GitHub: [https://github.com/muhammednajeebay](https://github.com/muhammednajeebay)
+- 🔗 LinkedIn: [https://linkedin.com/in/muhammednajeebay](https://linkedin.com/in/muhammednajeebay)
+
+---
+
+## ⭐ Support
+
+If you find the project inspiring or useful:
+
+**Give it a star ⭐ on GitHub** — it motivates future creations!
