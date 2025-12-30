@@ -2,24 +2,25 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class AppColors {
-  // Light Mode
-  static const lightBackground = Color(0xFFF7F9FC);
-  static const lightSurface = Color(0xFFFFFFFF);
-  static const lightPrimary = Color(0xFF3D5AFE);
-  static const lightSecondary = Color(0xFF00BFA5);
-  static const lightHeadings = Color(0xFF1A1A1A);
-  static const lightBodyText = Color(0xFF444444);
-  static const lightDivider = Color(0xFFE5E5E5);
+  // Light (White-first)
+  static const lightBackground = Color(0xFFFFFFFF);
+  static const lightSurface = Color(0xFFF5F5F5);
+  static const lightPrimary = Color(0xFF000000);
+  static const lightSecondary = Color(0xFF2E2E2E);
+  static const lightHeadings = Color(0xFF000000);
+  static const lightBodyText = Color(0xFF1F1F1F);
+  static const lightDivider = Color(0xFFE0E0E0);
+  static const lightAccent = Color(0xFFDC2626); // Red accent
 
-  // Dark Mode
-  static const darkBackground = Color(0xFF0E1217);
-  static const darkSurface = Color(0xFF161B22);
-  static const darkPrimary = Color(0xFF4C8BFF);
-  static const darkSecondary = Color(0xFF1DBFAF);
+  // Dark (Black-first)
+  static const darkBackground = Color(0xFF000000);
+  static const darkSurface = Color(0xFF121212);
+  static const darkPrimary = Color(0xFFFFFFFF);
+  static const darkSecondary = Color(0xFFBDBDBD);
   static const darkHeadings = Color(0xFFFFFFFF);
-  static const darkBodyText = Color(0xFFC9D1D9);
-  static const darkSubtleGradientStart = Color(0xFF0E1217);
-  static const darkSubtleGradientEnd = Color(0xFF161B22);
+  static const darkBodyText = Color(0xFFE0E0E0);
+  static const darkDivider = Color(0xFF2A2A2A);
+  static const darkAccent = Color(0xFFDC2626); // Red accent
 }
 
 class AppTheme {

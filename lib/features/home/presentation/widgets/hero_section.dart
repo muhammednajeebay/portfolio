@@ -1,362 +1,288 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:visibility_detector/visibility_detector.dart';
+import '../../../../core/theme/app_theme.dart';
 
-class HeroSection extends StatelessWidget {
+class HeroSection extends StatefulWidget {
   const HeroSection({super.key});
 
-  List<Widget> _buildHighlights(bool isMobile, ThemeData theme) {
-    final colorScheme = theme.colorScheme;
-    final isDark = theme.brightness == Brightness.dark;
-    const highlights = [
-      'Flutter Animations',
-      'Clean Architecture',
-      'State Management',
-      'API Integrations',
-      'CI/CD Ready',
-      'Multi-platform'
-    ];
+  @override
+  State<HeroSection> createState() => _HeroSectionState();
+}
 
-    return List.generate(highlights.length, (index) {
-      final label = highlights[index];
-      return Animate(
-        effects: [
-          FadeEffect(
-              duration: 400.ms,
-              delay: Duration(milliseconds: 400 + 50 * index)),
-          ScaleEffect(
-            begin: const Offset(0.9, 0.9),
-            duration: 500.ms,
-            curve: Curves.easeOutBack,
-          ),
-        ],
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [
-                isDark
-                    ? Color.alphaBlend(
-                        colorScheme.onSurface.withValues(alpha: 0.04),
-                        colorScheme.surfaceContainerHighest,
-                      )
-                    : colorScheme.primaryContainer.withValues(alpha: 0.9),
-                isDark
-                    ? Color.alphaBlend(
-                        colorScheme.onSurface.withValues(alpha: 0.02),
-                        colorScheme.surface,
-                      )
-                    : colorScheme.secondaryContainer.withValues(alpha: 0.85),
-              ],
-            ),
-            borderRadius: BorderRadius.circular(20),
-            border: Border.all(
-              color: colorScheme.primary.withValues(alpha: isDark ? 0.35 : 0.2),
-            ),
-          ),
-          child: Text(
-            label,
-            style: theme.textTheme.bodyMedium?.copyWith(
-              fontWeight: FontWeight.w600,
-            ),
-            textAlign: isMobile ? TextAlign.center : TextAlign.left,
-          ),
-        ),
-      );
-    });
+class _HeroSectionState extends State<HeroSection> {
+  bool _isVisible = false;
+  late final Key _visibilityKey;
+
+  @override
+  void initState() {
+    super.initState();
+    _visibilityKey = UniqueKey();
+  }
+
+  void _onVisibilityChanged(VisibilityInfo info) {
+    if (!_isVisible && info.visibleFraction > 0.1) {
+      setState(() => _isVisible = true);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final colorScheme = theme.colorScheme;
     final isDark = theme.brightness == Brightness.dark;
+    final isMobile = MediaQuery.of(context).size.width < 1024;
 
-    return Stack(
-      clipBehavior: Clip.none,
-      children: [
-        Positioned.fill(
-          child: Align(
-            alignment: Alignment.center,
-            child: Container(
-              height: 360,
-              width: 360,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                gradient: RadialGradient(
-                  colors: [
-                    (isDark
-                        ? colorScheme.primary.withValues(alpha: 0.08)
-                        : colorScheme.primary.withValues(alpha: 0.18)),
-                    Colors.transparent,
+    return VisibilityDetector(
+      key: _visibilityKey,
+      onVisibilityChanged: _onVisibilityChanged,
+      child: Container(
+        padding: EdgeInsets.symmetric(
+          horizontal: isMobile ? 24 : 80,
+          vertical: isMobile ? 60 : 100,
+        ),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            // Left side: Text content
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Animate(
+                    target: _isVisible ? 1 : 0,
+                    effects: [
+                      FadeEffect(
+                        duration: 600.ms,
+                        curve: Curves.easeOutCubic,
+                      ),
+                      MoveEffect(
+                        begin: const Offset(0, 30),
+                        duration: 800.ms,
+                        curve: Curves.fastOutSlowIn,
+                      ),
+                      BlurEffect(
+                        begin: const Offset(0, 10),
+                        duration: 600.ms,
+                        curve: Curves.easeOutCubic,
+                      ),
+                    ],
+                    child: Text(
+                      'Hi,',
+                      style: GoogleFonts.outfit(
+                        color: isDark
+                            ? AppColors.darkBodyText
+                            : AppColors.lightBodyText,
+                        fontSize: isMobile ? 20 : 24,
+                        fontWeight: FontWeight.w300,
+                        height: 1.5,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  Animate(
+                    target: _isVisible ? 1 : 0,
+                    effects: [
+                      FadeEffect(
+                        duration: 700.ms,
+                        delay: 200.ms,
+                        curve: Curves.easeOutCubic,
+                      ),
+                      MoveEffect(
+                        begin: const Offset(0, 40),
+                        duration: 900.ms,
+                        delay: 200.ms,
+                        curve: Curves.fastOutSlowIn,
+                      ),
+                      ScaleEffect(
+                        begin: const Offset(0.9, 0.9),
+                        duration: 900.ms,
+                        delay: 200.ms,
+                        curve: Curves.easeOutCubic,
+                      ),
+                      BlurEffect(
+                        begin: const Offset(0, 15),
+                        duration: 700.ms,
+                        delay: 200.ms,
+                        curve: Curves.easeOutCubic,
+                      ),
+                    ],
+                    child: Text(
+                      'Muhammed Najeeb AY',
+                      style: GoogleFonts.outfit(
+                        color: isDark
+                            ? AppColors.darkHeadings
+                            : AppColors.lightHeadings,
+                        fontSize: isMobile ? 36 : 50,
+                        fontWeight: FontWeight.bold,
+                        height: 1.2,
+                        letterSpacing: -1,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  Animate(
+                    target: _isVisible ? 1 : 0,
+                    effects: [
+                      FadeEffect(
+                        duration: 700.ms,
+                        delay: 400.ms,
+                        curve: Curves.easeOutCubic,
+                      ),
+                      MoveEffect(
+                        begin: const Offset(0, 30),
+                        duration: 800.ms,
+                        delay: 400.ms,
+                        curve: Curves.fastOutSlowIn,
+                      ),
+                      ScaleEffect(
+                        begin: const Offset(0.95, 0.95),
+                        duration: 800.ms,
+                        delay: 400.ms,
+                        curve: Curves.easeOutCubic,
+                      ),
+                      BlurEffect(
+                        begin: const Offset(0, 10),
+                        duration: 700.ms,
+                        delay: 400.ms,
+                        curve: Curves.easeOutCubic,
+                      ),
+                    ],
+                    child: Text(
+                      'Flutter Developer · Mobile & Web Applications',
+                      style: GoogleFonts.outfit(
+                        color: AppColors.lightAccent,
+                        fontSize: isMobile ? 18 : 22,
+                        fontWeight: FontWeight.w600,
+                        height: 1.4,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 24),
+                  Animate(
+                    target: _isVisible ? 1 : 0,
+                    effects: [
+                      FadeEffect(
+                        duration: 700.ms,
+                        delay: 600.ms,
+                        curve: Curves.easeOutCubic,
+                      ),
+                      MoveEffect(
+                        begin: const Offset(30, 0),
+                        duration: 800.ms,
+                        delay: 600.ms,
+                        curve: Curves.fastOutSlowIn,
+                      ),
+                      BlurEffect(
+                        begin: const Offset(10, 0),
+                        duration: 700.ms,
+                        delay: 600.ms,
+                        curve: Curves.easeOutCubic,
+                      ),
+                    ],
+                    child: Text(
+                      'I build scalable Flutter applications with clean architecture, focused on performance, clarity, and real-world impact.',
+                      style: GoogleFonts.outfit(
+                        color: isDark
+                            ? AppColors.darkBodyText
+                            : AppColors.lightBodyText,
+                        fontSize: isMobile ? 16 : 18,
+                        fontWeight: FontWeight.w400,
+                        height: 1.6,
+                      ),
+                    ),
+                  ),
+                  if (!isMobile) ...[
+                    const SizedBox(height: 60),
+                    Animate(
+                      target: _isVisible ? 1 : 0,
+                      effects: [
+                        FadeEffect(
+                          duration: 700.ms,
+                          delay: 1000.ms,
+                          curve: Curves.easeOutCubic,
+                        ),
+                        MoveEffect(
+                          begin: const Offset(0, 10),
+                          duration: 800.ms,
+                          delay: 1000.ms,
+                          curve: Curves.fastOutSlowIn,
+                        ),
+                      ],
+                      child: Animate(
+                        onPlay: (controller) => controller.repeat(),
+                        effects: [
+                          MoveEffect(
+                            begin: const Offset(0, 0),
+                            end: const Offset(0, 8),
+                            duration: 1500.ms,
+                            curve: Curves.easeInOut,
+                          ),
+                        ],
+                        child: Text(
+                          'Scroll Down',
+                          style: GoogleFonts.outfit(
+                            color: isDark
+                                ? AppColors.darkBodyText
+                                : AppColors.lightBodyText,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                      ),
+                    ),
                   ],
-                ),
+                ],
               ),
             ),
-          ),
-        ),
-        LayoutBuilder(
-          builder: (context, constraints) {
-            final isMobile = constraints.maxWidth < 750;
-            final content = Column(
-              crossAxisAlignment: isMobile
-                  ? CrossAxisAlignment.center
-                  : CrossAxisAlignment.start,
-              children: [
-                Animate(
-                  effects: [
-                    FadeEffect(duration: 500.ms, curve: Curves.easeOut),
-                    MoveEffect(
-                      begin: Offset(0, isMobile ? 32 : 24),
-                      duration: 600.ms,
-                      curve: Curves.easeOutQuad,
-                    ),
-                  ],
-                  child: Text(
-                    "Muhammed Najeeb AY",
-                    style: theme.textTheme.headlineLarge?.copyWith(
-                      fontSize: isMobile ? 40 : 56,
-                      fontWeight: FontWeight.bold,
-                      letterSpacing: -1.0,
-                    ),
-                    textAlign: isMobile ? TextAlign.center : TextAlign.left,
-                  ),
-                ),
-                const SizedBox(height: 12),
-                Animate(
-                  effects: const [
-                    FadeEffect(
-                        duration: Duration(milliseconds: 500),
-                        delay: Duration(milliseconds: 200)),
-                  ],
-                  child: Text(
-                    "I build things for mobile.",
-                    style: theme.textTheme.titleLarge?.copyWith(
-                      color: colorScheme.primary,
-                      fontWeight: FontWeight.w700,
-                      fontSize: isMobile ? 18 : 22,
-                    ),
-                    textAlign: isMobile ? TextAlign.center : TextAlign.left,
-                  ),
-                ),
-                const SizedBox(height: 16),
-                Text(
-                  "I'm a Flutter developer specializing in building exceptional digital experiences for mobile platforms.",
-                  style: theme.textTheme.bodyLarge?.copyWith(
-                    fontSize: 18,
-                    height: 1.5,
-                    color: theme.colorScheme.onSurfaceVariant,
-                  ),
-                  textAlign: isMobile ? TextAlign.center : TextAlign.left,
-                )
-                    .animate()
-                    .fade(delay: const Duration(milliseconds: 300))
-                    .moveY(begin: 20, end: 0),
-                const SizedBox(height: 32),
-                // CTA Buttons
-                // Row(
-                //   mainAxisAlignment: isMobile
-                //       ? MainAxisAlignment.center
-                //       : MainAxisAlignment.start,
-                //   children: [
-                //     ElevatedButton(
-                //       onPressed: () {
-                //         // Scroll to contact
-                //       },
-                //       style: ElevatedButton.styleFrom(
-                //         padding: const EdgeInsets.symmetric(
-                //             horizontal: 32, vertical: 20),
-                //         backgroundColor: colorScheme.primary,
-                //         foregroundColor: colorScheme.onPrimary,
-                //       ),
-                //       child: const Text("Get In Touch"),
-                //     ),
-                //     const SizedBox(width: 18),
-                //     OutlinedButton.icon(
-                //       icon: const Icon(Icons.arrow_outward_rounded),
-                //       label: const Text("View Work"),
-                //       style: OutlinedButton.styleFrom(
-                //         padding: const EdgeInsets.symmetric(
-                //             horizontal: 26, vertical: 16),
-                //         foregroundColor: colorScheme.onSurface,
-                //         side: BorderSide(
-                //           color: colorScheme.primary
-                //               .withValues(alpha: isDark ? 0.5 : 0.35),
-                //         ),
-                //         shape: RoundedRectangleBorder(
-                //             borderRadius: BorderRadius.circular(16)),
-                //       ),
-                //       onPressed: () => Scrollable.ensureVisible(
-                //         context.findAncestorStateOfType<State>()?.context ??
-                //             context,
-                //         duration: const Duration(milliseconds: 400),
-                //       ),
-                //     ),
-                //   ],
-                // ),
-                // const SizedBox(height: 24),
-                Wrap(
-                  spacing: 12,
-                  runSpacing: 12,
-                  alignment:
-                      isMobile ? WrapAlignment.center : WrapAlignment.start,
-                  children: _buildHighlights(isMobile, theme),
-                ),
-                const SizedBox(height: 28),
-                Animate(
-                  effects: const [
-                    FadeEffect(),
-                    MoveEffect(begin: Offset(0, 18), curve: Curves.easeOutCirc),
-                  ],
-                  child: Wrap(
-                    spacing: 18,
-                    runSpacing: 12,
-                    alignment:
-                        isMobile ? WrapAlignment.center : WrapAlignment.start,
-                    children: [
-                      ElevatedButton.icon(
-                        icon: const Icon(Icons.download_rounded),
-                        label: const Text("Download CV"),
-                        onPressed: () {
-                          // TODO: add CV link
-                        },
-                      ),
-                      OutlinedButton.icon(
-                        icon: const Icon(Icons.arrow_outward_rounded),
-                        label: const Text("View Work"),
-                        style: OutlinedButton.styleFrom(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 26, vertical: 16),
-                          foregroundColor: colorScheme.onSurface,
-                          side: BorderSide(
-                            color: colorScheme.primary
-                                .withValues(alpha: isDark ? 0.5 : 0.35),
-                          ),
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(16)),
-                        ),
-                        onPressed: () => Scrollable.ensureVisible(
-                          context.findAncestorStateOfType<State>()?.context ??
-                              context,
-                          duration: const Duration(milliseconds: 400),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            );
 
-            final avatar = Animate(
-              effects: const [
-                FadeEffect(duration: Duration(milliseconds: 600)),
-                ScaleEffect(
-                  begin: Offset(0.8, 0.8),
-                  duration: Duration(milliseconds: 600),
-                  curve: Curves.easeOutBack,
-                ),
-              ],
-              child: Container(
-                padding: const EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  gradient: SweepGradient(
-                    colors: [
-                      colorScheme.primary,
-                      colorScheme.tertiary,
-                      colorScheme.secondary,
-                      colorScheme.primary,
-                    ],
-                    stops: const [0.0, 0.4, 0.7, 1.0],
-                  ),
-                  boxShadow: [
-                    BoxShadow(
-                      color: colorScheme.primary.withValues(alpha: 0.35),
-                      blurRadius: 30,
-                      spreadRadius: 4,
+            // Right side: Portrait image
+            if (!isMobile) ...[
+              const SizedBox(width: 60),
+              Expanded(
+                flex: 2,
+                child: Animate(
+                  target: _isVisible ? 1 : 0,
+                  effects: [
+                    FadeEffect(
+                      duration: 800.ms,
+                      delay: 500.ms,
+                      curve: Curves.easeOutCubic,
+                    ),
+                    ScaleEffect(
+                      begin: const Offset(0.8, 0.8),
+                      duration: 1000.ms,
+                      delay: 500.ms,
+                      curve: Curves.easeOutCubic,
+                    ),
+                    MoveEffect(
+                      begin: const Offset(60, 0),
+                      duration: 1000.ms,
+                      delay: 500.ms,
+                      curve: Curves.fastOutSlowIn,
+                    ),
+                    BlurEffect(
+                      begin: const Offset(15, 0),
+                      duration: 800.ms,
+                      delay: 500.ms,
+                      curve: Curves.easeOutCubic,
                     ),
                   ],
-                ),
-                child: CircleAvatar(
-                  radius: isMobile ? 70 : 96,
-                  backgroundImage:
-                      const AssetImage('assets/profile/najeeb_pic.PNG'),
+                  child: AspectRatio(
+                    aspectRatio: 4 / 5, // 400/500 = 0.8
+                    child: Image.asset(
+                      'assets/profile/hero_img.png',
+                      fit: BoxFit.cover,
+                      colorBlendMode: BlendMode.saturation,
+                    ),
+                  ),
                 ),
               ),
-            );
-
-            // final stats = <Map<String, String>>[
-            //   {'value': '5+', 'label': 'Years crafting apps'},
-            //   {'value': '25+', 'label': 'Production launches'},
-            //   {'value': '100K+', 'label': 'End-users served'},
-            // ];
-
-            // final statCards = List.generate(stats.length, (index) {
-            //   final stat = stats[index];
-            //   return Animate(
-            //     effects: [
-            //       FadeEffect(
-            //         duration: 400.ms,
-            //         delay: Duration(milliseconds: 320 + index * 80),
-            //       ),
-            //       MoveEffect(
-            //         begin: const Offset(0, 20),
-            //         duration: 400.ms,
-            //       ),
-            //     ],
-            //     child: Container(
-            //       padding:
-            //           const EdgeInsets.symmetric(horizontal: 18, vertical: 20),
-            //       decoration: BoxDecoration(
-            //         borderRadius: BorderRadius.circular(18),
-            //         border: Border.all(
-            //             color: colorScheme.primary
-            //                 .withValues(alpha: isDark ? 0.28 : 0.2)),
-            //         color: isDark
-            //             ? elevatedSurface(0.12)
-            //             : colorScheme.surface.withValues(alpha: 0.9),
-            //       ),
-            //       child: Column(
-            //         crossAxisAlignment: CrossAxisAlignment.start,
-            //         children: [
-            //           Text(
-            //             stat['value']!,
-            //             style: theme.textTheme.headlineLarge?.copyWith(
-            //               color: colorScheme.primary,
-            //               fontSize: 40,
-            //             ),
-            //           ),
-            //           const SizedBox(height: 6),
-            //           Text(
-            //             stat['label']!,
-            //             style: theme.textTheme.bodyMedium,
-            //           ),
-            //         ],
-            //       ),
-            //     ),
-            //   );
-            // });
-
-            return Column(
-              children: [
-                if (isMobile) avatar,
-                if (isMobile) const SizedBox(height: 32),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Expanded(child: content),
-                    if (!isMobile) ...[
-                      const SizedBox(width: 48),
-                      avatar,
-                    ],
-                  ],
-                ),
-                const SizedBox(height: 36),
-              ],
-            );
-          },
+            ],
+          ],
         ),
-      ],
+      ),
     );
   }
 }

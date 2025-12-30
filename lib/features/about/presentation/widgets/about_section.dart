@@ -1,138 +1,264 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:google_fonts/google_fonts.dart';
+import '../../../../core/theme/app_theme.dart';
 
 class AboutSection extends StatelessWidget {
   const AboutSection({super.key});
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final colorScheme = theme.colorScheme;
+    final isDark = theme.brightness == Brightness.dark;
+    final isMobile = MediaQuery.of(context).size.width < 1024;
 
-    return Animate(
-      effects: [
-        FadeEffect(duration: 500.ms),
-        BlurEffect(
-            duration: 500.ms, begin: const Offset(10, 10), end: Offset.zero),
-      ],
-      child: Center(
-        child: Container(
-          constraints: const BoxConstraints(maxWidth: 900),
-          padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 24),
-          decoration: BoxDecoration(
-            color: theme.cardColor,
-            borderRadius: BorderRadius.circular(16),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withValues(alpha: 0.05),
-                blurRadius: 10,
-                offset: const Offset(0, 4),
+    return Container(
+      padding: EdgeInsets.symmetric(
+        horizontal: isMobile ? 24 : 80,
+        vertical: isMobile ? 60 : 100,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Animate(
+            effects: [
+              FadeEffect(
+                duration: 600.ms,
+                curve: Curves.easeOutCubic,
+              ),
+              MoveEffect(
+                begin: const Offset(0, 30),
+                duration: 800.ms,
+                curve: Curves.fastOutSlowIn,
+              ),
+              ScaleEffect(
+                begin: const Offset(0.95, 0.95),
+                duration: 800.ms,
+                curve: Curves.easeOutCubic,
               ),
             ],
+            child: Text(
+              'What about me',
+              style: GoogleFonts.outfit(
+                color:
+                    isDark ? AppColors.darkHeadings : AppColors.lightHeadings,
+                fontSize: isMobile ? 32 : 48,
+                fontWeight: FontWeight.bold,
+                height: 1.2,
+              ),
+            ),
           ),
-          child: Column(
+          const SizedBox(height: 40),
+          Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                "About Me",
-                style: theme.textTheme.headlineSmall?.copyWith(
-                  color: colorScheme.primary,
-                  fontWeight: FontWeight.bold,
+              // Left side: Portrait image
+              if (!isMobile)
+                Animate(
+                  effects: [
+                    FadeEffect(
+                      duration: 700.ms,
+                      delay: 300.ms,
+                      curve: Curves.easeOutCubic,
+                    ),
+                    ScaleEffect(
+                      begin: const Offset(0.85, 0.85),
+                      duration: 900.ms,
+                      delay: 300.ms,
+                      curve: Curves.easeOutCubic,
+                    ),
+                    MoveEffect(
+                      begin: const Offset(-40, 0),
+                      duration: 900.ms,
+                      delay: 300.ms,
+                      curve: Curves.fastOutSlowIn,
+                    ),
+                    BlurEffect(
+                      begin: const Offset(10, 0),
+                      duration: 700.ms,
+                      delay: 300.ms,
+                      curve: Curves.easeOutCubic,
+                    ),
+                  ],
+                  child: Container(
+                    width: 300,
+                    height: 400,
+                    margin: const EdgeInsets.only(right: 60),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.1),
+                          blurRadius: 20,
+                          offset: const Offset(0, 10),
+                        ),
+                      ],
+                    ),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(8),
+                      child: Image.asset(
+                        'assets/profile/najeeb_pic.PNG',
+                        fit: BoxFit.cover,
+                        color: Colors.white,
+                        colorBlendMode: BlendMode.saturation,
+                      ),
+                    ),
+                  ),
                 ),
-              ),
-              const SizedBox(height: 24),
-              RichText(
-                text: TextSpan(
-                  style: theme.textTheme.bodyLarge
-                      ?.copyWith(height: 1.6, fontSize: 16),
+              // Right side: Text content
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const TextSpan(text: "Hi, I'm "),
-                    TextSpan(text: "Najeeb", style: _bold(theme)),
-                    const TextSpan(
-                        text:
-                            ", a Flutter Developer and Mobile App Engineer passionate about crafting applications that are fast, scalable, and truly user-focused. With hands-on experience in production-grade apps, I bring together performance, clean architecture, and intuitive design to deliver seamless digital experiences.\n\n"),
-                    const TextSpan(
-                        text:
-                            "My expertise includes state management, API-driven development, animations, and platform integrations. I care deeply about writing clean, maintainable code and building solutions that can grow and adapt with time. For me, great apps are not just functional, they're elegant and sustainable.\n\n"),
-                    const TextSpan(
-                        text:
-                            "I thrive on continuous learning, constructive feedback, and staying ahead with modern Flutter/Dart practices. Known for being detail-oriented and pragmatic, I approach problem-solving with clarity while keeping long-term scalability in mind."),
+                    if (isMobile) ...[
+                      Animate(
+                        effects: [
+                          FadeEffect(
+                            duration: 700.ms,
+                            delay: 300.ms,
+                            curve: Curves.easeOutCubic,
+                          ),
+                          ScaleEffect(
+                            begin: const Offset(0.9, 0.9),
+                            duration: 800.ms,
+                            delay: 300.ms,
+                            curve: Curves.easeOutCubic,
+                          ),
+                          MoveEffect(
+                            begin: const Offset(0, 30),
+                            duration: 800.ms,
+                            delay: 300.ms,
+                            curve: Curves.fastOutSlowIn,
+                          ),
+                        ],
+                        child: Container(
+                          width: double.infinity,
+                          height: 300,
+                          margin: const EdgeInsets.only(bottom: 32),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.1),
+                                blurRadius: 20,
+                                offset: const Offset(0, 10),
+                              ),
+                            ],
+                          ),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(8),
+                            child: Image.asset(
+                              'assets/profile/najeeb_pic.PNG',
+                              fit: BoxFit.cover,
+                              color: Colors.white,
+                              colorBlendMode: BlendMode.saturation,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                    Animate(
+                      effects: [
+                        FadeEffect(
+                          duration: 700.ms,
+                          delay: 500.ms,
+                          curve: Curves.easeOutCubic,
+                        ),
+                        MoveEffect(
+                          begin: const Offset(30, 0),
+                          duration: 800.ms,
+                          delay: 500.ms,
+                          curve: Curves.fastOutSlowIn,
+                        ),
+                        BlurEffect(
+                          begin: const Offset(10, 0),
+                          duration: 700.ms,
+                          delay: 500.ms,
+                          curve: Curves.easeOutCubic,
+                        ),
+                      ],
+                      child: Text(
+                        "I'm Muhammed Najeeb, a Flutter Developer who builds mobile applications with a strong emphasis on clarity, structure, and long-term maintainability. I focus on creating products that feel fast, intentional, and dependable — not just visually polished, but architecturally sound.",
+                        style: GoogleFonts.outfit(
+                          color: isDark
+                              ? AppColors.darkBodyText
+                              : AppColors.lightBodyText,
+                          fontSize: isMobile ? 16 : 18,
+                          fontWeight: FontWeight.w400,
+                          height: 1.7,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 24),
+                    Animate(
+                      effects: [
+                        FadeEffect(
+                          duration: 700.ms,
+                          delay: 700.ms,
+                          curve: Curves.easeOutCubic,
+                        ),
+                        MoveEffect(
+                          begin: const Offset(30, 0),
+                          duration: 800.ms,
+                          delay: 700.ms,
+                          curve: Curves.fastOutSlowIn,
+                        ),
+                        BlurEffect(
+                          begin: const Offset(10, 0),
+                          duration: 700.ms,
+                          delay: 700.ms,
+                          curve: Curves.easeOutCubic,
+                        ),
+                      ],
+                      child: Text(
+                        "My work lives at the intersection of clean architecture and real-world usability. I've built production-grade systems including ERP platforms, learning management systems, and real-time applications, where scalability and performance aren't optional — they're requirements. I care deeply about how code evolves over time and how design decisions impact both users and developers.",
+                        style: GoogleFonts.outfit(
+                          color: isDark
+                              ? AppColors.darkBodyText
+                              : AppColors.lightBodyText,
+                          fontSize: isMobile ? 16 : 18,
+                          fontWeight: FontWeight.w400,
+                          height: 1.7,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 24),
+                    Animate(
+                      effects: [
+                        FadeEffect(
+                          duration: 700.ms,
+                          delay: 900.ms,
+                          curve: Curves.easeOutCubic,
+                        ),
+                        MoveEffect(
+                          begin: const Offset(30, 0),
+                          duration: 800.ms,
+                          delay: 900.ms,
+                          curve: Curves.fastOutSlowIn,
+                        ),
+                        BlurEffect(
+                          begin: const Offset(10, 0),
+                          duration: 700.ms,
+                          delay: 900.ms,
+                          curve: Curves.easeOutCubic,
+                        ),
+                      ],
+                      child: Text(
+                        "I value ownership, simplicity, and continuous improvement. I approach problems analytically, communicate clearly, and refine relentlessly. For me, good software is quiet — it works, it scales, and it doesn't get in the way.",
+                        style: GoogleFonts.outfit(
+                          color: isDark
+                              ? AppColors.darkBodyText
+                              : AppColors.lightBodyText,
+                          fontSize: isMobile ? 16 : 18,
+                          fontWeight: FontWeight.w400,
+                          height: 1.7,
+                        ),
+                      ),
+                    ),
                   ],
                 ),
               ),
-              const SizedBox(height: 32),
-              // Values
-              _buildHighlightBox(context, "Core Values:", [
-                const TextSpan(text: "I believe in building with "),
-                TextSpan(text: "integrity", style: _italic(theme)),
-                const TextSpan(text: ", taking full "),
-                TextSpan(text: "ownership", style: _italic(theme)),
-                const TextSpan(text: " of my work, and staying committed to "),
-                TextSpan(text: "continuous learning", style: _italic(theme)),
-                const TextSpan(
-                    text:
-                        ". Every project I work on is driven by a pursuit of "),
-                TextSpan(
-                    text: "excellence in execution", style: _italic(theme)),
-                const TextSpan(
-                    text: " and a mindset of creating solutions that last."),
-              ]),
-              const SizedBox(height: 16),
-              // Goals
-              _buildHighlightBox(context, "Goals:", [
-                const TextSpan(
-                    text:
-                        "My vision is to grow into a senior engineering role where I can "),
-                TextSpan(
-                    text: "design scalable architectures",
-                    style: _italic(theme)),
-                const TextSpan(text: ", "),
-                TextSpan(text: "mentor developers", style: _italic(theme)),
-                const TextSpan(
-                    text:
-                        ", and help shape digital products that deliver meaningful impact to users and businesses alike."),
-              ]),
             ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  TextStyle? _bold(ThemeData theme) => theme.textTheme.bodyLarge?.copyWith(
-      fontWeight: FontWeight.bold, color: theme.colorScheme.onSurface);
-  TextStyle? _italic(ThemeData theme) => theme.textTheme.bodyLarge
-      ?.copyWith(fontStyle: FontStyle.italic, color: theme.colorScheme.primary);
-
-  Widget _buildHighlightBox(
-      BuildContext context, String title, List<InlineSpan> children) {
-    final theme = Theme.of(context);
-    return Container(
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: theme.colorScheme.primary.withValues(alpha: 0.05),
-        border:
-            Border.all(color: theme.colorScheme.primary.withValues(alpha: 0.1)),
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Icon(Icons.diamond_outlined,
-              color: theme.colorScheme.primary, size: 20),
-          const SizedBox(width: 12),
-          Expanded(
-            child: RichText(
-              text: TextSpan(
-                style: theme.textTheme.bodyLarge?.copyWith(height: 1.5),
-                children: [
-                  TextSpan(
-                      text: "$title ",
-                      style: theme.textTheme.titleMedium
-                          ?.copyWith(fontWeight: FontWeight.bold)),
-                  ...children
-                ],
-              ),
-            ),
           ),
         ],
       ),

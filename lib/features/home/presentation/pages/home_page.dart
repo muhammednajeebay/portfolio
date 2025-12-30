@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:portfolio/shared/domain/entities/article.dart';
 import 'package:portfolio/shared/domain/entities/experience.dart';
@@ -21,6 +22,8 @@ import 'package:portfolio/shared/presentation/widgets/animated_navbar.dart';
 import 'package:portfolio/shared/presentation/widgets/motion_background.dart';
 import 'package:portfolio/shared/presentation/widgets/section_container.dart';
 import 'package:portfolio/shared/presentation/widgets/section_divider.dart';
+import 'package:portfolio/shared/presentation/widgets/sidebar.dart';
+import 'package:portfolio/core/theme/theme_cubit.dart';
 
 class HomePage extends StatefulWidget {
   final GetProjects getProjects;
@@ -60,6 +63,7 @@ class _HomePageState extends State<HomePage> {
   List<Project> _openSourceProjects = [];
   List<Article> _articles = [];
   double _scrollOffset = 0;
+  String _activeSection = 'Home';
 
   @override
   void initState() {
@@ -72,7 +76,45 @@ class _HomePageState extends State<HomePage> {
     if (!mounted) return;
     setState(() {
       _scrollOffset = _sc.offset;
+      // Update active section based on scroll position
+      _updateActiveSection();
     });
+  }
+
+  void _updateActiveSection() {
+    // Simple scroll-based section detection
+    final offset = _sc.offset;
+    if (offset < 500) {
+      _activeSection = 'Home';
+    } else if (offset < 1000) {
+      _activeSection = 'About';
+    } else if (offset < 1500) {
+      _activeSection = 'Work';
+    } else if (offset < 2000) {
+      _activeSection = 'Skill';
+    } else if (offset < 2500) {
+      _activeSection = 'Timeline';
+    } else {
+      _activeSection = 'Connect';
+    }
+  }
+
+  void _onSectionTap(String section) {
+    final keyMap = {
+      'Home': homeKey,
+      'About': aboutKey,
+      'Work': projectsKey,
+      'Skill': skillsKey,
+      'Timeline': experienceKey,
+      'Connect': contactKey,
+    };
+    final key = keyMap[section];
+    if (key != null) {
+      scrollTo(key);
+      setState(() {
+        _activeSection = section;
+      });
+    }
   }
 
   Future<void> _loadData() async {
@@ -107,63 +149,106 @@ class _HomePageState extends State<HomePage> {
     return MotionBackground(
       scrollOffset: _scrollOffset,
       child: Scaffold(
+        floatingActionButton: BlocBuilder<ThemeCubit, ThemeMode>(
+          builder: (context, themeMode) {
+            final isDark = themeMode == ThemeMode.dark ||
+                (themeMode == ThemeMode.system &&
+                    MediaQuery.of(context).platformBrightness ==
+                        Brightness.dark);
+            return FloatingActionButton(
+              onPressed: () {
+                context.read<ThemeCubit>().toggleTheme();
+              },
+              backgroundColor: Theme.of(context).colorScheme.primary,
+              foregroundColor: Theme.of(context).colorScheme.onPrimary,
+              elevation: 4,
+              child: Icon(
+                isDark ? Icons.light_mode : Icons.dark_mode,
+              ),
+            );
+          },
+        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
         backgroundColor: Colors.transparent,
-        extendBodyBehindAppBar: true,
-        appBar: PreferredSize(
-          preferredSize: const Size.fromHeight(65),
-          child: AnimatedNavbar(
-            onTap: (label) {
-              final key = {
-                'Home': homeKey,
-                'About': aboutKey,
-                'Skills': skillsKey,
-                'Experience': experienceKey,
-                'Projects': projectsKey,
-                'Contact': contactKey,
-              }[label];
-              if (key != null) scrollTo(key);
-            },
-            isMobile: isMobile,
-          ),
+        body: Row(
+          children: [
+            // Left Sidebar
+            if (!isMobile)
+              Sidebar(
+                activeSection: _activeSection,
+                onSectionTap: _onSectionTap,
+                isMobile: isMobile,
+              ),
+            // Main Content
+            Expanded(
+              child: Container(
+                color: Theme.of(context).brightness == Brightness.dark
+                    ? Colors.black
+                    : Colors.white,
+                child: SingleChildScrollView(
+                  controller: _sc,
+                  child: Column(
+                    children: [
+                      SectionContainer(
+                        key: homeKey,
+                        spacerBelow: false,
+                        child: const HeroSection(),
+                      ),
+                      const SectionDivider(curveType: CurveType.bottom),
+                      SectionContainer(
+                          key: aboutKey, child: const AboutSection()),
+                      const SectionDivider(curveType: CurveType.top),
+                      SectionContainer(
+                          key: skillsKey,
+                          child: SkillsSection(skills: _skills)),
+                      const SectionDivider(curveType: CurveType.bottom),
+                      SectionContainer(
+                          key: experienceKey,
+                          child: ExperienceSection(experiences: _experiences)),
+                      const SectionDivider(curveType: CurveType.top),
+                      SectionContainer(
+                          key: projectsKey,
+                          child: ProjectsSection(projects: _projects)),
+                      const SectionDivider(curveType: CurveType.bottom),
+                      SectionContainer(
+                        key: openSourceKey,
+                        child: OpenSourceSection(projects: _openSourceProjects),
+                      ),
+                      const SectionDivider(curveType: CurveType.top),
+                      SectionContainer(
+                        key: writingKey,
+                        child: WritingSection(articles: _articles),
+                      ),
+                      const SectionDivider(curveType: CurveType.top),
+                      SectionContainer(
+                          key: contactKey, child: const ContactSection()),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ],
         ),
-        // Drawer omitted for brevity but logic is similar
-        body: SingleChildScrollView(
-          controller: _sc,
-          child: Column(
-            children: [
-              SectionContainer(
-                key: homeKey,
-                spacerBelow: false,
-                child: const HeroSection(),
-              ),
-              const SectionDivider(curveType: CurveType.bottom),
-              SectionContainer(key: aboutKey, child: const AboutSection()),
-              const SectionDivider(curveType: CurveType.top),
-              SectionContainer(
-                  key: skillsKey, child: SkillsSection(skills: _skills)),
-              const SectionDivider(curveType: CurveType.bottom),
-              SectionContainer(
-                  key: experienceKey,
-                  child: ExperienceSection(experiences: _experiences)),
-              const SectionDivider(curveType: CurveType.top),
-              SectionContainer(
-                  key: projectsKey,
-                  child: ProjectsSection(projects: _projects)),
-              const SectionDivider(curveType: CurveType.bottom),
-              SectionContainer(
-                key: openSourceKey,
-                child: OpenSourceSection(projects: _openSourceProjects),
-              ),
-              const SectionDivider(curveType: CurveType.top),
-              SectionContainer(
-                key: writingKey,
-                child: WritingSection(articles: _articles),
-              ),
-              const SectionDivider(curveType: CurveType.top),
-              SectionContainer(key: contactKey, child: const ContactSection()),
-            ],
-          ),
-        ),
+        // Mobile: Show top navbar
+        appBar: isMobile
+            ? PreferredSize(
+                preferredSize: const Size.fromHeight(65),
+                child: AnimatedNavbar(
+                  onTap: (label) {
+                    final key = {
+                      'Home': homeKey,
+                      'About': aboutKey,
+                      'Skills': skillsKey,
+                      'Experience': experienceKey,
+                      'Projects': projectsKey,
+                      'Contact': contactKey,
+                    }[label];
+                    if (key != null) scrollTo(key);
+                  },
+                  isMobile: isMobile,
+                ),
+              )
+            : null,
       ),
     );
   }

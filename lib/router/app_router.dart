@@ -7,6 +7,7 @@ import 'package:portfolio/shared/domain/usecases/get_articles.dart';
 import 'package:portfolio/shared/domain/usecases/get_open_source_projects.dart';
 import 'package:portfolio/shared/domain/entities/project.dart';
 import 'package:portfolio/features/projects/presentation/pages/project_details_page.dart';
+import 'package:portfolio/shared/presentation/widgets/splash_screen.dart';
 
 class AppRouter {
   final GetProjects getProjects;
@@ -24,8 +25,12 @@ class AppRouter {
   });
 
   late final router = GoRouter(
-    initialLocation: '/',
+    initialLocation: '/splash',
     routes: [
+      GoRoute(
+        path: '/splash',
+        builder: (context, state) => const SplashScreen(),
+      ),
       GoRoute(
         path: '/',
         builder: (context, state) => HomePage(
