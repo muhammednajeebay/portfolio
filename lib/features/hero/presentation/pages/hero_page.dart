@@ -118,11 +118,6 @@ class _HeroSectionState extends State<HeroSection>
                   children: [
                     FadeTransition(
                       opacity: _fade,
-                      child: const WallText(isMobile: true),
-                    ),
-                    const SizedBox(height: 40),
-                    FadeTransition(
-                      opacity: _fade,
                       child: Center(
                         child: SizedBox(
                           width: size.width * 0.6,
@@ -132,6 +127,11 @@ class _HeroSectionState extends State<HeroSection>
                           ),
                         ),
                       ),
+                    ),
+                    const SizedBox(height: 40),
+                    FadeTransition(
+                      opacity: _fade,
+                      child: const WallText(isMobile: true),
                     ),
                   ],
                 ),
