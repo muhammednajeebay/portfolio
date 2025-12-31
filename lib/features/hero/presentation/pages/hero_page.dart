@@ -41,11 +41,11 @@ class _HeroSectionState extends State<HeroSection>
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
     final size = MediaQuery.of(context).size;
-    final isMobile = size.width < 1024;
 
     return LayoutBuilder(
       builder: (context, constraints) {
-        return constraints.maxWidth < 1024
+        // Desktop layout
+        return constraints.maxWidth >= 1024
             ? RepaintBoundary(
                 child: SizedBox(
                   height: size.height,
@@ -67,107 +67,103 @@ class _HeroSectionState extends State<HeroSection>
                       ),
 
                       // Main content layout
-                      if (!isMobile)
-                        Positioned.fill(
-                          child: Row(
-                            children: [
-                              // Left side - Text content
-                              Expanded(
-                                flex: 5,
+                      Positioned.fill(
+                        child: Row(
+                          children: [
+                            // Left side - Text content
+                            Expanded(
+                              flex: 5,
+                              child: Padding(
+                                padding: EdgeInsets.only(
+                                  left: size.width * 0.18,
+                                  top: size.height * 0.22,
+                                ),
+                                child: FadeTransition(
+                                  opacity: _fade,
+                                  child: const WallText(isMobile: false),
+                                ),
+                              ),
+                            ),
+
+                            // Right side - Person with chair
+                            Expanded(
+                              flex: 5,
+                              child: Align(
+                                alignment: Alignment.bottomCenter,
                                 child: Padding(
                                   padding: EdgeInsets.only(
-                                    left: size.width * 0.18,
-                                    top: size.height * 0.22,
+                                    right: size.width * 0.1,
+                                    bottom: size.height * 0.08,
                                   ),
                                   child: FadeTransition(
                                     opacity: _fade,
-                                    child: const WallText(isMobile: false),
+                                    child: Transform.scale(
+                                      scale: 1.15,
+                                      child: ChairWithPerson(size: size),
+                                    ),
                                   ),
                                 ),
                               ),
+                            ),
+                          ],
+                        ),
+                      ),
 
-                              // Right side - Person with chair
-                              Expanded(
-                                flex: 5,
-                                child: Align(
-                                  alignment: Alignment.bottomCenter,
-                                  child: Padding(
-                                    padding: EdgeInsets.only(
-                                      right: size.width * 0.1,
-                                      bottom: size.height * 0.08,
-                                    ),
-                                    child: FadeTransition(
-                                      opacity: _fade,
-                                      child: Transform.scale(
-                                        scale: 1.15,
-                                        child: ChairWithPerson(size: size),
-                                      ),
-                                    ),
-                                  ),
+                      // Scroll indicator at bottom
+                      Positioned(
+                        bottom: 40,
+                        left: 0,
+                        right: 0,
+                        child: FadeTransition(
+                          opacity: _fade,
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(
+                                'Scroll Down',
+                                style:
+                                    AppTextStyles.bodySmall(context).copyWith(
+                                  color: context.appColors.bodyText
+                                      .withOpacity(0.6),
+                                  letterSpacing: 1.5,
                                 ),
+                              ),
+                              const SizedBox(height: 8),
+                              Icon(
+                                Icons.keyboard_arrow_down,
+                                color:
+                                    context.appColors.bodyText.withOpacity(0.6),
+                                size: 20,
                               ),
                             ],
                           ),
                         ),
-
-                      // Scroll indicator at bottom
-                      if (!isMobile)
-                        Positioned(
-                          bottom: 40,
-                          left: 0,
-                          right: 0,
-                          child: FadeTransition(
-                            opacity: _fade,
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Text(
-                                  'Scroll Down',
-                                  style:
-                                      AppTextStyles.bodySmall(context).copyWith(
-                                    color: context.appColors.bodyText
-                                        .withOpacity(0.6),
-                                    letterSpacing: 1.5,
-                                  ),
-                                ),
-                                const SizedBox(height: 8),
-                                Icon(
-                                  Icons.keyboard_arrow_down,
-                                  color: context.appColors.bodyText
-                                      .withOpacity(0.6),
-                                  size: 20,
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
+                      ),
                     ],
                   ),
                 ),
               )
-            : Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 24, vertical: 60),
+            : // Mobile layout - 2 parts: hero image on top, content below
+            SingleChildScrollView(
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    FadeTransition(
-                      opacity: _fade,
-                      child: Center(
-                        child: SizedBox(
-                          width: size.width * 0.6,
-                          child: Image.asset(
-                            'assets/profile/hero_img.png',
-                            fit: BoxFit.contain,
-                          ),
-                        ),
-                      ),
+                    // Part 1: Hero image in room with perspective
+                    SizedBox(
+                      height: size.height * 0.7,
+                      width: size.width,
+                      child: ChairWithPerson(size: size),
                     ),
-                    const SizedBox(height: 40),
-                    FadeTransition(
-                      opacity: _fade,
-                      child: const WallText(isMobile: true),
+
+                    // Part 2: Text content below
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 24,
+                        vertical: 40,
+                      ),
+                      child: FadeTransition(
+                        opacity: _fade,
+                        child: const WallText(isMobile: true),
+                      ),
                     ),
                   ],
                 ),
