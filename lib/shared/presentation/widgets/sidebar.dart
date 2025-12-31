@@ -60,7 +60,10 @@ class Sidebar extends StatelessWidget {
                   final isActive =
                       activeSection.toLowerCase() == section.toLowerCase();
                   return GestureDetector(
-                    onTap: () => onSectionTap(section),
+                    onTap: () {
+                      debugPrint('🖱️ Sidebar UI: Tapping $section');
+                      onSectionTap(section);
+                    },
                     child: Container(
                       margin: const EdgeInsets.symmetric(vertical: 8),
                       child: RotatedBox(

@@ -44,7 +44,8 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin {
+class _HomePageState extends State<HomePage>
+    with SingleTickerProviderStateMixin {
   final ScrollController _sc = ScrollController();
   final homeKey = GlobalKey();
   final aboutKey = GlobalKey();
@@ -60,11 +61,11 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
   List<Experience> _experiences = [];
   List<Project> _openSourceProjects = [];
   List<Article> _articles = [];
-  
+
   // Use ValueNotifier for better performance
   final ValueNotifier<double> _scrollOffsetNotifier = ValueNotifier(0);
   final ValueNotifier<String> _activeSectionNotifier = ValueNotifier('Home');
-  
+
   bool _isLoading = true;
   bool _isScrolling = false;
 
@@ -78,11 +79,11 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
   // Throttled scroll handler for better performance
   void _handleScroll() {
     if (!mounted || _isScrolling) return;
-    
+
     _isScrolling = true;
     _scrollOffsetNotifier.value = _sc.offset;
     _updateActiveSection();
-    
+
     // Reset scrolling flag after a frame
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _isScrolling = false;
@@ -92,10 +93,10 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
   void _updateActiveSection() {
     final offset = _sc.offset;
     String newSection;
-    
+
     // Use more precise section detection based on viewport
     final viewportHeight = MediaQuery.of(context).size.height;
-    
+
     if (offset < viewportHeight * 0.5) {
       newSection = 'Home';
     } else if (offset < viewportHeight * 1.5) {
@@ -109,13 +110,16 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
     } else {
       newSection = 'Connect';
     }
-    
+
     if (_activeSectionNotifier.value != newSection) {
+      debugPrint(
+          '🔄 UI Update: Active section changed from ${_activeSectionNotifier.value} to $newSection (offset: ${offset.toStringAsFixed(1)})');
       _activeSectionNotifier.value = newSection;
     }
   }
 
   void _onSectionTap(String section) {
+    debugPrint('🔵 Sidebar tapped: $section');
     final keyMap = {
       'Home': homeKey,
       'About': aboutKey,
@@ -125,9 +129,14 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
       'Connect': contactKey,
     };
     final key = keyMap[section];
+    debugPrint('🔍 Key found for $section: ${key != null}');
     if (key != null) {
+      debugPrint('📍 Current context: ${key.currentContext != null}');
       _scrollToKey(key);
+      debugPrint('🔄 UI Update: Manually setting active section to $section');
       _activeSectionNotifier.value = section;
+    } else {
+      debugPrint('❌ No key mapping found for section: $section');
     }
   }
 
@@ -163,15 +172,43 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
 
   void _scrollToKey(GlobalKey key) {
     final context = key.currentContext;
-    if (context == null) return;
+    debugPrint('🎯 Attempting to scroll to key...');
+    if (context == null) {
+      debugPrint('❌ Context is null! Widget may not be mounted yet.');
+      return;
+    }
 
-    // Use higher-performance scrolling
-    Scrollable.ensureVisible(
-      context,
+    debugPrint('✅ Context found, getting position...');
+
+    // Get the RenderBox to calculate exact position
+    final RenderBox? renderBox = context.findRenderObject() as RenderBox?;
+    if (renderBox == null) {
+      debugPrint('❌ RenderBox is null!');
+      return;
+    }
+
+    // Get the position of the widget relative to the viewport
+    final position = renderBox.localToGlobal(Offset.zero);
+    final targetScrollOffset =
+        _sc.offset + position.dy - 100; // 100px offset from top
+
+    debugPrint('📊 Current offset: ${_sc.offset.toStringAsFixed(1)}');
+    debugPrint('📊 Target offset: ${targetScrollOffset.toStringAsFixed(1)}');
+    debugPrint('📊 Widget position.dy: ${position.dy.toStringAsFixed(1)}');
+
+    // Animate to the target position
+    _sc
+        .animateTo(
+      targetScrollOffset.clamp(0.0, _sc.position.maxScrollExtent),
       duration: const Duration(milliseconds: 600),
       curve: Curves.easeInOutCubic,
-      alignmentPolicy: ScrollPositionAlignmentPolicy.keepVisibleAtStart,
-    );
+    )
+        .then((_) {
+      debugPrint(
+          '✅ Scroll animation completed to ${_sc.offset.toStringAsFixed(1)}');
+    }).catchError((error) {
+      debugPrint('❌ Scroll error: $error');
+    });
   }
 
   @override
@@ -181,6 +218,8 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
     return ValueListenableBuilder<double>(
       valueListenable: _scrollOffsetNotifier,
       builder: (context, scrollOffset, child) {
+        debugPrint(
+            '🔄 UI Update: Scroll offset changed to ${scrollOffset.toStringAsFixed(1)}  ${child.toString()}');
         return MotionBackground(
           scrollOffset: scrollOffset,
           child: Scaffold(
@@ -244,22 +283,24 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
               child: const AboutSection(),
             ),
           ),
+          // Work section (Projects) - moved before Skills to match sidebar order
+          RepaintBoundary(
+            child: SectionContainer(
+              key: projectsKey,
+              child: ProjectsSection(projects: _projects),
+            ),
+          ),
           RepaintBoundary(
             child: SectionContainer(
               key: skillsKey,
               child: SkillsSection(skills: _skills),
             ),
           ),
+          // Timeline section (Experience)
           RepaintBoundary(
             child: SectionContainer(
               key: experienceKey,
               child: ExperienceSection(experiences: _experiences),
-            ),
-          ),
-          RepaintBoundary(
-            child: SectionContainer(
-              key: projectsKey,
-              child: ProjectsSection(projects: _projects),
             ),
           ),
           RepaintBoundary(
@@ -291,7 +332,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
         final isDark = themeMode == ThemeMode.dark ||
             (themeMode == ThemeMode.system &&
                 MediaQuery.of(context).platformBrightness == Brightness.dark);
-        
+
         return RepaintBoundary(
           child: FloatingActionButton(
             onPressed: () {
