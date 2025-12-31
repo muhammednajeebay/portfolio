@@ -2,7 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:portfolio/features/experience/presentation/widgets/experience_section.dart';
-import 'package:portfolio/features/home/presentation/widgets/hero_section.dart';
+import 'package:portfolio/features/hero/presentation/pages/hero_page.dart';
 import 'package:portfolio/features/opensource/presentation/widgets/open_source_section.dart';
 import 'package:portfolio/features/projects/presentation/widgets/projects_section.dart';
 import 'package:portfolio/features/skills/presentation/widgets/skills_section.dart';

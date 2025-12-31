@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:url_launcher/url_launcher_string.dart';
+import '../../../core/theme/app_theme.dart';
 
 class Sidebar extends StatelessWidget {
   final String activeSection;
@@ -16,8 +17,7 @@ class Sidebar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
+    final colors = context.appColors;
 
     if (isMobile) {
       // Mobile: Show as bottom navigation or drawer
@@ -35,7 +35,7 @@ class Sidebar extends StatelessWidget {
 
     return Container(
       width: 80,
-      color: isDark ? const Color(0xFF000000) : const Color(0xFF000000),
+      color: colors.background,
       child: Column(
         children: [
           // MN Initials
@@ -44,10 +44,8 @@ class Sidebar extends StatelessWidget {
             alignment: Alignment.center,
             child: Text(
               'MN',
-              style: GoogleFonts.outfit(
-                color: Colors.white,
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
+              style: AppTextStyles.headlineSmall(context).copyWith(
+                color: colors.primary,
                 letterSpacing: 2,
               ),
             ),
@@ -59,8 +57,8 @@ class Sidebar extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: sections.map((section) {
-                  final isActive = activeSection.toLowerCase() ==
-                      section.toLowerCase();
+                  final isActive =
+                      activeSection.toLowerCase() == section.toLowerCase();
                   return GestureDetector(
                     onTap: () => onSectionTap(section),
                     child: Container(
@@ -69,18 +67,14 @@ class Sidebar extends StatelessWidget {
                         quarterTurns: 1,
                         child: Text(
                           section,
-                          style: GoogleFonts.outfit(
-                            color: Colors.white,
-                            fontSize: 14,
-                            fontWeight: isActive
-                                ? FontWeight.w600
-                                : FontWeight.w400,
+                          style:
+                              AppTextStyles.navItem(context, isActive: isActive)
+                                  .copyWith(
                             decoration: isActive
                                 ? TextDecoration.underline
                                 : TextDecoration.none,
-                            decorationColor: Colors.white,
+                            decorationColor: colors.primary,
                             decorationThickness: 2,
-                            letterSpacing: 1.5,
                           ),
                         ),
                       ),
@@ -99,21 +93,21 @@ class Sidebar extends StatelessWidget {
                 _SocialIcon(
                   icon: FontAwesomeIcons.linkedin,
                   onTap: () {
-                    // TODO: Add LinkedIn URL
+                    _launchLink('https://www.linkedin.com/in/muhammednajeebay');
                   },
                 ),
                 const SizedBox(height: 16),
                 _SocialIcon(
                   icon: FontAwesomeIcons.github,
                   onTap: () {
-                    // TODO: Add GitHub URL
+                    _launchLink('https://github.com/muhammednajeebay');
                   },
                 ),
                 const SizedBox(height: 16),
                 _SocialIcon(
-                  icon: Icons.description,
+                  icon: FontAwesomeIcons.medium,
                   onTap: () {
-                    // TODO: Add resume download
+                    _launchLink('https://github.com/muhammednajeebay');
                   },
                 ),
               ],
@@ -122,6 +116,13 @@ class Sidebar extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  Future<void> _launchLink(String url) async {
+    final launched = await launchUrlString(url);
+    if (!launched) {
+      debugPrint('Could not launch $url');
+    }
   }
 }
 
@@ -136,6 +137,8 @@ class _SocialIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.appColors;
+
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -144,17 +147,16 @@ class _SocialIcon extends StatelessWidget {
         decoration: BoxDecoration(
           shape: BoxShape.circle,
           border: Border.all(
-            color: Colors.white.withOpacity(0.3),
+            color: colors.primary.withOpacity(0.3),
             width: 1,
           ),
         ),
         child: Icon(
           icon,
-          color: Colors.white,
+          color: colors.primary,
           size: 18,
         ),
       ),
     );
   }
 }
-

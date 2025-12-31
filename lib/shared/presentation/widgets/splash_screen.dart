@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:drawing_animation/drawing_animation.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
 import '../../../core/theme/app_theme.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -80,15 +79,10 @@ class _SplashScreenState extends State<SplashScreen>
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
-    final backgroundColor =
-        isDark ? AppColors.darkBackground : AppColors.lightBackground;
-    final textColor = isDark ? AppColors.darkHeadings : AppColors.lightHeadings;
-    final svgColor = isDark ? AppColors.darkHeadings : AppColors.lightHeadings;
+    final colors = context.appColors;
 
     return Scaffold(
-      backgroundColor: backgroundColor,
+      backgroundColor: colors.background,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -102,7 +96,7 @@ class _SplashScreenState extends State<SplashScreen>
                   angle: 3.14159, // 180 degrees in radians (π)
                   child: ColorFiltered(
                     colorFilter: ColorFilter.mode(
-                      svgColor,
+                      colors.headings,
                       BlendMode.srcIn,
                     ),
                     child: AnimatedDrawing.svg(
@@ -133,10 +127,7 @@ class _SplashScreenState extends State<SplashScreen>
                       opacity: _fadeAnimation,
                       child: Text(
                         'Muhammed Najeeb',
-                        style: GoogleFonts.outfit(
-                          fontSize: 32,
-                          fontWeight: FontWeight.w600,
-                          color: textColor,
+                        style: AppTextStyles.headlineLarge(context).copyWith(
                           letterSpacing: 1.2,
                         ),
                       ),

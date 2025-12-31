@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:portfolio/shared/domain/entities/article.dart';
@@ -12,16 +13,14 @@ import 'package:portfolio/shared/domain/usecases/get_projects.dart';
 import 'package:portfolio/shared/domain/usecases/get_skills.dart';
 import 'package:portfolio/features/about/presentation/widgets/about_section.dart';
 import 'package:portfolio/features/contact/presentation/widgets/contact_section.dart';
-import 'package:portfolio/features/home/presentation/widgets/hero_section.dart';
+import 'package:portfolio/features/hero/presentation/pages/hero_page.dart';
 import 'package:portfolio/features/experience/presentation/widgets/experience_section.dart';
 import 'package:portfolio/features/opensource/presentation/widgets/open_source_section.dart';
 import 'package:portfolio/features/projects/presentation/widgets/projects_section.dart';
 import 'package:portfolio/features/skills/presentation/widgets/skills_section.dart';
 import 'package:portfolio/features/writing/presentation/widgets/writing_section.dart';
-import 'package:portfolio/shared/presentation/widgets/animated_navbar.dart';
 import 'package:portfolio/shared/presentation/widgets/motion_background.dart';
 import 'package:portfolio/shared/presentation/widgets/section_container.dart';
-import 'package:portfolio/shared/presentation/widgets/section_divider.dart';
 import 'package:portfolio/shared/presentation/widgets/sidebar.dart';
 import 'package:portfolio/core/theme/theme_cubit.dart';
 
@@ -45,7 +44,7 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin {
   final ScrollController _sc = ScrollController();
   final homeKey = GlobalKey();
   final aboutKey = GlobalKey();
@@ -54,7 +53,6 @@ class _HomePageState extends State<HomePage> {
   final projectsKey = GlobalKey();
   final openSourceKey = GlobalKey();
   final writingKey = GlobalKey();
-  final educationKey = GlobalKey();
   final contactKey = GlobalKey();
 
   List<Project> _projects = [];
@@ -62,8 +60,13 @@ class _HomePageState extends State<HomePage> {
   List<Experience> _experiences = [];
   List<Project> _openSourceProjects = [];
   List<Article> _articles = [];
-  double _scrollOffset = 0;
-  String _activeSection = 'Home';
+  
+  // Use ValueNotifier for better performance
+  final ValueNotifier<double> _scrollOffsetNotifier = ValueNotifier(0);
+  final ValueNotifier<String> _activeSectionNotifier = ValueNotifier('Home');
+  
+  bool _isLoading = true;
+  bool _isScrolling = false;
 
   @override
   void initState() {
@@ -72,30 +75,43 @@ class _HomePageState extends State<HomePage> {
     _loadData();
   }
 
+  // Throttled scroll handler for better performance
   void _handleScroll() {
-    if (!mounted) return;
-    setState(() {
-      _scrollOffset = _sc.offset;
-      // Update active section based on scroll position
-      _updateActiveSection();
+    if (!mounted || _isScrolling) return;
+    
+    _isScrolling = true;
+    _scrollOffsetNotifier.value = _sc.offset;
+    _updateActiveSection();
+    
+    // Reset scrolling flag after a frame
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _isScrolling = false;
     });
   }
 
   void _updateActiveSection() {
-    // Simple scroll-based section detection
     final offset = _sc.offset;
-    if (offset < 500) {
-      _activeSection = 'Home';
-    } else if (offset < 1000) {
-      _activeSection = 'About';
-    } else if (offset < 1500) {
-      _activeSection = 'Work';
-    } else if (offset < 2000) {
-      _activeSection = 'Skill';
-    } else if (offset < 2500) {
-      _activeSection = 'Timeline';
+    String newSection;
+    
+    // Use more precise section detection based on viewport
+    final viewportHeight = MediaQuery.of(context).size.height;
+    
+    if (offset < viewportHeight * 0.5) {
+      newSection = 'Home';
+    } else if (offset < viewportHeight * 1.5) {
+      newSection = 'About';
+    } else if (offset < viewportHeight * 2.5) {
+      newSection = 'Work';
+    } else if (offset < viewportHeight * 3.5) {
+      newSection = 'Skill';
+    } else if (offset < viewportHeight * 4.5) {
+      newSection = 'Timeline';
     } else {
-      _activeSection = 'Connect';
+      newSection = 'Connect';
+    }
+    
+    if (_activeSectionNotifier.value != newSection) {
+      _activeSectionNotifier.value = newSection;
     }
   }
 
@@ -110,153 +126,230 @@ class _HomePageState extends State<HomePage> {
     };
     final key = keyMap[section];
     if (key != null) {
-      scrollTo(key);
-      setState(() {
-        _activeSection = section;
-      });
+      _scrollToKey(key);
+      _activeSectionNotifier.value = section;
     }
   }
 
   Future<void> _loadData() async {
-    final projects = await widget.getProjects();
-    final skills = await widget.getSkills();
-    final experiences = await widget.getExperiences();
-    final openSource = await widget.getOpenSourceProjects();
-    final articles = await widget.getArticles();
+    try {
+      // Load all data in parallel for faster loading
+      final results = await Future.wait([
+        widget.getProjects(),
+        widget.getSkills(),
+        widget.getExperiences(),
+        widget.getOpenSourceProjects(),
+        widget.getArticles(),
+      ]);
 
-    setState(() {
-      _projects = projects;
-      _skills = skills;
-      _experiences = experiences;
-      _openSourceProjects = openSource;
-      _articles = articles;
-    });
+      if (!mounted) return;
+
+      setState(() {
+        _projects = results[0] as List<Project>;
+        _skills = results[1] as List<Skill>;
+        _experiences = results[2] as List<Experience>;
+        _openSourceProjects = results[3] as List<Project>;
+        _articles = results[4] as List<Article>;
+        _isLoading = false;
+      });
+    } catch (e) {
+      if (!mounted) return;
+      setState(() {
+        _isLoading = false;
+      });
+      debugPrint('Error loading data: $e');
+    }
   }
 
-  void scrollTo(GlobalKey key) {
+  void _scrollToKey(GlobalKey key) {
+    final context = key.currentContext;
+    if (context == null) return;
+
+    // Use higher-performance scrolling
     Scrollable.ensureVisible(
-      key.currentContext!,
-      duration: const Duration(milliseconds: 800),
-      curve: Curves.easeInOutQuart,
+      context,
+      duration: const Duration(milliseconds: 600),
+      curve: Curves.easeInOutCubic,
+      alignmentPolicy: ScrollPositionAlignmentPolicy.keepVisibleAtStart,
     );
-    // Update URL hash? (Optional)
   }
 
   @override
   Widget build(BuildContext context) {
     final isMobile = MediaQuery.of(context).size.width < 1024;
 
-    return MotionBackground(
-      scrollOffset: _scrollOffset,
-      child: Scaffold(
-        floatingActionButton: BlocBuilder<ThemeCubit, ThemeMode>(
-          builder: (context, themeMode) {
-            final isDark = themeMode == ThemeMode.dark ||
-                (themeMode == ThemeMode.system &&
-                    MediaQuery.of(context).platformBrightness ==
-                        Brightness.dark);
-            return FloatingActionButton(
-              onPressed: () {
-                context.read<ThemeCubit>().toggleTheme();
-              },
-              backgroundColor: Theme.of(context).colorScheme.primary,
-              foregroundColor: Theme.of(context).colorScheme.onPrimary,
-              elevation: 4,
-              child: Icon(
-                isDark ? Icons.light_mode : Icons.dark_mode,
-              ),
-            );
-          },
-        ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-        backgroundColor: Colors.transparent,
-        body: Row(
-          children: [
-            // Left Sidebar
-            if (!isMobile)
-              Sidebar(
-                activeSection: _activeSection,
-                onSectionTap: _onSectionTap,
-                isMobile: isMobile,
-              ),
-            // Main Content
-            Expanded(
-              child: Container(
-                color: Theme.of(context).brightness == Brightness.dark
-                    ? Colors.black
-                    : Colors.white,
-                child: SingleChildScrollView(
-                  controller: _sc,
-                  child: Column(
-                    children: [
-                      SectionContainer(
-                        key: homeKey,
-                        spacerBelow: false,
-                        child: const HeroSection(),
-                      ),
-                      const SectionDivider(curveType: CurveType.bottom),
-                      SectionContainer(
-                          key: aboutKey, child: const AboutSection()),
-                      const SectionDivider(curveType: CurveType.top),
-                      SectionContainer(
-                          key: skillsKey,
-                          child: SkillsSection(skills: _skills)),
-                      const SectionDivider(curveType: CurveType.bottom),
-                      SectionContainer(
-                          key: experienceKey,
-                          child: ExperienceSection(experiences: _experiences)),
-                      const SectionDivider(curveType: CurveType.top),
-                      SectionContainer(
-                          key: projectsKey,
-                          child: ProjectsSection(projects: _projects)),
-                      const SectionDivider(curveType: CurveType.bottom),
-                      SectionContainer(
-                        key: openSourceKey,
-                        child: OpenSourceSection(projects: _openSourceProjects),
-                      ),
-                      const SectionDivider(curveType: CurveType.top),
-                      SectionContainer(
-                        key: writingKey,
-                        child: WritingSection(articles: _articles),
-                      ),
-                      const SectionDivider(curveType: CurveType.top),
-                      SectionContainer(
-                          key: contactKey, child: const ContactSection()),
-                    ],
+    return ValueListenableBuilder<double>(
+      valueListenable: _scrollOffsetNotifier,
+      builder: (context, scrollOffset, child) {
+        return MotionBackground(
+          scrollOffset: scrollOffset,
+          child: Scaffold(
+            floatingActionButton: _buildThemeToggle(context),
+            floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+            backgroundColor: Colors.transparent,
+            body: Row(
+              children: [
+                // Left Sidebar - use RepaintBoundary for better performance
+                if (!isMobile)
+                  RepaintBoundary(
+                    child: ValueListenableBuilder<String>(
+                      valueListenable: _activeSectionNotifier,
+                      builder: (context, activeSection, _) {
+                        return Sidebar(
+                          activeSection: activeSection,
+                          onSectionTap: _onSectionTap,
+                          isMobile: isMobile,
+                        );
+                      },
+                    ),
+                  ),
+                // Main Content
+                Expanded(
+                  child: Container(
+                    color: Theme.of(context).brightness == Brightness.dark
+                        ? Colors.black
+                        : Colors.white,
+                    child: _isLoading
+                        ? const Center(child: CircularProgressIndicator())
+                        : _buildScrollContent(),
                   ),
                 ),
-              ),
+              ],
             ),
-          ],
-        ),
-        // Mobile: Show top navbar
-        appBar: isMobile
-            ? PreferredSize(
-                preferredSize: const Size.fromHeight(65),
-                child: AnimatedNavbar(
-                  onTap: (label) {
-                    final key = {
-                      'Home': homeKey,
-                      'About': aboutKey,
-                      'Skills': skillsKey,
-                      'Experience': experienceKey,
-                      'Projects': projectsKey,
-                      'Contact': contactKey,
-                    }[label];
-                    if (key != null) scrollTo(key);
-                  },
-                  isMobile: isMobile,
-                ),
-              )
-            : null,
+            // Mobile: Show top navbar
+            // appBar: isMobile ? _buildMobileAppBar() : null,
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildScrollContent() {
+    return SingleChildScrollView(
+      controller: _sc,
+      physics: const BouncingScrollPhysics(), // Smoother scroll physics
+      child: Column(
+        children: [
+          RepaintBoundary(
+            child: SectionContainer(
+              key: homeKey,
+              spacerBelow: false,
+              fullSize: true,
+              child: const HeroSection(),
+            ),
+          ),
+          RepaintBoundary(
+            child: SectionContainer(
+              key: aboutKey,
+              child: const AboutSection(),
+            ),
+          ),
+          RepaintBoundary(
+            child: SectionContainer(
+              key: skillsKey,
+              child: SkillsSection(skills: _skills),
+            ),
+          ),
+          RepaintBoundary(
+            child: SectionContainer(
+              key: experienceKey,
+              child: ExperienceSection(experiences: _experiences),
+            ),
+          ),
+          RepaintBoundary(
+            child: SectionContainer(
+              key: projectsKey,
+              child: ProjectsSection(projects: _projects),
+            ),
+          ),
+          RepaintBoundary(
+            child: SectionContainer(
+              key: openSourceKey,
+              child: OpenSourceSection(projects: _openSourceProjects),
+            ),
+          ),
+          RepaintBoundary(
+            child: SectionContainer(
+              key: writingKey,
+              child: WritingSection(articles: _articles),
+            ),
+          ),
+          RepaintBoundary(
+            child: SectionContainer(
+              key: contactKey,
+              child: const ContactSection(),
+            ),
+          ),
+        ],
       ),
     );
   }
+
+  Widget _buildThemeToggle(BuildContext context) {
+    return BlocBuilder<ThemeCubit, ThemeMode>(
+      builder: (context, themeMode) {
+        final isDark = themeMode == ThemeMode.dark ||
+            (themeMode == ThemeMode.system &&
+                MediaQuery.of(context).platformBrightness == Brightness.dark);
+        
+        return RepaintBoundary(
+          child: FloatingActionButton(
+            onPressed: () {
+              context.read<ThemeCubit>().toggleTheme();
+            },
+            backgroundColor: Theme.of(context).colorScheme.primary,
+            foregroundColor: Theme.of(context).colorScheme.onPrimary,
+            elevation: 4,
+            child: AnimatedSwitcher(
+              duration: const Duration(milliseconds: 300),
+              transitionBuilder: (child, animation) {
+                return RotationTransition(
+                  turns: animation,
+                  child: FadeTransition(
+                    opacity: animation,
+                    child: child,
+                  ),
+                );
+              },
+              child: Icon(
+                isDark ? Icons.light_mode : Icons.dark_mode,
+                key: ValueKey(isDark),
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  // PreferredSizeWidget _buildMobileAppBar() {
+  //   return PreferredSize(
+  //     preferredSize: const Size.fromHeight(65),
+  //     child: RepaintBoundary(
+  //       child: AnimatedNavbar(
+  //         onTap: (label) {
+  //           final key = {
+  //             'Home': homeKey,
+  //             'About': aboutKey,
+  //             'Skills': skillsKey,
+  //             'Experience': experienceKey,
+  //             'Projects': projectsKey,
+  //             'Contact': contactKey,
+  //           }[label];
+  //           if (key != null) _scrollToKey(key);
+  //         },
+  //         isMobile: true,
+  //       ),
+  //     ),
+  //   );
+  // }
 
   @override
   void dispose() {
     _sc.removeListener(_handleScroll);
     _sc.dispose();
+    _scrollOffsetNotifier.dispose();
+    _activeSectionNotifier.dispose();
     super.dispose();
   }
 }

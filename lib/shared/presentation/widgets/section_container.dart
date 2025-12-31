@@ -4,11 +4,13 @@ import 'package:visibility_detector/visibility_detector.dart';
 class SectionContainer extends StatefulWidget {
   final Widget child;
   final bool spacerBelow;
+  final bool fullSize;
   final Duration revealDuration;
 
   const SectionContainer({
     super.key,
     required this.child,
+    this.fullSize = false,
     this.spacerBelow = true,
     this.revealDuration = const Duration(milliseconds: 600),
   });
@@ -35,14 +37,16 @@ class _SectionContainerState extends State<SectionContainer> {
 
   @override
   Widget build(BuildContext context) {
-    final content = Container(
-      padding: const EdgeInsets.symmetric(vertical: 80, horizontal: 12),
-      alignment: Alignment.center,
-      child: ConstrainedBox(
-        constraints: const BoxConstraints(maxWidth: 1040),
-        child: widget.child,
-      ),
-    );
+    final content = widget.fullSize
+        ? widget.child
+        : Container(
+            padding: const EdgeInsets.symmetric(vertical: 80, horizontal: 12),
+            alignment: Alignment.center,
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 1040),
+              child: widget.child,
+            ),
+          );
 
     return VisibilityDetector(
       key: _visibilityKey,
