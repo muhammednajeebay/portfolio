@@ -1,5 +1,5 @@
-
 import 'package:flutter/material.dart';
+import 'package:portfolio/features/hero/presentation/widgets/light_bulb.dart';
 
 /// Chair with person - positioned in room depth
 class ChairWithPerson extends StatelessWidget {
@@ -9,9 +9,12 @@ class ChairWithPerson extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return RepaintBoundary(
       child: Stack(
         alignment: Alignment.bottomCenter,
+        clipBehavior: Clip.none,
         children: [
           // Contact shadow
           Positioned(
@@ -38,6 +41,16 @@ class ChairWithPerson extends StatelessWidget {
             child: Image.asset(
               'assets/profile/hero_img.png',
               fit: BoxFit.contain,
+            ),
+          ),
+
+          // Hanging light bulb - positioned in room space above and in front
+          Positioned(
+            top: -size.height * 0.15, // Higher up in the room
+            left: size.width * 0.02, // Slightly offset to appear in front
+            child: HangingLightBulb(
+              isDark: isDark,
+              size: 50,
             ),
           ),
         ],
