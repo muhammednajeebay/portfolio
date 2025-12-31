@@ -43,73 +43,109 @@ class _HeroSectionState extends State<HeroSection>
     final size = MediaQuery.of(context).size;
     final isMobile = size.width < 1024;
 
-    return RepaintBoundary(
-      child: SizedBox(
-        height: size.height,
-        width: size.width,
-        child: Stack(
-          children: [
-            // Simple perspective background
-            AnimatedBuilder(
-              animation: _fade,
-              builder: (context, _) {
-                return CustomPaint(
-                  size: size,
-                  painter: SimplePerspectivePainter(
-                    opacity: _fade.value,
-                    isDark: isDark,
-                  ),
-                );
-              },
-            ),
-
-            // Main content layout
-            if (!isMobile)
-              Positioned.fill(
-                child: Row(
-                  children: [
-                    // Left side - Text content
-                    Expanded(
-                      flex: 5,
-                      child: Padding(
-                        padding: EdgeInsets.only(
-                          left: size.width * 0.18,
-                          top: size.height * 0.22,
-                        ),
-                        child: FadeTransition(
-                          opacity: _fade,
-                          child: const WallText(isMobile: false),
-                        ),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        return constraints.maxWidth < 1024
+            ? RepaintBoundary(
+                child: SizedBox(
+                  height: size.height,
+                  width: size.width,
+                  child: Stack(
+                    children: [
+                      // Simple perspective background
+                      AnimatedBuilder(
+                        animation: _fade,
+                        builder: (context, _) {
+                          return CustomPaint(
+                            size: size,
+                            painter: SimplePerspectivePainter(
+                              opacity: _fade.value,
+                              isDark: isDark,
+                            ),
+                          );
+                        },
                       ),
-                    ),
 
-                    // Right side - Person with chair
-                    Expanded(
-                      flex: 5,
-                      child: Align(
-                        alignment: Alignment.bottomCenter,
-                        child: Padding(
-                          padding: EdgeInsets.only(
-                            right: size.width * 0.1,
-                            bottom: size.height * 0.08,
+                      // Main content layout
+                      if (!isMobile)
+                        Positioned.fill(
+                          child: Row(
+                            children: [
+                              // Left side - Text content
+                              Expanded(
+                                flex: 5,
+                                child: Padding(
+                                  padding: EdgeInsets.only(
+                                    left: size.width * 0.18,
+                                    top: size.height * 0.22,
+                                  ),
+                                  child: FadeTransition(
+                                    opacity: _fade,
+                                    child: const WallText(isMobile: false),
+                                  ),
+                                ),
+                              ),
+
+                              // Right side - Person with chair
+                              Expanded(
+                                flex: 5,
+                                child: Align(
+                                  alignment: Alignment.bottomCenter,
+                                  child: Padding(
+                                    padding: EdgeInsets.only(
+                                      right: size.width * 0.1,
+                                      bottom: size.height * 0.08,
+                                    ),
+                                    child: FadeTransition(
+                                      opacity: _fade,
+                                      child: Transform.scale(
+                                        scale: 1.15,
+                                        child: ChairWithPerson(size: size),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
+                        ),
+
+                      // Scroll indicator at bottom
+                      if (!isMobile)
+                        Positioned(
+                          bottom: 40,
+                          left: 0,
+                          right: 0,
                           child: FadeTransition(
                             opacity: _fade,
-                            child: Transform.scale(
-                              scale: 1.15,
-                              child: ChairWithPerson(size: size),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(
+                                  'Scroll Down',
+                                  style:
+                                      AppTextStyles.bodySmall(context).copyWith(
+                                    color: context.appColors.bodyText
+                                        .withOpacity(0.6),
+                                    letterSpacing: 1.5,
+                                  ),
+                                ),
+                                const SizedBox(height: 8),
+                                Icon(
+                                  Icons.keyboard_arrow_down,
+                                  color: context.appColors.bodyText
+                                      .withOpacity(0.6),
+                                  size: 20,
+                                ),
+                              ],
                             ),
                           ),
                         ),
-                      ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-
-            // Mobile layout
-            if (isMobile)
-              Padding(
+              )
+            : Padding(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 24, vertical: 60),
                 child: Column(
@@ -135,39 +171,8 @@ class _HeroSectionState extends State<HeroSection>
                     ),
                   ],
                 ),
-              ),
-
-            // Scroll indicator at bottom
-            if (!isMobile)
-              Positioned(
-                bottom: 40,
-                left: 0,
-                right: 0,
-                child: FadeTransition(
-                  opacity: _fade,
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        'Scroll Down',
-                        style: AppTextStyles.bodySmall(context).copyWith(
-                          color: context.appColors.bodyText.withOpacity(0.6),
-                          letterSpacing: 1.5,
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      Icon(
-                        Icons.keyboard_arrow_down,
-                        color: context.appColors.bodyText.withOpacity(0.6),
-                        size: 20,
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-          ],
-        ),
-      ),
+              );
+      },
     );
   }
 }
