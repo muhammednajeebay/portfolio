@@ -3,14 +3,18 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:portfolio/shared/domain/entities/article.dart';
+import 'package:portfolio/shared/domain/entities/hero_info.dart';
 import 'package:portfolio/shared/domain/entities/experience.dart';
 import 'package:portfolio/shared/domain/entities/project.dart';
 import 'package:portfolio/shared/domain/entities/skill.dart';
+import 'package:portfolio/shared/domain/entities/about.dart';
 import 'package:portfolio/shared/domain/usecases/get_articles.dart';
 import 'package:portfolio/shared/domain/usecases/get_experiences.dart';
 import 'package:portfolio/shared/domain/usecases/get_open_source_projects.dart';
 import 'package:portfolio/shared/domain/usecases/get_projects.dart';
 import 'package:portfolio/shared/domain/usecases/get_skills.dart';
+import 'package:portfolio/shared/domain/usecases/get_about_info.dart';
+import 'package:portfolio/shared/domain/usecases/get_hero_info.dart';
 import 'package:portfolio/features/about/presentation/widgets/about_section.dart';
 import 'package:portfolio/features/contact/presentation/widgets/contact_section.dart';
 import 'package:portfolio/features/hero/presentation/pages/hero_page.dart';
@@ -30,6 +34,8 @@ class HomePage extends StatefulWidget {
   final GetExperiences getExperiences;
   final GetOpenSourceProjects getOpenSourceProjects;
   final GetArticles getArticles;
+  final GetAboutInfo getAboutInfo;
+  final GetHeroInfo getHeroInfo;
 
   const HomePage({
     super.key,
@@ -38,6 +44,8 @@ class HomePage extends StatefulWidget {
     required this.getExperiences,
     required this.getOpenSourceProjects,
     required this.getArticles,
+    required this.getAboutInfo,
+    required this.getHeroInfo,
   });
 
   @override
@@ -61,6 +69,8 @@ class _HomePageState extends State<HomePage>
   List<Experience> _experiences = [];
   List<Project> _openSourceProjects = [];
   List<Article> _articles = [];
+  About? _aboutInfo;
+  HeroInfo? _heroInfo;
 
   // Use ValueNotifier for better performance
   final ValueNotifier<double> _scrollOffsetNotifier = ValueNotifier(0);
@@ -149,6 +159,8 @@ class _HomePageState extends State<HomePage>
         widget.getExperiences(),
         widget.getOpenSourceProjects(),
         widget.getArticles(),
+        widget.getAboutInfo(),
+        widget.getHeroInfo(),
       ]);
 
       if (!mounted) return;
@@ -159,6 +171,8 @@ class _HomePageState extends State<HomePage>
         _experiences = results[2] as List<Experience>;
         _openSourceProjects = results[3] as List<Project>;
         _articles = results[4] as List<Article>;
+        _aboutInfo = results[5] as About;
+        _heroInfo = results[6] as HeroInfo;
         _isLoading = false;
       });
     } catch (e) {
@@ -274,13 +288,13 @@ class _HomePageState extends State<HomePage>
               key: homeKey,
               spacerBelow: false,
               fullSize: true,
-              child: const HeroSection(),
+              child: HeroSection(heroInfo: _heroInfo!),
             ),
           ),
           RepaintBoundary(
             child: SectionContainer(
               key: aboutKey,
-              child: const AboutSection(),
+              child: AboutSection(aboutInfo: _aboutInfo!),
             ),
           ),
           // Work section (Projects) - moved before Skills to match sidebar order

@@ -30,46 +30,54 @@ class AppColors {
 }
 
 /// App Text Styles
-/// Provides predefined text styles using Google Fonts (Outfit)
+/// Provides predefined text styles using Google Fonts (roboto)
 class AppTextStyles {
   // Display Styles
-  static TextStyle displayLarge(BuildContext context) => GoogleFonts.outfit(
+  static TextStyle displayLarge(BuildContext context) => GoogleFonts.roboto(
         fontSize: 57,
         fontWeight: FontWeight.bold,
         letterSpacing: -0.25,
         color: Theme.of(context).colorScheme.onSurface,
       );
 
-  static TextStyle displayMedium(BuildContext context) => GoogleFonts.outfit(
+  static TextStyle displayMedium(BuildContext context) => GoogleFonts.roboto(
         fontSize: 45,
         fontWeight: FontWeight.bold,
         letterSpacing: 0,
         color: Theme.of(context).colorScheme.onSurface,
       );
 
-  static TextStyle displaySmall(BuildContext context) => GoogleFonts.outfit(
+  static TextStyle displaySmall(BuildContext context) => GoogleFonts.roboto(
         fontSize: 36,
         fontWeight: FontWeight.bold,
         letterSpacing: 0,
         color: Theme.of(context).colorScheme.onSurface,
       );
 
+  // Hero Name Styles
+  static TextStyle splashTitle(BuildContext context) => GoogleFonts.bebasNeue(
+        fontSize: 48,
+        fontWeight: FontWeight.bold,
+        letterSpacing: 0,
+        color: Theme.of(context).colorScheme.onSurface,
+      );
+
   // Headline Styles
-  static TextStyle headlineLarge(BuildContext context) => GoogleFonts.outfit(
+  static TextStyle headlineLarge(BuildContext context) => GoogleFonts.roboto(
         fontSize: 32,
         fontWeight: FontWeight.bold,
         letterSpacing: 0,
         color: Theme.of(context).colorScheme.onSurface,
       );
 
-  static TextStyle headlineMedium(BuildContext context) => GoogleFonts.outfit(
+  static TextStyle headlineMedium(BuildContext context) => GoogleFonts.roboto(
         fontSize: 28,
         fontWeight: FontWeight.bold,
         letterSpacing: 0,
         color: Theme.of(context).colorScheme.onSurface,
       );
 
-  static TextStyle headlineSmall(BuildContext context) => GoogleFonts.outfit(
+  static TextStyle headlineSmall(BuildContext context) => GoogleFonts.roboto(
         fontSize: 24,
         fontWeight: FontWeight.w600,
         letterSpacing: 0,
@@ -77,21 +85,21 @@ class AppTextStyles {
       );
 
   // Title Styles
-  static TextStyle titleLarge(BuildContext context) => GoogleFonts.outfit(
+  static TextStyle titleLarge(BuildContext context) => GoogleFonts.roboto(
         fontSize: 22,
         fontWeight: FontWeight.w600,
         letterSpacing: 0,
         color: Theme.of(context).colorScheme.onSurface,
       );
 
-  static TextStyle titleMedium(BuildContext context) => GoogleFonts.outfit(
+  static TextStyle titleMedium(BuildContext context) => GoogleFonts.roboto(
         fontSize: 16,
         fontWeight: FontWeight.w600,
         letterSpacing: 0.15,
         color: Theme.of(context).colorScheme.onSurface,
       );
 
-  static TextStyle titleSmall(BuildContext context) => GoogleFonts.outfit(
+  static TextStyle titleSmall(BuildContext context) => GoogleFonts.roboto(
         fontSize: 14,
         fontWeight: FontWeight.w600,
         letterSpacing: 0.1,
@@ -99,7 +107,7 @@ class AppTextStyles {
       );
 
   // Body Styles
-  static TextStyle bodyLarge(BuildContext context) => GoogleFonts.outfit(
+  static TextStyle bodyLarge(BuildContext context) => GoogleFonts.roboto(
         fontSize: 16,
         fontWeight: FontWeight.w400,
         letterSpacing: 0.5,
@@ -107,7 +115,7 @@ class AppTextStyles {
         color: Theme.of(context).colorScheme.onSurface,
       );
 
-  static TextStyle bodyMedium(BuildContext context) => GoogleFonts.outfit(
+  static TextStyle bodyMedium(BuildContext context) => GoogleFonts.roboto(
         fontSize: 14,
         fontWeight: FontWeight.w400,
         letterSpacing: 0.25,
@@ -115,7 +123,7 @@ class AppTextStyles {
         color: Theme.of(context).colorScheme.onSurface,
       );
 
-  static TextStyle bodySmall(BuildContext context) => GoogleFonts.outfit(
+  static TextStyle bodySmall(BuildContext context) => GoogleFonts.roboto(
         fontSize: 12,
         fontWeight: FontWeight.w400,
         letterSpacing: 0.4,
@@ -124,21 +132,21 @@ class AppTextStyles {
       );
 
   // Label Styles
-  static TextStyle labelLarge(BuildContext context) => GoogleFonts.outfit(
+  static TextStyle labelLarge(BuildContext context) => GoogleFonts.roboto(
         fontSize: 14,
         fontWeight: FontWeight.w500,
         letterSpacing: 0.1,
         color: Theme.of(context).colorScheme.onSurface,
       );
 
-  static TextStyle labelMedium(BuildContext context) => GoogleFonts.outfit(
+  static TextStyle labelMedium(BuildContext context) => GoogleFonts.roboto(
         fontSize: 12,
         fontWeight: FontWeight.w500,
         letterSpacing: 0.5,
         color: Theme.of(context).colorScheme.onSurface,
       );
 
-  static TextStyle labelSmall(BuildContext context) => GoogleFonts.outfit(
+  static TextStyle labelSmall(BuildContext context) => GoogleFonts.roboto(
         fontSize: 11,
         fontWeight: FontWeight.w500,
         letterSpacing: 0.5,
@@ -146,7 +154,7 @@ class AppTextStyles {
       );
 
   // Custom Styles
-  static TextStyle heroName(BuildContext context) => GoogleFonts.outfit(
+  static TextStyle heroName(BuildContext context) => GoogleFonts.roboto(
         fontSize: 48,
         fontWeight: FontWeight.bold,
         letterSpacing: -1,
@@ -156,7 +164,7 @@ class AppTextStyles {
 
   static TextStyle heroTitle(BuildContext context) {
     final colors = context.appColors;
-    return GoogleFonts.outfit(
+    return GoogleFonts.roboto(
       fontSize: 22,
       fontWeight: FontWeight.w600,
       height: 1.4,
@@ -164,27 +172,27 @@ class AppTextStyles {
     );
   }
 
-  static TextStyle heroGreeting(BuildContext context) => GoogleFonts.outfit(
+  static TextStyle heroGreeting(BuildContext context) => GoogleFonts.roboto(
         fontSize: 22,
         fontWeight: FontWeight.w300,
         color: Theme.of(context).colorScheme.onSurface,
       );
 
-  static TextStyle sectionTitle(BuildContext context) => GoogleFonts.outfit(
+  static TextStyle sectionTitle(BuildContext context) => GoogleFonts.roboto(
         fontSize: 36,
         fontWeight: FontWeight.bold,
         letterSpacing: -0.5,
         color: Theme.of(context).colorScheme.onSurface,
       );
 
-  static TextStyle cardTitle(BuildContext context) => GoogleFonts.outfit(
+  static TextStyle cardTitle(BuildContext context) => GoogleFonts.roboto(
         fontSize: 20,
         fontWeight: FontWeight.w600,
         color: Theme.of(context).colorScheme.onSurface,
       );
 
   static TextStyle navItem(BuildContext context, {bool isActive = false}) =>
-      GoogleFonts.outfit(
+      GoogleFonts.roboto(
         fontSize: 14,
         fontWeight: isActive ? FontWeight.w800 : FontWeight.w600,
         letterSpacing: 1.5,
@@ -261,80 +269,80 @@ class AppThemeColors {
 /// Main App Theme Configuration
 class AppTheme {
   static TextTheme _buildTextTheme(TextTheme base, Color headings, Color body) {
-    return GoogleFonts.outfitTextTheme(base).copyWith(
+    return GoogleFonts.robotoTextTheme(base).copyWith(
       // Display
-      displayLarge: GoogleFonts.outfit(
+      displayLarge: GoogleFonts.roboto(
         color: headings,
         fontWeight: FontWeight.bold,
         fontSize: 57,
         letterSpacing: -0.25,
       ),
-      displayMedium: GoogleFonts.outfit(
+      displayMedium: GoogleFonts.roboto(
         color: headings,
         fontWeight: FontWeight.bold,
         fontSize: 45,
         letterSpacing: 0,
       ),
-      displaySmall: GoogleFonts.outfit(
+      displaySmall: GoogleFonts.roboto(
         color: headings,
         fontWeight: FontWeight.bold,
         fontSize: 36,
         letterSpacing: 0,
       ),
       // Headline
-      headlineLarge: GoogleFonts.outfit(
+      headlineLarge: GoogleFonts.roboto(
         color: headings,
         fontWeight: FontWeight.bold,
         fontSize: 32,
         letterSpacing: 0,
       ),
-      headlineMedium: GoogleFonts.outfit(
+      headlineMedium: GoogleFonts.roboto(
         color: headings,
         fontWeight: FontWeight.bold,
         fontSize: 28,
         letterSpacing: 0,
       ),
-      headlineSmall: GoogleFonts.outfit(
+      headlineSmall: GoogleFonts.roboto(
         color: headings,
         fontWeight: FontWeight.w600,
         fontSize: 24,
         letterSpacing: 0,
       ),
       // Title
-      titleLarge: GoogleFonts.outfit(
+      titleLarge: GoogleFonts.roboto(
         color: headings,
         fontWeight: FontWeight.w600,
         fontSize: 22,
         letterSpacing: 0,
       ),
-      titleMedium: GoogleFonts.outfit(
+      titleMedium: GoogleFonts.roboto(
         color: headings,
         fontWeight: FontWeight.w600,
         fontSize: 16,
         letterSpacing: 0.15,
       ),
-      titleSmall: GoogleFonts.outfit(
+      titleSmall: GoogleFonts.roboto(
         color: headings,
         fontWeight: FontWeight.w600,
         fontSize: 14,
         letterSpacing: 0.1,
       ),
       // Body
-      bodyLarge: GoogleFonts.outfit(
+      bodyLarge: GoogleFonts.roboto(
         color: body,
         fontSize: 16,
         fontWeight: FontWeight.w400,
         letterSpacing: 0.5,
         height: 1.5,
       ),
-      bodyMedium: GoogleFonts.outfit(
+      bodyMedium: GoogleFonts.roboto(
         color: body,
         fontSize: 14,
         fontWeight: FontWeight.w400,
         letterSpacing: 0.25,
         height: 1.5,
       ),
-      bodySmall: GoogleFonts.outfit(
+      bodySmall: GoogleFonts.roboto(
         color: body,
         fontSize: 12,
         fontWeight: FontWeight.w400,
@@ -342,19 +350,19 @@ class AppTheme {
         height: 1.4,
       ),
       // Label
-      labelLarge: GoogleFonts.outfit(
+      labelLarge: GoogleFonts.roboto(
         color: body,
         fontSize: 14,
         fontWeight: FontWeight.w500,
         letterSpacing: 0.1,
       ),
-      labelMedium: GoogleFonts.outfit(
+      labelMedium: GoogleFonts.roboto(
         color: body,
         fontSize: 12,
         fontWeight: FontWeight.w500,
         letterSpacing: 0.5,
       ),
-      labelSmall: GoogleFonts.outfit(
+      labelSmall: GoogleFonts.roboto(
         color: body,
         fontSize: 11,
         fontWeight: FontWeight.w500,

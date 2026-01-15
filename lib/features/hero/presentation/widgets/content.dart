@@ -1,12 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:portfolio/core/theme/app_theme.dart';
 import 'package:portfolio/shared/presentation/widgets/animated_Text.dart';
+import 'package:portfolio/shared/domain/entities/hero_info.dart';
 
 /// Text content on the wall
 class WallText extends StatelessWidget {
   final bool isMobile;
+  final HeroInfo heroInfo;
 
-  const WallText({super.key, required this.isMobile});
+  const WallText({
+    super.key,
+    required this.isMobile,
+    required this.heroInfo,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +20,7 @@ class WallText extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         AnimatedText(
-          text: 'Hi, I am',
+          text: heroInfo.greeting,
           delay: 0,
           style: AppTextStyles.heroGreeting(context).copyWith(
             fontSize: isMobile ? 18 : 22,
@@ -22,7 +28,7 @@ class WallText extends StatelessWidget {
         ),
         const SizedBox(height: 6),
         AnimatedText(
-          text: 'Muhammed Najeeb AY',
+          text: heroInfo.name,
           delay: 100,
           style: AppTextStyles.heroName(context).copyWith(
             fontSize: isMobile ? 32 : 48,
@@ -45,7 +51,7 @@ class WallText extends StatelessWidget {
         ),
         const SizedBox(height: 18),
         AnimatedText(
-          text: 'Flutter Developer',
+          text: heroInfo.title,
           delay: 250,
           style: AppTextStyles.heroTitle(context).copyWith(
             fontSize: isMobile ? 18 : 21,
@@ -53,7 +59,7 @@ class WallText extends StatelessWidget {
         ),
         const SizedBox(height: 4),
         AnimatedText(
-          text: 'Mobile & Web Applications',
+          text: heroInfo.subtitle,
           delay: 280,
           style: AppTextStyles.bodyLarge(context).copyWith(
             fontSize: isMobile ? 14 : 16,
@@ -61,24 +67,23 @@ class WallText extends StatelessWidget {
         ),
         if (!isMobile) ...[
           const SizedBox(height: 24),
-          AnimatedText(
-            text:
-                'I build scalable Flutter applications\nwith clean architecture,',
-            delay: 350,
-            style: AppTextStyles.bodyMedium(context).copyWith(
-              color: context.appColors.bodyText.withOpacity(0.7),
-              height: 1.7,
-            ),
-          ),
-          const SizedBox(height: 2),
-          AnimatedText(
-            text: 'focused on performance, clarity,\nand real-world impact.',
-            delay: 380,
-            style: AppTextStyles.bodyMedium(context).copyWith(
-              color: context.appColors.bodyText.withOpacity(0.7),
-              height: 1.7,
-            ),
-          ),
+          ...List.generate(heroInfo.descriptionLines.length, (index) {
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                AnimatedText(
+                  text: heroInfo.descriptionLines[index],
+                  delay: 350 + (index * 30),
+                  style: AppTextStyles.bodyMedium(context).copyWith(
+                    color: context.appColors.bodyText.withOpacity(0.7),
+                    height: 1.7,
+                  ),
+                ),
+                if (index < heroInfo.descriptionLines.length - 1)
+                  const SizedBox(height: 2),
+              ],
+            );
+          }),
         ],
       ],
     );

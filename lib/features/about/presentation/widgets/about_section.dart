@@ -2,9 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../../../core/theme/app_theme.dart';
+import '../../../../shared/domain/entities/about.dart';
 
 class AboutSection extends StatelessWidget {
-  const AboutSection({super.key});
+  final About aboutInfo;
+
+  const AboutSection({
+    super.key,
+    required this.aboutInfo,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +44,7 @@ class AboutSection extends StatelessWidget {
               ),
             ],
             child: Text(
-              'What about me',
+              aboutInfo.title,
               style: GoogleFonts.outfit(
                 color:
                     isDark ? AppColors.darkHeadings : AppColors.lightHeadings,
@@ -97,7 +103,7 @@ class AboutSection extends StatelessWidget {
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(8),
                       child: Image.asset(
-                        'assets/profile/najeeb_pic.PNG',
+                        aboutInfo.imageUrl,
                         fit: BoxFit.cover,
                         color: Colors.white,
                         colorBlendMode: BlendMode.saturation,
@@ -148,7 +154,7 @@ class AboutSection extends StatelessWidget {
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(8),
                             child: Image.asset(
-                              'assets/profile/najeeb_pic.PNG',
+                              aboutInfo.imageUrl,
                               fit: BoxFit.cover,
                               color: Colors.white,
                               colorBlendMode: BlendMode.saturation,
@@ -157,104 +163,46 @@ class AboutSection extends StatelessWidget {
                         ),
                       ),
                     ],
-                    Animate(
-                      effects: [
-                        FadeEffect(
-                          duration: 700.ms,
-                          delay: 500.ms,
-                          curve: Curves.easeOutCubic,
-                        ),
-                        MoveEffect(
-                          begin: const Offset(30, 0),
-                          duration: 800.ms,
-                          delay: 500.ms,
-                          curve: Curves.fastOutSlowIn,
-                        ),
-                        BlurEffect(
-                          begin: const Offset(10, 0),
-                          duration: 700.ms,
-                          delay: 500.ms,
-                          curve: Curves.easeOutCubic,
-                        ),
-                      ],
-                      child: Text(
-                        "I'm Muhammed Najeeb, a Flutter Developer who builds mobile applications with a strong emphasis on clarity, structure, and long-term maintainability. I focus on creating products that feel fast, intentional, and dependable — not just visually polished, but architecturally sound.",
-                        style: GoogleFonts.outfit(
-                          color: isDark
-                              ? AppColors.darkBodyText
-                              : AppColors.lightBodyText,
-                          fontSize: isMobile ? 16 : 18,
-                          fontWeight: FontWeight.w400,
-                          height: 1.7,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 24),
-                    Animate(
-                      effects: [
-                        FadeEffect(
-                          duration: 700.ms,
-                          delay: 700.ms,
-                          curve: Curves.easeOutCubic,
-                        ),
-                        MoveEffect(
-                          begin: const Offset(30, 0),
-                          duration: 800.ms,
-                          delay: 700.ms,
-                          curve: Curves.fastOutSlowIn,
-                        ),
-                        BlurEffect(
-                          begin: const Offset(10, 0),
-                          duration: 700.ms,
-                          delay: 700.ms,
-                          curve: Curves.easeOutCubic,
-                        ),
-                      ],
-                      child: Text(
-                        "My work lives at the intersection of clean architecture and real-world usability. I've built production-grade systems including ERP platforms, learning management systems, and real-time applications, where scalability and performance aren't optional — they're requirements. I care deeply about how code evolves over time and how design decisions impact both users and developers.",
-                        style: GoogleFonts.outfit(
-                          color: isDark
-                              ? AppColors.darkBodyText
-                              : AppColors.lightBodyText,
-                          fontSize: isMobile ? 16 : 18,
-                          fontWeight: FontWeight.w400,
-                          height: 1.7,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 24),
-                    Animate(
-                      effects: [
-                        FadeEffect(
-                          duration: 700.ms,
-                          delay: 900.ms,
-                          curve: Curves.easeOutCubic,
-                        ),
-                        MoveEffect(
-                          begin: const Offset(30, 0),
-                          duration: 800.ms,
-                          delay: 900.ms,
-                          curve: Curves.fastOutSlowIn,
-                        ),
-                        BlurEffect(
-                          begin: const Offset(10, 0),
-                          duration: 700.ms,
-                          delay: 900.ms,
-                          curve: Curves.easeOutCubic,
-                        ),
-                      ],
-                      child: Text(
-                        "I value ownership, simplicity, and continuous improvement. I approach problems analytically, communicate clearly, and refine relentlessly. For me, good software is quiet — it works, it scales, and it doesn't get in the way.",
-                        style: GoogleFonts.outfit(
-                          color: isDark
-                              ? AppColors.darkBodyText
-                              : AppColors.lightBodyText,
-                          fontSize: isMobile ? 16 : 18,
-                          fontWeight: FontWeight.w400,
-                          height: 1.7,
-                        ),
-                      ),
-                    ),
+                    ...List.generate(aboutInfo.descriptions.length, (index) {
+                      return Column(
+                        children: [
+                          Animate(
+                            effects: [
+                              FadeEffect(
+                                duration: 700.ms,
+                                delay: (500 + index * 200).ms,
+                                curve: Curves.easeOutCubic,
+                              ),
+                              MoveEffect(
+                                begin: const Offset(30, 0),
+                                duration: 800.ms,
+                                delay: (500 + index * 200).ms,
+                                curve: Curves.fastOutSlowIn,
+                              ),
+                              BlurEffect(
+                                begin: const Offset(10, 0),
+                                duration: 700.ms,
+                                delay: (500 + index * 200).ms,
+                                curve: Curves.easeOutCubic,
+                              ),
+                            ],
+                            child: Text(
+                              aboutInfo.descriptions[index],
+                              style: GoogleFonts.outfit(
+                                color: isDark
+                                    ? AppColors.darkBodyText
+                                    : AppColors.lightBodyText,
+                                fontSize: isMobile ? 16 : 18,
+                                fontWeight: FontWeight.w400,
+                                height: 1.7,
+                              ),
+                            ),
+                          ),
+                          if (index < aboutInfo.descriptions.length - 1)
+                            const SizedBox(height: 24),
+                        ],
+                      );
+                    }),
                   ],
                 ),
               ),

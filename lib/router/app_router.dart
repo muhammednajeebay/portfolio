@@ -5,6 +5,8 @@ import 'package:portfolio/shared/domain/usecases/get_projects.dart';
 import 'package:portfolio/shared/domain/usecases/get_skills.dart';
 import 'package:portfolio/shared/domain/usecases/get_articles.dart';
 import 'package:portfolio/shared/domain/usecases/get_open_source_projects.dart';
+import 'package:portfolio/shared/domain/usecases/get_about_info.dart';
+import 'package:portfolio/shared/domain/usecases/get_hero_info.dart';
 import 'package:portfolio/shared/domain/entities/project.dart';
 import 'package:portfolio/features/projects/presentation/pages/project_details_page.dart';
 import 'package:portfolio/shared/presentation/widgets/splash_screen.dart';
@@ -15,6 +17,8 @@ class AppRouter {
   final GetExperiences getExperiences;
   final GetOpenSourceProjects getOpenSourceProjects;
   final GetArticles getArticles;
+  final GetAboutInfo getAboutInfo;
+  final GetHeroInfo getHeroInfo;
 
   AppRouter({
     required this.getProjects,
@@ -22,6 +26,8 @@ class AppRouter {
     required this.getExperiences,
     required this.getOpenSourceProjects,
     required this.getArticles,
+    required this.getAboutInfo,
+    required this.getHeroInfo,
   });
 
   late final router = GoRouter(
@@ -39,6 +45,8 @@ class AppRouter {
           getExperiences: getExperiences,
           getOpenSourceProjects: getOpenSourceProjects,
           getArticles: getArticles,
+          getAboutInfo: getAboutInfo,
+          getHeroInfo: getHeroInfo,
         ),
       ),
       GoRoute(

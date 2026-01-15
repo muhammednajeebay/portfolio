@@ -3,9 +3,12 @@ import 'package:portfolio/core/theme/app_theme.dart';
 import 'package:portfolio/features/hero/presentation/widgets/content.dart';
 import 'package:portfolio/features/hero/presentation/widgets/hero.dart';
 import 'package:portfolio/features/hero/presentation/widgets/room.dart';
+import 'package:portfolio/shared/domain/entities/hero_info.dart';
 
 class HeroSection extends StatefulWidget {
-  const HeroSection({super.key});
+  final HeroInfo heroInfo;
+
+  const HeroSection({super.key, required this.heroInfo});
 
   @override
   State<HeroSection> createState() => _HeroSectionState();
@@ -80,7 +83,10 @@ class _HeroSectionState extends State<HeroSection>
                                 ),
                                 child: FadeTransition(
                                   opacity: _fade,
-                                  child: const WallText(isMobile: false),
+                                  child: WallText(
+                                    isMobile: false,
+                                    heroInfo: widget.heroInfo,
+                                  ),
                                 ),
                               ),
                             ),
@@ -99,7 +105,10 @@ class _HeroSectionState extends State<HeroSection>
                                     opacity: _fade,
                                     child: Transform.scale(
                                       scale: 1.15,
-                                      child: ChairWithPerson(size: size),
+                                      child: ChairWithPerson(
+                                        size: size,
+                                        heroInfo: widget.heroInfo,
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -151,7 +160,10 @@ class _HeroSectionState extends State<HeroSection>
                     SizedBox(
                       height: size.height * 0.7,
                       width: size.width,
-                      child: ChairWithPerson(size: size),
+                      child: ChairWithPerson(
+                        size: size,
+                        heroInfo: widget.heroInfo,
+                      ),
                     ),
 
                     // Part 2: Text content below
@@ -162,7 +174,10 @@ class _HeroSectionState extends State<HeroSection>
                       ),
                       child: FadeTransition(
                         opacity: _fade,
-                        child: const WallText(isMobile: true),
+                        child: WallText(
+                          isMobile: true,
+                          heroInfo: widget.heroInfo,
+                        ),
                       ),
                     ),
                   ],

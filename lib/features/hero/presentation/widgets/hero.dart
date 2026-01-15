@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:portfolio/features/hero/presentation/widgets/light_bulb.dart';
+import 'package:portfolio/shared/domain/entities/hero_info.dart';
 
 /// Chair with person - positioned in room depth
 class ChairWithPerson extends StatelessWidget {
   final Size size;
+  final HeroInfo heroInfo;
 
-  const ChairWithPerson({super.key, required this.size});
+  const ChairWithPerson({
+    super.key,
+    required this.size,
+    required this.heroInfo,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +45,7 @@ class ChairWithPerson extends StatelessWidget {
           SizedBox(
             height: size.height * 0.45,
             child: Image.asset(
-              'assets/profile/hero_img.png',
+              heroInfo.imageUrl,
               fit: BoxFit.contain,
             ),
           ),

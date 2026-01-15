@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:drawing_animation/drawing_animation.dart';
 import 'package:go_router/go_router.dart';
+import 'package:animated_text_kit/animated_text_kit.dart';
 import '../../../core/theme/app_theme.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -13,9 +14,8 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen>
     with SingleTickerProviderStateMixin {
   bool _run = false;
+  bool _showText = false;
   late AnimationController _textController;
-  late Animation<double> _fadeAnimation;
-  late Animation<Offset> _slideAnimation;
 
   @override
   void initState() {
@@ -23,28 +23,8 @@ class _SplashScreenState extends State<SplashScreen>
 
     // Text animation controller
     _textController = AnimationController(
-      duration: const Duration(milliseconds: 800),
+      duration: const Duration(milliseconds: 1500),
       vsync: this,
-    );
-
-    _fadeAnimation = Tween<double>(
-      begin: 0.0,
-      end: 1.0,
-    ).animate(
-      CurvedAnimation(
-        parent: _textController,
-        curve: Curves.easeIn,
-      ),
-    );
-
-    _slideAnimation = Tween<Offset>(
-      begin: const Offset(0, 0.3),
-      end: Offset.zero,
-    ).animate(
-      CurvedAnimation(
-        parent: _textController,
-        curve: Curves.easeOut,
-      ),
     );
 
     // Start the drawing animation
@@ -59,7 +39,9 @@ class _SplashScreenState extends State<SplashScreen>
     // Start text animation after logo draws
     Future.delayed(const Duration(milliseconds: 2000), () {
       if (mounted) {
-        _textController.forward();
+        setState(() {
+          _showText = true;
+        });
       }
     });
 
@@ -118,23 +100,26 @@ class _SplashScreenState extends State<SplashScreen>
             // const SizedBox(height: 20),
             Expanded(
               flex: 1,
-              child: AnimatedBuilder(
-                animation: _textController,
-                builder: (context, child) {
-                  return SlideTransition(
-                    position: _slideAnimation,
-                    child: FadeTransition(
-                      opacity: _fadeAnimation,
-                      child: Text(
-                        'Muhammed Najeeb',
-                        style: AppTextStyles.headlineLarge(context).copyWith(
-                          letterSpacing: 1.2,
-                        ),
+              child: _showText
+                  ? Center(
+                      child: AnimatedTextKit(
+                        animatedTexts: [
+                          TypewriterAnimatedText(
+                            'Muhammed Najeeb',
+                            textStyle:
+                                AppTextStyles.splashTitle(context).copyWith(
+                              letterSpacing: 2,
+                            ),
+                            speed: const Duration(milliseconds: 100),
+                            cursor: '_',
+                          ),
+                        ],
+                        totalRepeatCount: 1,
+                        displayFullTextOnTap: true,
+                        stopPauseOnTap: true,
                       ),
-                    ),
-                  );
-                },
-              ),
+                    )
+                  : const SizedBox.shrink(),
             ),
           ],
         ),

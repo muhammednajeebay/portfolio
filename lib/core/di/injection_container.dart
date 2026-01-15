@@ -8,6 +8,8 @@ import 'package:portfolio/shared/domain/usecases/get_experiences.dart';
 import 'package:portfolio/shared/domain/usecases/get_open_source_projects.dart';
 import 'package:portfolio/shared/domain/usecases/get_projects.dart';
 import 'package:portfolio/shared/domain/usecases/get_skills.dart';
+import 'package:portfolio/shared/domain/usecases/get_about_info.dart';
+import 'package:portfolio/shared/domain/usecases/get_hero_info.dart';
 
 final sl = GetIt.instance;
 
@@ -19,6 +21,8 @@ Future<void> init() async {
         getExperiences: sl(),
         getOpenSourceProjects: sl(),
         getArticles: sl(),
+        getAboutInfo: sl(),
+        getHeroInfo: sl(),
       ));
 
   // Use cases
@@ -27,6 +31,8 @@ Future<void> init() async {
   sl.registerLazySingleton(() => GetExperiences(sl()));
   sl.registerLazySingleton(() => GetOpenSourceProjects(sl()));
   sl.registerLazySingleton(() => GetArticles(sl()));
+  sl.registerLazySingleton(() => GetAboutInfo(sl()));
+  sl.registerLazySingleton(() => GetHeroInfo(sl()));
 
   // Repository
   sl.registerLazySingleton<PortfolioRepository>(

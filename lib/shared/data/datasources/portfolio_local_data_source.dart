@@ -3,6 +3,8 @@ import '../models/experience_model.dart';
 import '../models/project_model.dart';
 import '../models/skill_model.dart';
 import '../models/article_model.dart';
+import '../models/about_model.dart';
+import '../models/hero_info_model.dart';
 
 abstract class PortfolioLocalDataSource {
   Future<List<ProjectModel>> getProjects();
@@ -10,6 +12,8 @@ abstract class PortfolioLocalDataSource {
   Future<List<SkillModel>> getSkills();
   Future<List<ExperienceModel>> getExperiences();
   Future<List<ArticleModel>> getArticles();
+  Future<AboutModel> getAboutInfo();
+  Future<HeroInfoModel> getHeroInfo();
 }
 
 class PortfolioLocalDataSourceImpl implements PortfolioLocalDataSource {
@@ -244,5 +248,33 @@ class PortfolioLocalDataSourceImpl implements PortfolioLocalDataSource {
         date: 'Ongoing',
       ),
     ];
+  }
+
+  @override
+  Future<AboutModel> getAboutInfo() async {
+    return const AboutModel(
+      title: 'What about me',
+      descriptions: [
+        "I'm Muhammed Najeeb, a Flutter Developer who builds mobile applications with a strong emphasis on clarity, structure, and long-term maintainability. I focus on creating products that feel fast, intentional, and dependable — not just visually polished, but architecturally sound.",
+        "My work lives at the intersection of clean architecture and real-world usability. I've built production-grade systems including ERP platforms, learning management systems, and real-time applications, where scalability and performance aren't optional — they're requirements. I care deeply about how code evolves over time and how design decisions impact both users and developers.",
+        "I value ownership, simplicity, and continuous improvement. I approach problems analytically, communicate clearly, and refine relentlessly. For me, good software is quiet — it works, it scales, and it doesn't get in the way.",
+      ],
+      imageUrl: 'assets/profile/najeeb_pic.PNG',
+    );
+  }
+
+  @override
+  Future<HeroInfoModel> getHeroInfo() async {
+    return const HeroInfoModel(
+      greeting: 'Hi, I am',
+      name: 'Muhammed Najeeb AY',
+      title: 'Flutter Developer',
+      subtitle: 'Mobile & Web Applications',
+      descriptionLines: [
+        'I build scalable Flutter applications\nwith clean architecture,',
+        'focused on performance, clarity,\nand real-world impact.',
+      ],
+      imageUrl: 'assets/profile/hero_img.png',
+    );
   }
 }

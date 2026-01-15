@@ -11,6 +11,7 @@ import 'package:portfolio/shared/domain/entities/article.dart';
 import 'package:portfolio/shared/domain/entities/experience.dart';
 import 'package:portfolio/shared/domain/entities/project.dart';
 import 'package:portfolio/shared/domain/entities/skill.dart';
+import 'package:portfolio/shared/domain/entities/hero_info.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 import 'package:portfolio/core/di/injection_container.dart' as di;
 
@@ -71,7 +72,16 @@ void main() {
   });
 
   testWidgets('HeroSection layout test', (WidgetTester tester) async {
-    await tester.pumpWidget(wrap(const HeroSection()));
+    await tester.pumpWidget(wrap(const HeroSection(
+      heroInfo: HeroInfo(
+        greeting: 'G',
+        name: 'N',
+        title: 'T',
+        subtitle: 'S',
+        descriptionLines: ['L1'],
+        imageUrl: 'assets/profile/hero_img.png',
+      ),
+    )));
     await tester.pumpAndSettle();
   });
 
