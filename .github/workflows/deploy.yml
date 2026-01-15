@@ -34,7 +34,7 @@ jobs:
         run: flutter test
 
       - name: Build web
-        run: flutter build web --release --base-href /portfolio_/  # 🔥 THIS IS THE KEY FIX
+        run: flutter build web --release --base-href /portfolio/
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
