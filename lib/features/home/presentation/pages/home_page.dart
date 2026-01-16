@@ -64,7 +64,6 @@ class _HomePageState extends State<HomePage>
   final ValueNotifier<String> _activeSectionNotifier = ValueNotifier('Home');
 
   bool _isLoading = true;
-  bool _isScrolling = false;
 
   @override
   void initState() {
@@ -75,41 +74,53 @@ class _HomePageState extends State<HomePage>
 
   // Throttled scroll handler for better performance
   void _handleScroll() {
-    if (!mounted || _isScrolling) return;
+    if (!mounted) return;
 
-    _isScrolling = true;
     _scrollOffsetNotifier.value = _sc.offset;
     _updateActiveSection();
-
-    // Reset scrolling flag after a frame to allow next update
-    Future.microtask(() {
-      if (mounted) _isScrolling = false;
-    });
   }
 
   void _updateActiveSection() {
-    final offset = _sc.offset;
-    String newSection;
+    final keyMap = {
+      'Home': homeKey,
+      'About': aboutKey,
+      'Work': projectsKey,
+      'Skill': skillsKey,
+      'Timeline': experienceKey,
+      'Connect': contactKey,
+    };
 
-    // Use more precise section detection based on viewport
+    String? bestSection;
+    double maxVisibleHeight = -1.0;
+
     final viewportHeight = MediaQuery.of(context).size.height;
 
-    if (offset < viewportHeight * 0.5) {
-      newSection = 'Home';
-    } else if (offset < viewportHeight * 1.5) {
-      newSection = 'About';
-    } else if (offset < viewportHeight * 2.5) {
-      newSection = 'Work';
-    } else if (offset < viewportHeight * 3.5) {
-      newSection = 'Skill';
-    } else if (offset < viewportHeight * 4.5) {
-      newSection = 'Timeline';
-    } else {
-      newSection = 'Connect';
+    for (var entry in keyMap.entries) {
+      final key = entry.value;
+      final sectionName = entry.key;
+      final renderBox = key.currentContext?.findRenderObject() as RenderBox?;
+
+      if (renderBox != null) {
+        final position = renderBox.localToGlobal(Offset.zero);
+        final height = renderBox.size.height;
+
+        // Calculate how much of the section is visible in the viewport
+        final top = position.dy;
+        final bottom = position.dy + height;
+
+        final visibleTop = top.clamp(0.0, viewportHeight);
+        final visibleBottom = bottom.clamp(0.0, viewportHeight);
+        final visibleHeight = visibleBottom - visibleTop;
+
+        if (visibleHeight > maxVisibleHeight) {
+          maxVisibleHeight = visibleHeight;
+          bestSection = sectionName;
+        }
+      }
     }
 
-    if (_activeSectionNotifier.value != newSection) {
-      _activeSectionNotifier.value = newSection;
+    if (bestSection != null && _activeSectionNotifier.value != bestSection) {
+      _activeSectionNotifier.value = bestSection;
     }
   }
 
