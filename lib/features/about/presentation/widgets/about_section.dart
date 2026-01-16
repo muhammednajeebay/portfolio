@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '../../../../core/theme/app_theme.dart';
 import '../../../../shared/domain/entities/about.dart';
-import '../../../../shared/presentation/widgets/animated_header.dart';
 
 class AboutSection extends StatelessWidget {
   final About aboutInfo;
@@ -15,183 +12,212 @@ class AboutSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (aboutInfo.descriptions.length < 3) return const SizedBox.shrink();
+
     final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
+    final colors = theme.colorScheme;
     final isMobile = MediaQuery.of(context).size.width < 1024;
 
-    return Container(
+    return Padding(
       padding: EdgeInsets.symmetric(
-        horizontal: isMobile ? 24 : 80,
-        vertical: isMobile ? 60 : 100,
+        vertical: isMobile ? 60 : 120,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          AnimatedHeader(
-            text: aboutInfo.title,
+          // Quiet Heading
+          Text(
+            aboutInfo.title,
             style: GoogleFonts.outfit(
-              color: isDark ? AppColors.darkHeadings : AppColors.lightHeadings,
-              fontSize: isMobile ? 32 : 48,
-              fontWeight: FontWeight.bold,
-              height: 1.2,
+              fontSize: 16,
+              fontWeight: FontWeight.w400,
+              letterSpacing: 1.0,
+              color: colors.onSurface.withOpacity(0.5),
             ),
           ),
-          const SizedBox(height: 40),
-          Row(
+          const SizedBox(height: 60),
+
+          // 2-Column Layout
+          if (isMobile)
+            _buildMobileLayout(context, colors)
+          else
+            _buildDesktopLayout(context, colors),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildDesktopLayout(BuildContext context, ColorScheme colors) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // Left Side: Image
+        Container(
+          width: 280,
+          height: 360, // Slightly reduced height
+          decoration: const BoxDecoration(
+            color: Colors.transparent,
+          ),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(4),
+            child: ColorFiltered(
+              colorFilter: const ColorFilter.matrix([
+                0.2126,
+                0.7152,
+                0.0722,
+                0,
+                0,
+                0.2126,
+                0.7152,
+                0.0722,
+                0,
+                0,
+                0.2126,
+                0.7152,
+                0.0722,
+                0,
+                0,
+                0,
+                0,
+                0,
+                1,
+                0,
+              ]),
+              child: Image.asset(
+                aboutInfo.imageUrl,
+                fit: BoxFit.cover,
+              ),
+            ),
+          ),
+        ),
+
+        const SizedBox(width: 80), // Increased horizontal spacing
+
+        // Right Side: Text Blocks
+        Expanded(
+          child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Left side: Portrait image
-              if (!isMobile)
-                Animate(
-                  effects: [
-                    FadeEffect(
-                      duration: 700.ms,
-                      delay: 300.ms,
-                      curve: Curves.easeOutCubic,
-                    ),
-                    ScaleEffect(
-                      begin: const Offset(0.85, 0.85),
-                      duration: 900.ms,
-                      delay: 300.ms,
-                      curve: Curves.easeOutCubic,
-                    ),
-                    MoveEffect(
-                      begin: const Offset(-40, 0),
-                      duration: 900.ms,
-                      delay: 300.ms,
-                      curve: Curves.fastOutSlowIn,
-                    ),
-                    BlurEffect(
-                      begin: const Offset(10, 0),
-                      duration: 700.ms,
-                      delay: 300.ms,
-                      curve: Curves.easeOutCubic,
-                    ),
-                  ],
-                  child: Container(
-                    width: 300,
-                    height: 400,
-                    margin: const EdgeInsets.only(right: 60),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(8),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.1),
-                          blurRadius: 20,
-                          offset: const Offset(0, 10),
-                        ),
-                      ],
-                    ),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(8),
-                      child: Image.asset(
-                        aboutInfo.imageUrl,
-                        fit: BoxFit.cover,
-                        color: Colors.white,
-                        colorBlendMode: BlendMode.saturation,
-                      ),
-                    ),
+              // Block 1: Identity
+              SizedBox(
+                width: 500, // Reduced text width
+                child: Text(
+                  aboutInfo.descriptions[0],
+                  style: GoogleFonts.outfit(
+                    fontSize: 22,
+                    fontWeight: FontWeight.w500,
+                    height: 1.4,
+                    color: colors.onSurface,
                   ),
                 ),
-              // Right side: Text content
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    if (isMobile) ...[
-                      Animate(
-                        effects: [
-                          FadeEffect(
-                            duration: 700.ms,
-                            delay: 300.ms,
-                            curve: Curves.easeOutCubic,
-                          ),
-                          ScaleEffect(
-                            begin: const Offset(0.9, 0.9),
-                            duration: 800.ms,
-                            delay: 300.ms,
-                            curve: Curves.easeOutCubic,
-                          ),
-                          MoveEffect(
-                            begin: const Offset(0, 30),
-                            duration: 800.ms,
-                            delay: 300.ms,
-                            curve: Curves.fastOutSlowIn,
-                          ),
-                        ],
-                        child: Container(
-                          width: double.infinity,
-                          height: 300,
-                          margin: const EdgeInsets.only(bottom: 32),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(8),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withOpacity(0.1),
-                                blurRadius: 20,
-                                offset: const Offset(0, 10),
-                              ),
-                            ],
-                          ),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(8),
-                            child: Image.asset(
-                              aboutInfo.imageUrl,
-                              fit: BoxFit.cover,
-                              color: Colors.white,
-                              colorBlendMode: BlendMode.saturation,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                    ...List.generate(aboutInfo.descriptions.length, (index) {
-                      return Column(
-                        children: [
-                          Animate(
-                            effects: [
-                              FadeEffect(
-                                duration: 700.ms,
-                                delay: (500 + index * 200).ms,
-                                curve: Curves.easeOutCubic,
-                              ),
-                              MoveEffect(
-                                begin: const Offset(30, 0),
-                                duration: 800.ms,
-                                delay: (500 + index * 200).ms,
-                                curve: Curves.fastOutSlowIn,
-                              ),
-                              BlurEffect(
-                                begin: const Offset(10, 0),
-                                duration: 700.ms,
-                                delay: (500 + index * 200).ms,
-                                curve: Curves.easeOutCubic,
-                              ),
-                            ],
-                            child: Text(
-                              aboutInfo.descriptions[index],
-                              style: GoogleFonts.outfit(
-                                color: isDark
-                                    ? AppColors.darkBodyText
-                                    : AppColors.lightBodyText,
-                                fontSize: isMobile ? 16 : 18,
-                                fontWeight: FontWeight.w400,
-                                height: 1.7,
-                              ),
-                            ),
-                          ),
-                          if (index < aboutInfo.descriptions.length - 1)
-                            const SizedBox(height: 24),
-                        ],
-                      );
-                    }),
-                  ],
+              ),
+              const SizedBox(height: 48), // Space between blocks > space within
+
+              // Block 2: Context
+              SizedBox(
+                width: 480,
+                child: Text(
+                  aboutInfo.descriptions[1],
+                  style: GoogleFonts.outfit(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w400,
+                    height: 1.6,
+                    color: colors.onSurface.withOpacity(0.8),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 48),
+
+              // Block 3: Values
+              Text(
+                aboutInfo.descriptions[2],
+                style: GoogleFonts.outfit(
+                  fontSize: 14, // Small size
+                  fontWeight: FontWeight.w400,
+                  height: 1.8, // Generous line height
+                  color: colors.onSurface.withOpacity(0.4), // Low contrast
                 ),
               ),
             ],
           ),
-        ],
-      ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildMobileLayout(BuildContext context, ColorScheme colors) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // Image at top for mobile
+        Container(
+          width: double.infinity,
+          height: 300,
+          margin: const EdgeInsets.only(bottom: 48),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(4),
+            child: ColorFiltered(
+              colorFilter: const ColorFilter.matrix([
+                0.2126,
+                0.7152,
+                0.0722,
+                0,
+                0,
+                0.2126,
+                0.7152,
+                0.0722,
+                0,
+                0,
+                0.2126,
+                0.7152,
+                0.0722,
+                0,
+                0,
+                0,
+                0,
+                0,
+                1,
+                0,
+              ]),
+              child: Image.asset(
+                aboutInfo.imageUrl,
+                fit: BoxFit.cover,
+              ),
+            ),
+          ),
+        ),
+
+        // Text Blocks
+        Text(
+          aboutInfo.descriptions[0],
+          style: GoogleFonts.outfit(
+            fontSize: 20,
+            fontWeight: FontWeight.w500,
+            height: 1.4,
+            color: colors.onSurface,
+          ),
+        ),
+        const SizedBox(height: 32),
+        Text(
+          aboutInfo.descriptions[1],
+          style: GoogleFonts.outfit(
+            fontSize: 16,
+            fontWeight: FontWeight.w400,
+            height: 1.6,
+            color: colors.onSurface.withOpacity(0.8),
+          ),
+        ),
+        const SizedBox(height: 32),
+        Text(
+          aboutInfo.descriptions[2],
+          style: GoogleFonts.outfit(
+            fontSize: 14,
+            fontWeight: FontWeight.w400,
+            height: 1.8,
+            color: colors.onSurface.withOpacity(0.4),
+          ),
+        ),
+      ],
     );
   }
 }

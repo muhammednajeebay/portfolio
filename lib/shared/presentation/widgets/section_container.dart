@@ -5,6 +5,8 @@ class SectionContainer extends StatefulWidget {
   final Widget child;
   final bool spacerBelow;
   final bool fullSize;
+  final String? sectionNumber;
+  final bool centered;
   final Duration revealDuration;
 
   const SectionContainer({
@@ -12,6 +14,8 @@ class SectionContainer extends StatefulWidget {
     required this.child,
     this.fullSize = false,
     this.spacerBelow = true,
+    this.sectionNumber,
+    this.centered = false,
     this.revealDuration = const Duration(milliseconds: 600),
   });
 
@@ -37,14 +41,40 @@ class _SectionContainerState extends State<SectionContainer> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     final content = widget.fullSize
         ? widget.child
         : Container(
-            padding: const EdgeInsets.symmetric(vertical: 80, horizontal: 12),
-            alignment: Alignment.center,
+            padding: EdgeInsets.symmetric(
+              vertical: widget.centered ? 120 : 80,
+              horizontal: 24,
+            ),
+            alignment:
+                widget.centered ? Alignment.center : Alignment.centerLeft,
             child: ConstrainedBox(
               constraints: const BoxConstraints(maxWidth: 1040),
-              child: widget.child,
+              child: Stack(
+                clipBehavior: Clip.none,
+                children: [
+                  if (widget.sectionNumber != null)
+                    Positioned(
+                      left: -60,
+                      top: 0,
+                      child: Opacity(
+                        opacity: 0.1,
+                        child: Text(
+                          widget.sectionNumber!,
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                            color: theme.colorScheme.onSurface,
+                          ),
+                        ),
+                      ),
+                    ),
+                  widget.child,
+                ],
+              ),
             ),
           );
 

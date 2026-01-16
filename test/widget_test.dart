@@ -84,7 +84,7 @@ void main() {
 
   testWidgets('SkillsSection layout test', (WidgetTester tester) async {
     await tester.pumpWidget(wrap(const SkillsSection(skills: [
-      Skill(name: 'Cat', icon: Icons.code, items: ['A', 'B'])
+      Skill(name: 'Cat', description: 'Desc', items: ['A', 'B'])
     ])));
     await tester.pumpAndSettle();
   });

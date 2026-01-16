@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'package:portfolio/shared/domain/entities/hero_info.dart';
 import 'package:portfolio/shared/domain/entities/experience.dart';
@@ -125,7 +126,6 @@ class _HomePageState extends State<HomePage>
   }
 
   void _onSectionTap(String section) {
-    debugPrint('🔵 Sidebar tapped: $section');
     final keyMap = {
       'Home': homeKey,
       'About': aboutKey,
@@ -135,14 +135,9 @@ class _HomePageState extends State<HomePage>
       'Connect': contactKey,
     };
     final key = keyMap[section];
-    debugPrint('🔍 Key found for $section: ${key != null}');
     if (key != null) {
-      debugPrint('📍 Current context: ${key.currentContext != null}');
       _scrollToKey(key);
-      debugPrint('🔄 UI Update: Manually setting active section to $section');
       _activeSectionNotifier.value = section;
-    } else {
-      debugPrint('❌ No key mapping found for section: $section');
     }
   }
 
@@ -172,24 +167,18 @@ class _HomePageState extends State<HomePage>
       setState(() {
         _isLoading = false;
       });
-      debugPrint('Error loading data: $e');
     }
   }
 
   void _scrollToKey(GlobalKey key) {
     final context = key.currentContext;
-    debugPrint('🎯 Attempting to scroll to key...');
     if (context == null) {
-      debugPrint('❌ Context is null! Widget may not be mounted yet.');
       return;
     }
-
-    debugPrint('✅ Context found, getting position...');
 
     // Get the RenderBox to calculate exact position
     final RenderBox? renderBox = context.findRenderObject() as RenderBox?;
     if (renderBox == null) {
-      debugPrint('❌ RenderBox is null!');
       return;
     }
 
@@ -197,10 +186,6 @@ class _HomePageState extends State<HomePage>
     final position = renderBox.localToGlobal(Offset.zero);
     final targetScrollOffset =
         _sc.offset + position.dy - 100; // 100px offset from top
-
-    debugPrint('📊 Current offset: ${_sc.offset.toStringAsFixed(1)}');
-    debugPrint('📊 Target offset: ${targetScrollOffset.toStringAsFixed(1)}');
-    debugPrint('📊 Widget position.dy: ${position.dy.toStringAsFixed(1)}');
 
     // Animate to the target position
     _sc
@@ -291,36 +276,48 @@ class _HomePageState extends State<HomePage>
               key: homeKey,
               spacerBelow: false,
               fullSize: true,
+              sectionNumber: '01',
+              centered: true,
               child: HeroSection(heroInfo: _heroInfo!),
             ),
           ),
           RepaintBoundary(
             child: SectionContainer(
               key: aboutKey,
+              sectionNumber: '02',
+              centered: true,
               child: AboutSection(aboutInfo: _aboutInfo!),
             ),
           ),
           RepaintBoundary(
             child: SectionContainer(
               key: projectsKey,
+              sectionNumber: '03',
+              centered: true,
               child: ProjectsSection(projects: _projects),
             ),
           ),
           RepaintBoundary(
             child: SectionContainer(
               key: skillsKey,
+              sectionNumber: '04',
+              centered: true,
               child: SkillsSection(skills: _skills),
             ),
           ),
           RepaintBoundary(
             child: SectionContainer(
               key: experienceKey,
+              sectionNumber: '05',
+              centered: true,
               child: ExperienceSection(experiences: _experiences),
             ),
           ),
           RepaintBoundary(
             child: SectionContainer(
               key: contactKey,
+              sectionNumber: '06',
+              centered: true,
               child: const ContactSection(),
             ),
           ),
@@ -356,7 +353,7 @@ class _HomePageState extends State<HomePage>
                 );
               },
               child: Icon(
-                isDark ? Icons.light_mode : Icons.dark_mode,
+                isDark ? FontAwesomeIcons.moon : FontAwesomeIcons.sun,
                 key: ValueKey(isDark),
               ),
             ),
@@ -365,28 +362,6 @@ class _HomePageState extends State<HomePage>
       },
     );
   }
-
-  // PreferredSizeWidget _buildMobileAppBar() {
-  //   return PreferredSize(
-  //     preferredSize: const Size.fromHeight(65),
-  //     child: RepaintBoundary(
-  //       child: AnimatedNavbar(
-  //         onTap: (label) {
-  //           final key = {
-  //             'Home': homeKey,
-  //             'About': aboutKey,
-  //             'Skills': skillsKey,
-  //             'Experience': experienceKey,
-  //             'Projects': projectsKey,
-  //             'Contact': contactKey,
-  //           }[label];
-  //           if (key != null) _scrollToKey(key);
-  //         },
-  //         isMobile: true,
-  //       ),
-  //     ),
-  //   );
-  // }
 
   @override
   void dispose() {
@@ -413,7 +388,7 @@ class _HomePageState extends State<HomePage>
       ),
       leading: Builder(
         builder: (context) => IconButton(
-          icon: Icon(Icons.menu_rounded, color: colors.primary),
+          icon: Icon(FontAwesomeIcons.bars, color: colors.primary),
           onPressed: () => Scaffold.of(context).openDrawer(),
         ),
       ),

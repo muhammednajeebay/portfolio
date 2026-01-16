@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:portfolio/shared/domain/entities/skill.dart';
-import 'package:portfolio/shared/presentation/widgets/animated_header.dart';
 
 class SkillsSection extends StatelessWidget {
   final List<Skill> skills;
@@ -13,101 +12,148 @@ class SkillsSection extends StatelessWidget {
     if (skills.isEmpty) return const SizedBox.shrink();
 
     final theme = Theme.of(context);
-    final isMobile = MediaQuery.of(context).size.width < 1024;
-    final isDark = theme.brightness == Brightness.dark;
+    final isMobile = MediaQuery.of(context).size.width < 768;
 
-    return Padding(
-      padding: EdgeInsets.symmetric(
-        horizontal: isMobile ? 24 : 0,
-        vertical: 80,
-      ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Main Content
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                AnimatedHeader(
-                  text: "What I use.",
-                  style: GoogleFonts.outfit(
-                    fontSize: isMobile ? 32 : 40,
-                    fontWeight: FontWeight.bold,
-                    color: isDark ? Colors.white : Colors.black,
-                  ),
-                ),
-                const SizedBox(height: 24),
-
-                SizedBox(
-                  width: isMobile ? double.infinity : 600,
-                  child: Text(
-                    "I use a number of tools to aid my creative process when bringing things to life. Listed below are the tools and technologies that I have used over the years.",
-                    style: GoogleFonts.outfit(
-                      fontSize: 18,
-                      height: 1.6,
-                      color: isDark ? Colors.grey[400] : Colors.grey[700],
-                    ),
-                  ),
-                ).animate().fadeIn(delay: 200.ms).slideY(begin: 0.1),
-
-                const SizedBox(height: 60),
-
-                // Skills Grid
-                isMobile
-                    ? Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: skills
-                            .map((s) => _buildSkillCategory(context, s))
-                            .toList(),
-                      )
-                    : Wrap(
-                        spacing: 80,
-                        runSpacing: 40,
-                        children: skills
-                            .map((s) => _buildSkillCategory(context, s))
-                            .toList(),
-                      ),
-              ],
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          "What I use.",
+          style: GoogleFonts.outfit(
+            fontSize: isMobile ? 32 : 48,
+            fontWeight: FontWeight.bold,
+            color: theme.colorScheme.onSurface,
+          ),
+        ).animate().fadeIn(duration: 600.ms).slideY(begin: 0.1),
+        const SizedBox(height: 24),
+        Opacity(
+          opacity: 0.7,
+          child: Text(
+            "I use a number of tools to aid my creative process when bringing things to life. Listed below are the tools and technologies that I have used over the years.",
+            style: GoogleFonts.outfit(
+              fontSize: 18,
+              height: 1.6,
+              color: theme.colorScheme.onSurface,
             ),
           ),
-        ],
-      ),
+        ).animate().fadeIn(delay: 200.ms).slideY(begin: 0.1),
+        const SizedBox(height: 60),
+        LayoutBuilder(
+          builder: (context, constraints) {
+            final double width = constraints.maxWidth;
+            int columns = 4;
+            if (width < 768)
+              columns = 1;
+            else if (width < 1024) columns = 2;
+
+            return GridView.builder(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: skills.length,
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: columns,
+                crossAxisSpacing: 24,
+                mainAxisSpacing: 24,
+                childAspectRatio: columns == 1 ? 2.5 : 1.2,
+              ),
+              itemBuilder: (context, index) {
+                return _SkillGroupTile(skill: skills[index]);
+              },
+            );
+          },
+        ).animate().fadeIn(delay: 400.ms),
+      ],
     );
   }
+}
 
-  Widget _buildSkillCategory(BuildContext context, Skill skill) {
+class _SkillGroupTile extends StatefulWidget {
+  final Skill skill;
+
+  const _SkillGroupTile({required this.skill});
+
+  @override
+  State<_SkillGroupTile> createState() => _SkillGroupTileState();
+}
+
+class _SkillGroupTileState extends State<_SkillGroupTile> {
+  bool _isHovered = false;
+
+  @override
+  Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
+    final colors = theme.colorScheme;
 
-    return Container(
-      width: 250,
-      margin: const EdgeInsets.only(bottom: 40),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            skill.name,
-            style: GoogleFonts.outfit(
-              fontSize: 14,
-              fontWeight: FontWeight.w900,
-              color: isDark ? Colors.white : Colors.black,
+    return MouseRegion(
+      onEnter: (_) => setState(() => _isHovered = true),
+      onExit: (_) => setState(() => _isHovered = false),
+      child: FocusableActionDetector(
+        onShowFocusHighlight: (value) => setState(() => _isHovered = value),
+        child: Container(
+          padding: const EdgeInsets.all(24),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            border: Border.all(
+              color: colors.onSurface.withOpacity(_isHovered ? 0.2 : 0.05),
+              width: 1,
             ),
           ),
-          const SizedBox(height: 16),
-          ...skill.items.map((item) => Padding(
-                padding: const EdgeInsets.only(bottom: 12.0),
-                child: Text(
-                  item,
-                  style: GoogleFonts.outfit(
-                    fontSize: 16,
-                    color: isDark ? Colors.grey[400] : Colors.grey[800],
-                    fontWeight: FontWeight.w500,
-                  ),
+          child: Stack(
+            children: [
+              // Thin accent line on the left
+              AnimatedOpacity(
+                duration: const Duration(milliseconds: 200),
+                opacity: _isHovered ? 1.0 : 0.0,
+                child: Container(
+                  width: 2,
+                  height: 20,
+                  color: colors.primary,
                 ),
-              )),
-        ],
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 12),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    AnimatedDefaultTextStyle(
+                      duration: const Duration(milliseconds: 200),
+                      style: GoogleFonts.outfit(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
+                        color: colors.onSurface
+                            .withOpacity(_isHovered ? 1.0 : 0.8),
+                      ),
+                      child: Text(widget.skill.name),
+                    ),
+                    const SizedBox(height: 8),
+                    AnimatedOpacity(
+                      duration: const Duration(milliseconds: 200),
+                      opacity: _isHovered ? 1.0 : 0.5,
+                      child: Text(
+                        widget.skill.description,
+                        style: GoogleFonts.outfit(
+                          fontSize: 13,
+                          color: colors.onSurface,
+                        ),
+                      ),
+                    ),
+                    const Spacer(),
+                    Text(
+                      widget.skill.items.join(' · '),
+                      style: GoogleFonts.outfit(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w400,
+                        height: 1.4,
+                        color: colors.onSurface.withOpacity(0.9),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
-    ).animate().fadeIn(delay: 400.ms).slideY(begin: 0.05);
+    );
   }
 }

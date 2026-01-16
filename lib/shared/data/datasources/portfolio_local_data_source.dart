@@ -1,5 +1,3 @@
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-
 import '../models/project_model.dart';
 import '../models/skill_model.dart';
 import '../models/experience_model.dart';
@@ -49,7 +47,7 @@ class PortfolioLocalDataSourceImpl implements PortfolioLocalDataSource {
         technologies: ['Flutter Web', 'Clean Architecture', 'GitHub Actions'],
         githubUrl: 'https://github.com/muhammednajeebay/portfolio_',
         category: 'Portfolio',
-        primaryColor: '#000000',
+        primaryColor: '#FBBC05',
       ),
       const ProjectModel(
         imageUrl:
@@ -114,45 +112,45 @@ class PortfolioLocalDataSourceImpl implements PortfolioLocalDataSource {
   Future<List<SkillModel>> getSkills() async {
     return const [
       SkillModel(
-        name: 'Development',
-        icon: FontAwesomeIcons.code,
+        name: 'Core Stack',
+        description: 'Production-ready Flutter development',
         items: [
           'Flutter',
           'Dart',
-          'Provider',
-          'GetX',
           'BLoC',
-          'Cubit',
-          'GoRouter'
+          'GoRouter',
+          'GetX',
+          'Provider',
+          'Cubit'
         ],
       ),
       SkillModel(
         name: 'Architecture',
-        icon: FontAwesomeIcons
-            .sitemap, // 'architecture' isn't in FontAwesome, using closest
-        items: ['Clean Architecture', 'MVC', 'Modular Development'],
+        description: 'Designed for scalability',
+        items: ['Clean Architecture', 'Modular Design', 'MVC'],
       ),
       SkillModel(
-        name: 'Integration',
-        icon: FontAwesomeIcons.cloud,
+        name: 'State & Data',
+        description: 'Predictable state and persistence',
+        items: ['Hive', 'SQLite', 'SharedPreferences'],
+      ),
+      SkillModel(
+        name: 'Networking',
+        description: 'Real-time and API-driven apps',
         items: [
-          'REST API',
+          'REST',
           'GraphQL',
-          'Firebase',
           'WebSockets',
-          'VideoSDK',
-          'Dio'
+          'Firebase',
+          'Supabase',
+          'Dio',
+          'Http'
         ],
       ),
       SkillModel(
-        name: 'Data Storage',
-        icon: FontAwesomeIcons.database,
-        items: ['Hive', 'SharedPreferences', 'Sqflite'],
-      ),
-      SkillModel(
-        name: 'Tools',
-        icon: FontAwesomeIcons.toolbox,
-        items: ['Git & GitHub', 'Postman', 'Android Studio', 'VS Code'],
+        name: 'Tooling',
+        description: 'Professional dev workflow',
+        items: ['Git', 'GitHub', 'Postman', 'VS Code', 'FVM', 'Android Studio'],
       ),
     ];
   }
@@ -207,9 +205,9 @@ class PortfolioLocalDataSourceImpl implements PortfolioLocalDataSource {
     return const AboutModel(
       title: 'What about me',
       descriptions: [
-        "I'm Muhammed Najeeb, a Flutter Developer who builds mobile applications with a strong emphasis on clarity, structure, and long-term maintainability. I focus on creating products that feel fast, intentional, and dependable — not just visually polished, but architecturally sound.",
-        "My work lives at the intersection of clean architecture and real-world usability. I've built production-grade systems including ERP platforms, learning management systems, and real-time applications, where scalability and performance aren't optional — they're requirements. I care deeply about how code evolves over time and how design decisions impact both users and developers.",
-        "I value ownership, simplicity, and continuous improvement. I approach problems analytically, communicate clearly, and refine relentlessly. For me, good software is quiet — it works, it scales, and it doesn't get in the way.",
+        "I build Flutter applications focused on structure, clarity, and long-term maintainability.",
+        "I’m Muhammed Najeeb, a Flutter Developer working on production-grade systems including ERP platforms, learning management systems, and real-time applications. My focus is on clean architecture and dependable performance in real-world environments.",
+        "Clean architecture over shortcuts\nScalability before polish\nCode that stays readable over time",
       ],
       imageUrl: 'assets/profile/najeeb_pic.PNG',
     );
