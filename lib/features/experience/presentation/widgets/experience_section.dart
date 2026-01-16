@@ -10,7 +10,6 @@ class ExperienceSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isMobile = MediaQuery.of(context).size.width < 1024;
     final theme = Theme.of(context);
     final colors = context.appColors;
 
@@ -28,17 +27,17 @@ class ExperienceSection extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    if (isMobile)
                       Padding(
                         padding: const EdgeInsets.only(bottom: 40.0),
                         child: AnimatedHeader(
-                          text: "Experience",
+                          text: "Timeline.",
                           style: theme.textTheme.headlineLarge!.copyWith(
                             fontWeight: FontWeight.bold,
                             color: colors.primary,
                           ),
                         ),
                       ),
+                    const SizedBox(height: 24),
                     ...experiences.asMap().entries.map((entry) {
                       final index = entry.key;
                       final experience = entry.value;

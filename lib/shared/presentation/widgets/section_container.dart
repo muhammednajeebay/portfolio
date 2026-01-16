@@ -41,7 +41,7 @@ class _SectionContainerState extends State<SectionContainer> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
+    // final theme = Theme.of(context);
     final content = widget.fullSize
         ? widget.child
         : Container(
@@ -56,22 +56,6 @@ class _SectionContainerState extends State<SectionContainer> {
               child: Stack(
                 clipBehavior: Clip.none,
                 children: [
-                  if (widget.sectionNumber != null)
-                    Positioned(
-                      left: -60,
-                      top: 0,
-                      child: Opacity(
-                        opacity: 0.1,
-                        child: Text(
-                          widget.sectionNumber!,
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
-                            color: theme.colorScheme.onSurface,
-                          ),
-                        ),
-                      ),
-                    ),
                   widget.child,
                 ],
               ),
