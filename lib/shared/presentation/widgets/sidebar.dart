@@ -61,7 +61,7 @@ class Sidebar extends StatelessWidget {
                       section.toUpperCase(),
                       style: AppTextStyles.navItem(context, isActive: isActive)
                           .copyWith(
-                        color: isActive ? colors.primary : colors.secondary,
+                        color: isActive ? colors.accent : colors.secondary,
                         letterSpacing: 4,
                       ),
                     ),
@@ -146,10 +146,11 @@ class Sidebar extends StatelessWidget {
                           style:
                               AppTextStyles.navItem(context, isActive: isActive)
                                   .copyWith(
+                            color: isActive ? colors.accent : colors.secondary,
                             decoration: isActive
                                 ? TextDecoration.underline
                                 : TextDecoration.none,
-                            decorationColor: colors.primary,
+                            decorationColor: colors.accent,
                             decorationThickness: 2,
                           ),
                         ),

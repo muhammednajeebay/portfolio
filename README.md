@@ -41,6 +41,11 @@ Built with **Clean Architecture**, responsive layouts, custom animations, and op
 - Electric blue accents for a tech-forward vibe
 - High-contrast, premium feel
 
+### 🏷️ Branding
+- **Logo**: Custom modern "N" with a metallic/silver finish
+- **Background**: Solid black for maximum contrast and premium aesthetic
+- **Iconography**: Generated for all platforms (Android, iOS, Web) using `flutter_launcher_icons`
+
 ---
 
 ## 🧠 Architecture Diagram

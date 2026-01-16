@@ -1,3 +1,4 @@
+import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
 import 'package:portfolio/features/home/presentation/pages/home_page.dart';
 import 'package:portfolio/shared/domain/usecases/get_experiences.dart';
@@ -43,9 +44,20 @@ class AppRouter {
       ),
       GoRoute(
         path: '/project-details',
-        builder: (context, state) {
+        pageBuilder: (context, state) {
           final project = state.extra as Project;
-          return ProjectDetailsPage(project: project);
+          return CustomTransitionPage(
+            key: state.pageKey,
+            child: ProjectDetailsPage(project: project),
+            transitionsBuilder:
+                (context, animation, secondaryAnimation, child) {
+              return FadeTransition(
+                opacity: CurveTween(curve: Curves.easeInOut).animate(animation),
+                child: child,
+              );
+            },
+            transitionDuration: const Duration(milliseconds: 500),
+          );
         },
       ),
     ],

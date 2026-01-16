@@ -43,10 +43,12 @@ void main() {
     await tester.pumpWidget(wrap(const ProjectsSection(projects: [
       Project(
         title: 'Test Project',
+        status: 'live',
         description: 'Desc',
         imageUrl: 'http://example.com/image.png',
         technologies: ['Flutter'],
-        githubUrl: '',
+        features: ['Feature 1'],
+        links: {'github': 'http://github.com'},
         category: 'Test',
         primaryColor: '#000000',
       )

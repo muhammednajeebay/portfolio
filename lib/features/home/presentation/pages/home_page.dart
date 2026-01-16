@@ -353,7 +353,7 @@ class _HomePageState extends State<HomePage>
                 );
               },
               child: Icon(
-                isDark ? FontAwesomeIcons.moon : FontAwesomeIcons.sun,
+                isDark ? Icons.nightlight_round : Icons.wb_sunny_rounded,
                 key: ValueKey(isDark),
               ),
             ),
