@@ -3,6 +3,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../shared/domain/entities/about.dart';
+import '../../../../shared/presentation/widgets/animated_header.dart';
 
 class AboutSection extends StatelessWidget {
   final About aboutInfo;
@@ -26,32 +27,13 @@ class AboutSection extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Animate(
-            effects: [
-              FadeEffect(
-                duration: 600.ms,
-                curve: Curves.easeOutCubic,
-              ),
-              MoveEffect(
-                begin: const Offset(0, 30),
-                duration: 800.ms,
-                curve: Curves.fastOutSlowIn,
-              ),
-              ScaleEffect(
-                begin: const Offset(0.95, 0.95),
-                duration: 800.ms,
-                curve: Curves.easeOutCubic,
-              ),
-            ],
-            child: Text(
-              aboutInfo.title,
-              style: GoogleFonts.outfit(
-                color:
-                    isDark ? AppColors.darkHeadings : AppColors.lightHeadings,
-                fontSize: isMobile ? 32 : 48,
-                fontWeight: FontWeight.bold,
-                height: 1.2,
-              ),
+          AnimatedHeader(
+            text: aboutInfo.title,
+            style: GoogleFonts.outfit(
+              color: isDark ? AppColors.darkHeadings : AppColors.lightHeadings,
+              fontSize: isMobile ? 32 : 48,
+              fontWeight: FontWeight.bold,
+              height: 1.2,
             ),
           ),
           const SizedBox(height: 40),

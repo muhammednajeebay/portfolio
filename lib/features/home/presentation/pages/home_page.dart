@@ -94,9 +94,9 @@ class _HomePageState extends State<HomePage>
     _scrollOffsetNotifier.value = _sc.offset;
     _updateActiveSection();
 
-    // Reset scrolling flag after a frame
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _isScrolling = false;
+    // Reset scrolling flag after a frame to allow next update
+    Future.microtask(() {
+      if (mounted) _isScrolling = false;
     });
   }
 
@@ -122,8 +122,6 @@ class _HomePageState extends State<HomePage>
     }
 
     if (_activeSectionNotifier.value != newSection) {
-      debugPrint(
-          '🔄 UI Update: Active section changed from ${_activeSectionNotifier.value} to $newSection (offset: ${offset.toStringAsFixed(1)})');
       _activeSectionNotifier.value = newSection;
     }
   }
@@ -232,8 +230,6 @@ class _HomePageState extends State<HomePage>
     return ValueListenableBuilder<double>(
       valueListenable: _scrollOffsetNotifier,
       builder: (context, scrollOffset, child) {
-        debugPrint(
-            '🔄 UI Update: Scroll offset changed to ${scrollOffset.toStringAsFixed(1)}  ${child.toString()}');
         return MotionBackground(
           scrollOffset: scrollOffset,
           child: Scaffold(

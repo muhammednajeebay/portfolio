@@ -1,7 +1,8 @@
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import '../models/experience_model.dart';
+
 import '../models/project_model.dart';
 import '../models/skill_model.dart';
+import '../models/experience_model.dart';
 import '../models/article_model.dart';
 import '../models/about_model.dart';
 import '../models/hero_info_model.dart';
@@ -19,130 +20,105 @@ abstract class PortfolioLocalDataSource {
 class PortfolioLocalDataSourceImpl implements PortfolioLocalDataSource {
   @override
   Future<List<ProjectModel>> getProjects() async {
-    return const [
-      ProjectModel(
+    return [
+      const ProjectModel(
         imageUrl:
-            'https://images.unsplash.com/photo-1507925921958-8a62f3d1a50d?auto=format&fit=crop&w=1200&q=60', // Task Matrix placeholder
-        title: 'Task Matrix (In Progress)',
+            'https://images.unsplash.com/photo-1507925921958-8a62f3d1a50d?auto=format&fit=crop&w=1200&q=60',
+        title: 'Task Matrix',
         description:
-            'A scalable task management platform built with Flutter and Supabase — designed for teams operating across multiple organizations. It balances real-time collaboration, gamified productivity, and clean architecture principles.',
-        technologies: [
-          'Flutter',
-          'Supabase',
-          'BLoC',
-          'GoRouter',
-          'Clean Architecture'
-        ],
+            'A scalable task management platform built with Flutter and Supabase — designed for teams operating across multiple organizations.',
+        technologies: ['Flutter', 'Supabase', 'Clean Architecture'],
         githubUrl: 'https://github.com/muhammednajeebay/taskmatrix',
+        category: 'Productivity',
+        primaryColor: '#6200EE',
       ),
-      ProjectModel(
+      const ProjectModel(
         imageUrl:
-            'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1200&q=60', // Portfolio
+            'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1200&q=60',
         title: 'Flutter Portfolio',
         description:
-            'A professionally architected Flutter Web application showcasing clean architecture, smooth animations, and automated CI/CD workflows with GitHub Actions deployment.',
-        technologies: [
-          'Flutter Web',
-          'Clean Architecture',
-          'flutter_bloc',
-          'GitHub Actions'
-        ],
+            'A professionally architected Flutter Web application showcasing clean architecture and smooth animations.',
+        technologies: ['Flutter Web', 'Clean Architecture', 'GitHub Actions'],
         githubUrl: 'https://github.com/muhammednajeebay/portfolio_',
+        category: 'Portfolio',
+        primaryColor: '#000000',
       ),
-      ProjectModel(
+      const ProjectModel(
         imageUrl:
-            'https://images.unsplash.com/photo-1556742049-0cfed4f7a07d?auto=format&fit=crop&w=1200&q=60', // ERP
+             'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1200&q=60',
         title: 'ERP Software',
         description:
-            'Enterprise-grade ERP covering inventory control, sales workflows, purchase cycles, and financial accounting — designed for high reliability and smooth multi-department operations.',
-        technologies: ['Flutter', 'GetX', 'GraphQL', 'WebSocket'],
+            'Enterprise-grade ERP covering inventory control, sales workflows, and financial accounting.',
+        technologies: ['Flutter', 'REST API', 'SQL'],
         githubUrl: '',
+        category: 'Business',
+        primaryColor: '#1A73E8',
       ),
-      ProjectModel(
+      const ProjectModel(
         imageUrl:
-            'https://images.unsplash.com/photo-1501504905252-473c47e087f8?auto=format&fit=crop&w=1200&q=60', // LMS
+            'https://images.unsplash.com/photo-1501504905252-473c47e087f8?auto=format&fit=crop&w=1200&q=60',
         title: 'Learning Management System',
         description:
-            'School-focused LMS featuring role-based dashboards for admins and teachers, complete with attendance tracking, assignments, grading, and exam management.',
-        technologies: ['Flutter', 'BLoC', 'GraphQL'],
+            'School-focused LMS featuring role-based dashboards for admins and teachers.',
+        technologies: ['Flutter', 'Firebase', 'Clean Architecture'],
         githubUrl: '',
+        category: 'Education',
+        primaryColor: '#FBBC05',
       ),
-      ProjectModel(
+      const ProjectModel(
         imageUrl:
-            'https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&w=1200&q=60', // Event ERP
+            'https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&w=1200&q=60',
         title: 'Event ERP',
         description:
-            'Custom ERP tailored for event management companies, enabling streamlined client handling, vendor coordination, budgeting, and real-time event workflow tracking.',
-        technologies: ['Flutter', 'BLoC', 'GraphQL'],
+            'Custom ERP tailored for event management companies, enabling streamlined client handling.',
+        technologies: ['Flutter', 'Provider'],
         githubUrl: '',
+        category: 'Events',
+        primaryColor: '#EA4335',
       ),
-      ProjectModel(
+      const ProjectModel(
         imageUrl:
-            'https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&w=1200&q=60', // Digibank
+            'https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&w=1200&q=60',
         title: 'DIGIBANK',
         description:
-            'Banking Application Clone with seamless financial services. Features account overview, detailed transaction history, and seamless REST API integration.',
-        technologies: ['Flutter', 'Provider', 'REST API'],
+            'Banking Application Clone with seamless financial services and REST API integration.',
+        technologies: ['Flutter', 'REST API', 'Animations'],
         githubUrl: '',
+        category: 'Fintech',
+        primaryColor: '#34A853',
       ),
-      ProjectModel(
+      const ProjectModel(
         imageUrl:
-            'https://images.unsplash.com/photo-1466637574441-749b8f19452f?auto=format&fit=crop&w=1200&q=60', // Yummly
+            'https://images.unsplash.com/photo-1466637574441-749b8f19452f?auto=format&fit=crop&w=1200&q=60',
         title: 'YUMMLY',
         description:
-            'Recipe Recommendation App with personalized suggestions, user uploads, and bookmarking systems.',
-        technologies: ['Flutter', 'Provider', 'REST API'],
+            'Recipe Recommendation App with personalized suggestions and bookmarking systems.',
+        technologies: ['Flutter', 'API'],
         githubUrl: '',
-      ),
-      ProjectModel(
-        imageUrl:
-            'https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=1200&q=60', // Placement
-        title: 'Placement Assistance App',
-        description:
-            'Platform connecting companies, students, and administrators with job posting and application tracking.',
-        technologies: ['Flutter', 'Provider', 'REST API'],
-        githubUrl: '',
-      ),
-      ProjectModel(
-        imageUrl:
-            'https://images.unsplash.com/photo-1504711434969-e33886168f5c?auto=format&fit=crop&w=1200&q=60', // News Hunt
-        title: 'News Hunt',
-        description:
-            'Up-to-date news article aggregator fetching real-time data from newsapi.org with categorized browsing.',
-        technologies: ['Flutter', 'Provider', 'REST API'],
-        githubUrl: '',
-      ),
-      ProjectModel(
-        imageUrl:
-            'https://images.unsplash.com/photo-1606326608606-aa0b62935f2b?auto=format&fit=crop&w=1200&q=60', // Quiz App
-        title: 'Quiz App',
-        description:
-            'Self-assessment knowledge testing application with dynamic content and score tracking.',
-        technologies: ['Flutter', 'Provider', 'REST API'],
-        githubUrl: '',
+        category: 'Lifestyle',
+        primaryColor: '#FF5722',
       ),
     ];
   }
 
   @override
   Future<List<ProjectModel>> getOpenSourceProjects() async {
-    return const [
-      ProjectModel(
+    return [
+      const ProjectModel(
         imageUrl:
             'https://images.unsplash.com/photo-1555099962-4199c345e5dd?auto=format&fit=crop&w=1200&q=60',
         title: 'Responsive Text Plus',
         description:
-            'A Flutter package that dynamically scales text size based on screen or container dimensions, ensuring perfect readability and design consistency across devices.',
-        technologies: [
-          'Flutter',
-          'Dart',
-          'Pub.dev',
-        ],
+            'A Flutter package to create responsive text that scales based on viewport size.',
+        technologies: ['Dart', 'Flutter', 'Pub.dev'],
         githubUrl: 'https://github.com/muhammednajeebay/responsive_text',
+        category: 'Package',
+        primaryColor: '#00BFA5',
       ),
     ];
   }
 
+  // ... (keeping other methods same as they were before I modified them)
   @override
   Future<List<SkillModel>> getSkills() async {
     return const [

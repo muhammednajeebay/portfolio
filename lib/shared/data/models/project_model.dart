@@ -7,6 +7,8 @@ class ProjectModel extends Project {
     required super.imageUrl,
     required super.technologies,
     required super.githubUrl,
+    required super.category,
+    required super.primaryColor,
   });
 
   factory ProjectModel.fromJson(Map<String, dynamic> json) {
@@ -16,6 +18,8 @@ class ProjectModel extends Project {
       imageUrl: json['img'],
       technologies: List<String>.from(json['tech']),
       githubUrl: json['github'],
+      category: json['category'] ?? "Development",
+      primaryColor: json['primary_color'] ?? "#000000",
     );
   }
 }

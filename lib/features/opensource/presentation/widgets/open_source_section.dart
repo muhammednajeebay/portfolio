@@ -3,6 +3,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:portfolio/shared/domain/entities/project.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:portfolio/shared/presentation/widgets/animated_header.dart';
 
 class OpenSourceSection extends StatelessWidget {
   final List<Project> projects;
@@ -21,8 +22,8 @@ class OpenSourceSection extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          "Open Source",
+        AnimatedHeader(
+          text: "Open Source",
           style: theme.textTheme.headlineLarge!
               .copyWith(color: theme.colorScheme.primary),
         ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:portfolio/shared/domain/entities/project.dart';
+import 'package:portfolio/shared/presentation/widgets/animated_header.dart';
 
 class ProjectDetailsPage extends StatelessWidget {
   final Project project;
@@ -35,11 +36,11 @@ class ProjectDetailsPage extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 32),
-            Text(
-              project.title,
-              style: theme.textTheme.headlineLarge
-                  ?.copyWith(fontWeight: FontWeight.bold),
-            ).animate().fade().slideY(begin: 0.2, end: 0),
+            AnimatedHeader(
+              text: project.title,
+              style: theme.textTheme.headlineLarge!
+                  .copyWith(fontWeight: FontWeight.bold),
+            ),
             const SizedBox(height: 16),
             Wrap(
               spacing: 8,
@@ -53,10 +54,10 @@ class ProjectDetailsPage extends StatelessWidget {
                   .toList(),
             ).animate().fade(delay: 200.ms),
             const SizedBox(height: 32),
-            Text(
-              "Overview",
-              style: theme.textTheme.headlineSmall
-                  ?.copyWith(fontWeight: FontWeight.bold),
+            AnimatedHeader(
+              text: "Overview",
+              style: theme.textTheme.headlineSmall!
+                  .copyWith(fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 12),
             Text(
@@ -84,11 +85,13 @@ class ProjectDetailsPage extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(title,
-              style: Theme.of(context)
-                  .textTheme
-                  .titleLarge
-                  ?.copyWith(fontWeight: FontWeight.bold)),
+          AnimatedHeader(
+            text: title,
+            style: Theme.of(context)
+                .textTheme
+                .titleLarge!
+                .copyWith(fontWeight: FontWeight.bold),
+          ),
           const SizedBox(height: 8),
           Text(content, style: Theme.of(context).textTheme.bodyMedium),
         ],

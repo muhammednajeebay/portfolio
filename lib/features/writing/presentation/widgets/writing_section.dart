@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:portfolio/shared/domain/entities/article.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:portfolio/shared/presentation/widgets/animated_header.dart';
 
 class WritingSection extends StatelessWidget {
   final List<Article> articles;
@@ -18,8 +19,8 @@ class WritingSection extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          "Articles",
+        AnimatedHeader(
+          text: "Articles",
           style: theme.textTheme.headlineLarge!
               .copyWith(color: theme.colorScheme.primary),
         ),

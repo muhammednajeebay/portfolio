@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher_string.dart';
+import 'package:portfolio/shared/presentation/widgets/animated_header.dart';
 
 class ContactSection extends StatelessWidget {
   const ContactSection({super.key});
@@ -27,11 +28,13 @@ class ContactSection extends StatelessWidget {
           padding: const EdgeInsets.symmetric(vertical: 38, horizontal: 32),
           child: Column(
             children: [
-              Text("Contact Me",
-                  style: Theme.of(context)
-                      .textTheme
-                      .headlineLarge!
-                      .copyWith(color: Theme.of(context).colorScheme.primary)),
+              AnimatedHeader(
+                text: "Contact Me",
+                style: Theme.of(context)
+                    .textTheme
+                    .headlineLarge!
+                    .copyWith(color: Theme.of(context).colorScheme.primary),
+              ),
               const SizedBox(height: 16),
               Text(
                 "Reach out via email or connect with me on LinkedIn or GitHub.",

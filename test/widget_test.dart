@@ -41,10 +41,8 @@ void main() {
     );
   }
 
-  // ... previous tests ...
   testWidgets('ProjectsSection layout test', (WidgetTester tester) async {
-    await tester.pumpWidget(wrap(const ProjectsSection(
-        projects: []))); // Test empty to be safe or with data
+    await tester.pumpWidget(wrap(const ProjectsSection(projects: [])));
     await tester.pumpWidget(wrap(const ProjectsSection(projects: [
       Project(
         title: 'Test Project',
@@ -52,6 +50,8 @@ void main() {
         imageUrl: 'http://example.com/image.png',
         technologies: ['Flutter'],
         githubUrl: '',
+        category: 'Test',
+        primaryColor: '#000000',
       )
     ])));
     await tester.pumpAndSettle();
@@ -107,6 +107,8 @@ void main() {
         imageUrl: 'http://example.com/image.png',
         technologies: ['Flutter'],
         githubUrl: '',
+        category: 'Test',
+        primaryColor: '#000000',
       )
     ])));
     await tester.pumpAndSettle();

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:portfolio/shared/domain/entities/experience.dart';
+import 'package:portfolio/shared/presentation/widgets/animated_header.dart';
 
 class ExperienceSection extends StatelessWidget {
   final List<Experience> experiences;
@@ -13,8 +14,8 @@ class ExperienceSection extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            "Experience",
+          AnimatedHeader(
+            text: "Experience",
             style: Theme.of(context)
                 .textTheme
                 .headlineLarge!

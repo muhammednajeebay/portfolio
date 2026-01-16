@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:portfolio/core/theme/app_theme.dart';
-import 'package:portfolio/shared/presentation/widgets/animated_Text.dart';
+import 'package:portfolio/shared/presentation/widgets/animated_text.dart';
 import 'package:portfolio/shared/domain/entities/hero_info.dart';
 
 /// Text content on the wall
