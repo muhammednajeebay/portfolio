@@ -88,8 +88,8 @@ class ProjectDetailsPage extends StatelessWidget {
                   end: Alignment.bottomCenter,
                   colors: [
                     Colors.transparent,
-                    colors.background.withOpacity(0.8),
-                    colors.background,
+                    AppColors.darkBackground.withOpacity(0.8),
+                    AppColors.darkBackground,
                   ],
                 ),
               ),
