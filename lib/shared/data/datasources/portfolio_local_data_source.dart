@@ -67,7 +67,7 @@ class PortfolioLocalDataSourceImpl implements PortfolioLocalDataSource {
         description:
             'A professionally architected Flutter Web application showcasing clean architecture, smooth animations, and automated CI/CD workflows with GitHub Actions deployment.',
         imageUrl:
-            'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1200&q=60',
+            'https://images.unsplash.com/photo-1461749280684-dccba630e2f6?q=80&w=2069&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
         technologies: [
           'Flutter Web',
           'Clean Architecture',
@@ -149,6 +149,32 @@ class PortfolioLocalDataSourceImpl implements PortfolioLocalDataSource {
         links: {},
         category: 'Events',
         primaryColor: '#EA4335',
+      ),
+      const ProjectModel(
+        title: 'Personal Portfolio',
+        status: 'live',
+        description:
+            'A performance-focused personal portfolio built to showcase real-world engineering depth, modular architecture, and narrative-driven interaction. Designed as a headless, data-driven system with cinematic motion and advanced theming.',
+        imageUrl:
+            'https://images.unsplash.com/photo-1531297484001-80022131f5a1?q=80&w=2840&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+        technologies: [
+          'HTML',
+          'Vanilla CSS',
+          'JavaScript',
+        ],
+        features: [
+          'Data-driven architecture using centralized content.json',
+          'Clean Architecture–inspired modular JavaScript structure',
+          'Fully responsive layout with Progressive Web App support',
+          'SEO-optimized with semantic HTML and structured data',
+        ],
+        links: {
+          'github': 'https://github.com/muhammednajeebay',
+          // optionally add:
+          'live': 'https://najeebay.netlify.app',
+        },
+        category: 'Portfolio',
+        primaryColor: '#000000',
       ),
       const ProjectModel(
         title: 'DIGIBANK',
@@ -251,11 +277,10 @@ class PortfolioLocalDataSourceImpl implements PortfolioLocalDataSource {
         items: [
           'Flutter',
           'Dart',
-          'BLoC',
+          'Html',
+          'CSS',
+          'JavaScript',
           'GoRouter',
-          'GetX',
-          'Provider',
-          'Cubit'
         ],
       ),
       SkillModel(
@@ -265,8 +290,16 @@ class PortfolioLocalDataSourceImpl implements PortfolioLocalDataSource {
       ),
       SkillModel(
         name: 'State & Data',
-        description: 'Predictable state and persistence',
-        items: ['Hive', 'SQLite', 'SharedPreferences'],
+        description: 'Predictable state and storage',
+        items: [
+          'BLoC',
+          'GetX',
+          'Provider',
+          'Cubit',
+          'Hive',
+          'SQLite',
+          'SharedPreferences'
+        ],
       ),
       SkillModel(
         name: 'Networking',
