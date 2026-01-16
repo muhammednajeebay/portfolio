@@ -1,7 +1,6 @@
 import '../../domain/entities/experience.dart';
 import '../../domain/entities/project.dart';
 import '../../domain/entities/skill.dart';
-import '../../domain/entities/article.dart';
 import '../../domain/entities/about.dart';
 import '../../domain/entities/hero_info.dart';
 import '../../domain/repositories/portfolio_repository.dart';
@@ -18,11 +17,6 @@ class PortfolioRepositoryImpl implements PortfolioRepository {
   }
 
   @override
-  Future<List<Project>> getOpenSourceProjects() async {
-    return await localDataSource.getOpenSourceProjects();
-  }
-
-  @override
   Future<List<Skill>> getSkills() async {
     return await localDataSource.getSkills();
   }
@@ -30,11 +24,6 @@ class PortfolioRepositoryImpl implements PortfolioRepository {
   @override
   Future<List<Experience>> getExperiences() async {
     return await localDataSource.getExperiences();
-  }
-
-  @override
-  Future<List<Article>> getArticles() async {
-    return await localDataSource.getArticles();
   }
 
   @override

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:go_router/go_router.dart';
 import 'package:portfolio/shared/domain/entities/project.dart';
 import 'hover_project_item.dart';
 import 'package:portfolio/shared/presentation/widgets/animated_header.dart';
@@ -37,8 +38,7 @@ class ProjectsSection extends StatelessWidget {
               index: index,
               project: projects[index],
               onTap: () {
-                // Navigate to details
-                // You can add navigation logic here if needed
+                context.push('/project-details', extra: projects[index]);
               },
             ).animate().fadeIn(delay: (100 * index).ms).slideY(begin: 0.1);
           },

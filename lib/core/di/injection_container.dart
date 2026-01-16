@@ -3,9 +3,7 @@ import 'package:portfolio/router/app_router.dart';
 import 'package:portfolio/shared/data/datasources/portfolio_local_data_source.dart';
 import 'package:portfolio/shared/data/repositories/portfolio_repository_impl.dart';
 import 'package:portfolio/shared/domain/repositories/portfolio_repository.dart';
-import 'package:portfolio/shared/domain/usecases/get_articles.dart';
 import 'package:portfolio/shared/domain/usecases/get_experiences.dart';
-import 'package:portfolio/shared/domain/usecases/get_open_source_projects.dart';
 import 'package:portfolio/shared/domain/usecases/get_projects.dart';
 import 'package:portfolio/shared/domain/usecases/get_skills.dart';
 import 'package:portfolio/shared/domain/usecases/get_about_info.dart';
@@ -19,8 +17,6 @@ Future<void> init() async {
         getProjects: sl(),
         getSkills: sl(),
         getExperiences: sl(),
-        getOpenSourceProjects: sl(),
-        getArticles: sl(),
         getAboutInfo: sl(),
         getHeroInfo: sl(),
       ));
@@ -29,8 +25,6 @@ Future<void> init() async {
   sl.registerLazySingleton(() => GetProjects(sl()));
   sl.registerLazySingleton(() => GetSkills(sl()));
   sl.registerLazySingleton(() => GetExperiences(sl()));
-  sl.registerLazySingleton(() => GetOpenSourceProjects(sl()));
-  sl.registerLazySingleton(() => GetArticles(sl()));
   sl.registerLazySingleton(() => GetAboutInfo(sl()));
   sl.registerLazySingleton(() => GetHeroInfo(sl()));
 

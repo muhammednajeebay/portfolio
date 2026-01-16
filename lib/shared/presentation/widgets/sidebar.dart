@@ -19,11 +19,6 @@ class Sidebar extends StatelessWidget {
   Widget build(BuildContext context) {
     final colors = context.appColors;
 
-    if (isMobile) {
-      // Mobile: Show as bottom navigation or drawer
-      return const SizedBox.shrink();
-    }
-
     final sections = [
       'Home',
       'About',
@@ -32,6 +27,85 @@ class Sidebar extends StatelessWidget {
       'Timeline',
       'Connect',
     ];
+
+    if (isMobile) {
+      return Drawer(
+        backgroundColor: colors.background,
+        child: Column(
+          children: [
+            const SizedBox(height: 60),
+            // MN Logo in Drawer
+            Text(
+              'MN',
+              style: AppTextStyles.headlineSmall(context).copyWith(
+                color: colors.primary,
+                letterSpacing: 2,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 40),
+            const Divider(indent: 40, endIndent: 40),
+            const SizedBox(height: 20),
+            // Navigation Items
+            Expanded(
+              child: ListView.builder(
+                itemCount: sections.length,
+                itemBuilder: (context, index) {
+                  final section = sections[index];
+                  final isActive =
+                      activeSection.toLowerCase() == section.toLowerCase();
+
+                  return ListTile(
+                    contentPadding: const EdgeInsets.symmetric(horizontal: 40),
+                    title: Text(
+                      section.toUpperCase(),
+                      style: AppTextStyles.navItem(context, isActive: isActive)
+                          .copyWith(
+                        color: isActive ? colors.primary : colors.secondary,
+                        letterSpacing: 4,
+                      ),
+                    ),
+                    trailing: isActive
+                        ? Icon(Icons.arrow_right_alt, color: colors.primary)
+                        : null,
+                    onTap: () {
+                      onSectionTap(section);
+                      Navigator.pop(context); // Close drawer
+                    },
+                  );
+                },
+              ),
+            ),
+            // Social Icons at bottom
+            Padding(
+              padding: const EdgeInsets.only(bottom: 40),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  _SocialIcon(
+                    icon: FontAwesomeIcons.linkedin,
+                    onTap: () => _launchLink(
+                        'https://www.linkedin.com/in/muhammednajeebay'),
+                  ),
+                  const SizedBox(width: 20),
+                  _SocialIcon(
+                    icon: FontAwesomeIcons.github,
+                    onTap: () =>
+                        _launchLink('https://github.com/muhammednajeebay'),
+                  ),
+                  const SizedBox(width: 20),
+                  _SocialIcon(
+                    icon: FontAwesomeIcons.medium,
+                    onTap: () =>
+                        _launchLink('https://medium.com/@muhammednajeebay'),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      );
+    }
 
     return Container(
       width: 80,
@@ -61,7 +135,6 @@ class Sidebar extends StatelessWidget {
                       activeSection.toLowerCase() == section.toLowerCase();
                   return GestureDetector(
                     onTap: () {
-                      debugPrint('🖱️ Sidebar UI: Tapping $section');
                       onSectionTap(section);
                     },
                     child: Container(
@@ -110,7 +183,7 @@ class Sidebar extends StatelessWidget {
                 _SocialIcon(
                   icon: FontAwesomeIcons.medium,
                   onTap: () {
-                    _launchLink('https://github.com/muhammednajeebay');
+                    _launchLink('https://medium.com/@muhammednajeebay');
                   },
                 ),
               ],
@@ -122,8 +195,9 @@ class Sidebar extends StatelessWidget {
   }
 
   Future<void> _launchLink(String url) async {
-    final launched = await launchUrlString(url);
-    if (!launched) {
+    try {
+      await launchUrlString(url);
+    } catch (e) {
       debugPrint('Could not launch $url');
     }
   }

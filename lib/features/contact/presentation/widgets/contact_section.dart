@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import 'package:portfolio/shared/presentation/widgets/animated_header.dart';
+import 'package:portfolio/core/theme/app_theme.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class ContactSection extends StatelessWidget {
   const ContactSection({super.key});
@@ -16,124 +17,168 @@ class ContactSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Animate(
-      effects: const [FadeEffect(), MoveEffect(begin: Offset(0, 24))],
-      child: Card(
-        elevation: 7,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(22)),
-        shadowColor:
-            Theme.of(context).colorScheme.secondary.withValues(alpha: 0.1),
-        color: Theme.of(context).colorScheme.secondary.withValues(alpha: 0.1),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 38, horizontal: 32),
-          child: Column(
+    final theme = Theme.of(context);
+    final isMobile = MediaQuery.of(context).size.width < 1024;
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 80.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          AnimatedHeader(
+            text: "Connect.",
+            style: GoogleFonts.outfit(
+              fontSize: isMobile ? 32 : 40,
+              fontWeight: FontWeight.bold,
+              color: theme.colorScheme.onSurface,
+            ),
+          ),
+          const SizedBox(height: 24),
+          SizedBox(
+            width: isMobile ? double.infinity : 600,
+            child: Text(
+              "I'm always looking for new opportunities and interesting projects to collaborate on. Feel free to reach out via email or any of the platforms below.",
+              style: GoogleFonts.outfit(
+                fontSize: 18,
+                height: 1.6,
+                color: theme.colorScheme.onSurface.withOpacity(0.7),
+              ),
+            ),
+          ).animate().fadeIn(delay: 200.ms).slideY(begin: 0.1),
+          const SizedBox(height: 60),
+          _ContactItem(
+            label: 'Email',
+            value: 'muhammednajeeb.ay@gmail.com',
+            icon: Icons.email_outlined,
+            onTap: () => _launchLink('mailto:muhammednajeeb.ay@gmail.com'),
+          ).animate().fadeIn(delay: 400.ms).slideY(begin: 0.1),
+          const SizedBox(height: 40),
+          Wrap(
+            spacing: 40,
+            runSpacing: 20,
             children: [
-              AnimatedHeader(
-                text: "Contact Me",
-                style: Theme.of(context)
-                    .textTheme
-                    .headlineLarge!
-                    .copyWith(color: Theme.of(context).colorScheme.primary),
+              _SocialLink(
+                label: 'LinkedIn',
+                onTap: () =>
+                    _launchLink('https://www.linkedin.com/in/muhammednajeebay'),
               ),
-              const SizedBox(height: 16),
-              Text(
-                "Reach out via email or connect with me on LinkedIn or GitHub.",
-                textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.bodyMedium,
+              _SocialLink(
+                label: 'GitHub',
+                onTap: () => _launchLink('https://github.com/muhammednajeebay'),
               ),
-              const SizedBox(height: 28),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(Icons.email,
-                      color: Theme.of(context).colorScheme.primary),
-                  const SizedBox(width: 6),
-                  SelectableText(
-                    'muhammednajeeb.ay@gmail.com',
-                    style: Theme.of(context).textTheme.bodyMedium,
-                  ),
-                ],
+              _SocialLink(
+                label: 'Medium',
+                onTap: () =>
+                    _launchLink('https://medium.com/@muhammednajeeb.ay'),
               ),
-              const SizedBox(height: 14),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(Icons.location_on,
-                      color: Theme.of(context).colorScheme.secondary),
-                  const SizedBox(width: 6),
-                  SelectableText(
-                    'Kerala, India',
-                    style: Theme.of(context).textTheme.bodyMedium,
-                  ),
-                ],
-              ),
-              const SizedBox(height: 24),
-              Wrap(
-                alignment: WrapAlignment.center,
-                spacing: 16,
-                children: [
-                  _SocialButton(
-                    icon: FontAwesomeIcons.linkedin,
-                    url: 'https://www.linkedin.com/in/muhammednajeebay',
-                    label: 'LinkedIn',
-                    onPressed: () => _launchLink(
-                        'https://www.linkedin.com/in/muhammednajeebay'),
-                  ),
-                  _SocialButton(
-                    icon: FontAwesomeIcons.github,
-                    url: 'https://github.com/muhammednajeebay',
-                    label: 'GitHub',
-                    onPressed: () =>
-                        _launchLink('https://github.com/muhammednajeebay'),
-                  ),
-                  _SocialButton(
-                    icon: FontAwesomeIcons.medium,
-                    url: 'https://medium.com/@muhammednajeeb.ay',
-                    label: 'Medium',
-                    onPressed: () =>
-                        _launchLink('https://medium.com/@muhammednajeeb.ay'),
-                  ),
-                  _SocialButton(
-                    icon: FontAwesomeIcons.solidFilePdf,
-                    url:
-                        'https://drive.google.com/file/d/1HE4YXOQiKdqjnSb1n2g22ixbbA-BWKVE/view',
-                    label: 'Resume',
-                    onPressed: () => _launchLink(
-                        'https://drive.google.com/file/d/1HE4YXOQiKdqjnSb1n2g22ixbbA-BWKVE/view'),
-                  ),
-                ],
+              _SocialLink(
+                label: 'Resume',
+                onTap: () => _launchLink(
+                    'https://drive.google.com/file/d/1HE4YXOQiKdqjnSb1n2g22ixbbA-BWKVE/view'),
               ),
             ],
-          ),
-        ),
+          ).animate().fadeIn(delay: 600.ms).slideY(begin: 0.1),
+        ],
       ),
     );
   }
 }
 
-class _SocialButton extends StatelessWidget {
-  final IconData icon;
-  final String url;
+class _ContactItem extends StatelessWidget {
   final String label;
-  final VoidCallback onPressed;
+  final String value;
+  final IconData icon;
+  final VoidCallback onTap;
 
-  const _SocialButton({
-    required this.icon,
-    required this.url,
+  const _ContactItem({
     required this.label,
-    required this.onPressed,
+    required this.value,
+    required this.icon,
+    required this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
-    return IconButton(
-      icon: Icon(icon),
-      iconSize: 34,
-      // Use a generic color or from theme, or let IconButton handle it if null
-      // For this design, let's keep it simple or use primary
-      color: Theme.of(context).iconTheme.color,
-      onPressed: onPressed,
-      tooltip: label,
+    final theme = Theme.of(context);
+    final colors = context.appColors;
+
+    return GestureDetector(
+      onTap: onTap,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            label.toUpperCase(),
+            style: GoogleFonts.outfit(
+              fontSize: 12,
+              fontWeight: FontWeight.bold,
+              letterSpacing: 2,
+              color: colors.primary.withOpacity(0.5),
+            ),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            value,
+            style: theme.textTheme.headlineSmall?.copyWith(
+              fontWeight: FontWeight.w900,
+              color: theme.colorScheme.onSurface,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _SocialLink extends StatefulWidget {
+  final String label;
+  final VoidCallback onTap;
+
+  const _SocialLink({
+    required this.label,
+    required this.onTap,
+  });
+
+  @override
+  State<_SocialLink> createState() => _SocialLinkState();
+}
+
+class _SocialLinkState extends State<_SocialLink> {
+  bool _isHovered = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colors = context.appColors;
+
+    return MouseRegion(
+      onEnter: (_) => setState(() => _isHovered = true),
+      onExit: (_) => setState(() => _isHovered = false),
+      child: GestureDetector(
+        onTap: widget.onTap,
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              '▷',
+              style: TextStyle(
+                color: colors.primary.withOpacity(_isHovered ? 1.0 : 0.5),
+                fontSize: 10,
+              ),
+            ),
+            const SizedBox(width: 8),
+            Text(
+              widget.label,
+              style: GoogleFonts.outfit(
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+                color: theme.colorScheme.onSurface,
+                decoration: _isHovered ? TextDecoration.underline : null,
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

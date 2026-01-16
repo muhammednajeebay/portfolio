@@ -3,11 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:portfolio/features/experience/presentation/widgets/experience_section.dart';
 import 'package:portfolio/features/hero/presentation/pages/hero_page.dart';
-import 'package:portfolio/features/opensource/presentation/widgets/open_source_section.dart';
 import 'package:portfolio/features/projects/presentation/widgets/projects_section.dart';
 import 'package:portfolio/features/skills/presentation/widgets/skills_section.dart';
-import 'package:portfolio/features/writing/presentation/widgets/writing_section.dart';
-import 'package:portfolio/shared/domain/entities/article.dart';
 import 'package:portfolio/shared/domain/entities/experience.dart';
 import 'package:portfolio/shared/domain/entities/project.dart';
 import 'package:portfolio/shared/domain/entities/skill.dart';
@@ -88,28 +85,6 @@ void main() {
   testWidgets('SkillsSection layout test', (WidgetTester tester) async {
     await tester.pumpWidget(wrap(const SkillsSection(skills: [
       Skill(name: 'Cat', icon: Icons.code, items: ['A', 'B'])
-    ])));
-    await tester.pumpAndSettle();
-  });
-
-  testWidgets('WritingSection layout test', (WidgetTester tester) async {
-    await tester.pumpWidget(wrap(const WritingSection(articles: [
-      Article(title: 'T', summary: 'S', url: 'u', readTime: '5m', date: 'D')
-    ])));
-    await tester.pumpAndSettle();
-  });
-
-  testWidgets('OpenSource layout test', (WidgetTester tester) async {
-    await tester.pumpWidget(wrap(const OpenSourceSection(projects: [
-      Project(
-        title: 'Test Project',
-        description: 'Desc',
-        imageUrl: 'http://example.com/image.png',
-        technologies: ['Flutter'],
-        githubUrl: '',
-        category: 'Test',
-        primaryColor: '#000000',
-      )
     ])));
     await tester.pumpAndSettle();
   });

@@ -1,16 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:portfolio/shared/domain/entities/article.dart';
 import 'package:portfolio/shared/domain/entities/hero_info.dart';
 import 'package:portfolio/shared/domain/entities/experience.dart';
 import 'package:portfolio/shared/domain/entities/project.dart';
 import 'package:portfolio/shared/domain/entities/skill.dart';
 import 'package:portfolio/shared/domain/entities/about.dart';
-import 'package:portfolio/shared/domain/usecases/get_articles.dart';
 import 'package:portfolio/shared/domain/usecases/get_experiences.dart';
-import 'package:portfolio/shared/domain/usecases/get_open_source_projects.dart';
 import 'package:portfolio/shared/domain/usecases/get_projects.dart';
 import 'package:portfolio/shared/domain/usecases/get_skills.dart';
 import 'package:portfolio/shared/domain/usecases/get_about_info.dart';
@@ -19,21 +15,18 @@ import 'package:portfolio/features/about/presentation/widgets/about_section.dart
 import 'package:portfolio/features/contact/presentation/widgets/contact_section.dart';
 import 'package:portfolio/features/hero/presentation/pages/hero_page.dart';
 import 'package:portfolio/features/experience/presentation/widgets/experience_section.dart';
-import 'package:portfolio/features/opensource/presentation/widgets/open_source_section.dart';
 import 'package:portfolio/features/projects/presentation/widgets/projects_section.dart';
 import 'package:portfolio/features/skills/presentation/widgets/skills_section.dart';
-import 'package:portfolio/features/writing/presentation/widgets/writing_section.dart';
 import 'package:portfolio/shared/presentation/widgets/motion_background.dart';
 import 'package:portfolio/shared/presentation/widgets/section_container.dart';
 import 'package:portfolio/shared/presentation/widgets/sidebar.dart';
 import 'package:portfolio/core/theme/theme_cubit.dart';
+import 'package:portfolio/core/theme/app_theme.dart';
 
 class HomePage extends StatefulWidget {
   final GetProjects getProjects;
   final GetSkills getSkills;
   final GetExperiences getExperiences;
-  final GetOpenSourceProjects getOpenSourceProjects;
-  final GetArticles getArticles;
   final GetAboutInfo getAboutInfo;
   final GetHeroInfo getHeroInfo;
 
@@ -42,8 +35,6 @@ class HomePage extends StatefulWidget {
     required this.getProjects,
     required this.getSkills,
     required this.getExperiences,
-    required this.getOpenSourceProjects,
-    required this.getArticles,
     required this.getAboutInfo,
     required this.getHeroInfo,
   });
@@ -60,15 +51,11 @@ class _HomePageState extends State<HomePage>
   final skillsKey = GlobalKey();
   final experienceKey = GlobalKey();
   final projectsKey = GlobalKey();
-  final openSourceKey = GlobalKey();
-  final writingKey = GlobalKey();
   final contactKey = GlobalKey();
 
   List<Project> _projects = [];
   List<Skill> _skills = [];
   List<Experience> _experiences = [];
-  List<Project> _openSourceProjects = [];
-  List<Article> _articles = [];
   About? _aboutInfo;
   HeroInfo? _heroInfo;
 
@@ -155,8 +142,6 @@ class _HomePageState extends State<HomePage>
         widget.getProjects(),
         widget.getSkills(),
         widget.getExperiences(),
-        widget.getOpenSourceProjects(),
-        widget.getArticles(),
         widget.getAboutInfo(),
         widget.getHeroInfo(),
       ]);
@@ -167,10 +152,8 @@ class _HomePageState extends State<HomePage>
         _projects = results[0] as List<Project>;
         _skills = results[1] as List<Skill>;
         _experiences = results[2] as List<Experience>;
-        _openSourceProjects = results[3] as List<Project>;
-        _articles = results[4] as List<Article>;
-        _aboutInfo = results[5] as About;
-        _heroInfo = results[6] as HeroInfo;
+        _aboutInfo = results[3] as About;
+        _heroInfo = results[4] as HeroInfo;
         _isLoading = false;
       });
     } catch (e) {
@@ -247,7 +230,7 @@ class _HomePageState extends State<HomePage>
                         return Sidebar(
                           activeSection: activeSection,
                           onSectionTap: _onSectionTap,
-                          isMobile: isMobile,
+                          isMobile: false,
                         );
                       },
                     ),
@@ -258,15 +241,28 @@ class _HomePageState extends State<HomePage>
                     color: Theme.of(context).brightness == Brightness.dark
                         ? Colors.black
                         : Colors.white,
-                    child: _isLoading
+                    child: _isLoading || _heroInfo == null || _aboutInfo == null
                         ? const Center(child: CircularProgressIndicator())
                         : _buildScrollContent(),
                   ),
                 ),
               ],
             ),
+            // Mobile: Show drawer
+            drawer: isMobile
+                ? ValueListenableBuilder<String>(
+                    valueListenable: _activeSectionNotifier,
+                    builder: (context, activeSection, _) {
+                      return Sidebar(
+                        activeSection: activeSection,
+                        onSectionTap: _onSectionTap,
+                        isMobile: true,
+                      );
+                    },
+                  )
+                : null,
             // Mobile: Show top navbar
-            // appBar: isMobile ? _buildMobileAppBar() : null,
+            appBar: isMobile ? _buildMobileAppBar() : null,
           ),
         );
       },
@@ -293,7 +289,6 @@ class _HomePageState extends State<HomePage>
               child: AboutSection(aboutInfo: _aboutInfo!),
             ),
           ),
-          // Work section (Projects) - moved before Skills to match sidebar order
           RepaintBoundary(
             child: SectionContainer(
               key: projectsKey,
@@ -306,23 +301,10 @@ class _HomePageState extends State<HomePage>
               child: SkillsSection(skills: _skills),
             ),
           ),
-          // Timeline section (Experience)
           RepaintBoundary(
             child: SectionContainer(
               key: experienceKey,
               child: ExperienceSection(experiences: _experiences),
-            ),
-          ),
-          RepaintBoundary(
-            child: SectionContainer(
-              key: openSourceKey,
-              child: OpenSourceSection(projects: _openSourceProjects),
-            ),
-          ),
-          RepaintBoundary(
-            child: SectionContainer(
-              key: writingKey,
-              child: WritingSection(articles: _articles),
             ),
           ),
           RepaintBoundary(
@@ -402,5 +384,28 @@ class _HomePageState extends State<HomePage>
     _scrollOffsetNotifier.dispose();
     _activeSectionNotifier.dispose();
     super.dispose();
+  }
+
+  PreferredSizeWidget _buildMobileAppBar() {
+    final colors = context.appColors;
+    return AppBar(
+      backgroundColor: Colors.transparent,
+      elevation: 0,
+      centerTitle: true,
+      title: Text(
+        'MN',
+        style: AppTextStyles.headlineSmall(context).copyWith(
+          color: colors.primary,
+          letterSpacing: 2,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+      leading: Builder(
+        builder: (context) => IconButton(
+          icon: Icon(Icons.menu_rounded, color: colors.primary),
+          onPressed: () => Scaffold.of(context).openDrawer(),
+        ),
+      ),
+    );
   }
 }

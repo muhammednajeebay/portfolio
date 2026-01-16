@@ -3,16 +3,13 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../models/project_model.dart';
 import '../models/skill_model.dart';
 import '../models/experience_model.dart';
-import '../models/article_model.dart';
 import '../models/about_model.dart';
 import '../models/hero_info_model.dart';
 
 abstract class PortfolioLocalDataSource {
   Future<List<ProjectModel>> getProjects();
-  Future<List<ProjectModel>> getOpenSourceProjects();
   Future<List<SkillModel>> getSkills();
   Future<List<ExperienceModel>> getExperiences();
-  Future<List<ArticleModel>> getArticles();
   Future<AboutModel> getAboutInfo();
   Future<HeroInfoModel> getHeroInfo();
 }
@@ -21,6 +18,17 @@ class PortfolioLocalDataSourceImpl implements PortfolioLocalDataSource {
   @override
   Future<List<ProjectModel>> getProjects() async {
     return [
+      const ProjectModel(
+        imageUrl:
+            'https://images.unsplash.com/photo-1555099962-4199c345e5dd?auto=format&fit=crop&w=1200&q=60',
+        title: 'Responsive Text Plus',
+        description:
+            'A Flutter package to create responsive text that scales based on viewport size.',
+        technologies: ['Dart', 'Flutter', 'Pub.dev'],
+        githubUrl: 'https://github.com/muhammednajeebay/responsive_text',
+        category: 'Package',
+        primaryColor: '#00BFA5',
+      ),
       const ProjectModel(
         imageUrl:
             'https://images.unsplash.com/photo-1507925921958-8a62f3d1a50d?auto=format&fit=crop&w=1200&q=60',
@@ -45,7 +53,7 @@ class PortfolioLocalDataSourceImpl implements PortfolioLocalDataSource {
       ),
       const ProjectModel(
         imageUrl:
-             'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1200&q=60',
+            'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1200&q=60',
         title: 'ERP Software',
         description:
             'Enterprise-grade ERP covering inventory control, sales workflows, and financial accounting.',
@@ -97,23 +105,6 @@ class PortfolioLocalDataSourceImpl implements PortfolioLocalDataSource {
         githubUrl: '',
         category: 'Lifestyle',
         primaryColor: '#FF5722',
-      ),
-    ];
-  }
-
-  @override
-  Future<List<ProjectModel>> getOpenSourceProjects() async {
-    return [
-      const ProjectModel(
-        imageUrl:
-            'https://images.unsplash.com/photo-1555099962-4199c345e5dd?auto=format&fit=crop&w=1200&q=60',
-        title: 'Responsive Text Plus',
-        description:
-            'A Flutter package to create responsive text that scales based on viewport size.',
-        technologies: ['Dart', 'Flutter', 'Pub.dev'],
-        githubUrl: 'https://github.com/muhammednajeebay/responsive_text',
-        category: 'Package',
-        primaryColor: '#00BFA5',
       ),
     ];
   }
@@ -207,21 +198,6 @@ class PortfolioLocalDataSourceImpl implements PortfolioLocalDataSource {
           'REST API',
           'Firebase',
         ],
-      ),
-    ];
-  }
-
-  @override
-  Future<List<ArticleModel>> getArticles() async {
-    return const [
-      // Placeholder articles linking to profile
-      ArticleModel(
-        title: 'Check out my articles on Medium',
-        summary:
-            'I write about Flutter architecture, performance, and best practices. Click to read my latest stories.',
-        url: 'https://medium.com/@muhammednajeeb.ay',
-        readTime: 'View Profile',
-        date: 'Ongoing',
       ),
     ];
   }
