@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import '../../../core/theme/app_theme.dart';
+import 'animations/flicker_text_animation.dart';
 
-class Sidebar extends StatelessWidget {
+class Sidebar extends StatefulWidget {
   final String activeSection;
   final Function(String) onSectionTap;
   final bool isMobile;
@@ -16,19 +17,58 @@ class Sidebar extends StatelessWidget {
   });
 
   @override
+  State<Sidebar> createState() => _SidebarState();
+}
+
+class _SidebarState extends State<Sidebar> with TickerProviderStateMixin {
+  late Map<String, AnimationController> _controllers;
+
+  final List<String> sections = [
+    'Home',
+    'About',
+    'Work',
+    'Skill',
+    'Timeline',
+    'Connect',
+  ];
+
+  @override
+  void initState() {
+    super.initState();
+    _controllers = {
+      for (var section in sections)
+        section: AnimationController(
+          vsync: this,
+          duration: const Duration(milliseconds: 600),
+        ),
+    };
+
+    // Initial flicker for current active section
+    _controllers[widget.activeSection]?.forward();
+  }
+
+  @override
+  void didUpdateWidget(Sidebar oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.activeSection != widget.activeSection) {
+      _controllers[oldWidget.activeSection]?.reverse();
+      _controllers[widget.activeSection]?.forward(from: 0);
+    }
+  }
+
+  @override
+  void dispose() {
+    for (var controller in _controllers.values) {
+      controller.dispose();
+    }
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final colors = context.appColors;
 
-    final sections = [
-      'Home',
-      'About',
-      'Work',
-      'Skill',
-      'Timeline',
-      'Connect',
-    ];
-
-    if (isMobile) {
+    if (widget.isMobile) {
       return Drawer(
         backgroundColor: colors.background,
         child: Column(
@@ -52,16 +92,19 @@ class Sidebar extends StatelessWidget {
                 itemCount: sections.length,
                 itemBuilder: (context, index) {
                   final section = sections[index];
-                  final isActive =
-                      activeSection.toLowerCase() == section.toLowerCase();
+                  final isActive = widget.activeSection.toLowerCase() ==
+                      section.toLowerCase();
 
                   return ListTile(
                     contentPadding: const EdgeInsets.symmetric(horizontal: 40),
-                    title: Text(
-                      section.toUpperCase(),
-                      style: AppTextStyles.navItem(context, isActive: isActive)
-                          .copyWith(
-                        color: isActive ? colors.accent : colors.secondary,
+                    title: FlickerTextAnimation(
+                      controller: _controllers[section]!,
+                      text: section.toUpperCase(),
+                      textColor: colors.secondary,
+                      fadeInColor: colors.accent,
+                      textStyle:
+                          AppTextStyles.navItem(context, isActive: isActive)
+                              .copyWith(
                         letterSpacing: 4,
                       ),
                     ),
@@ -69,7 +112,7 @@ class Sidebar extends StatelessWidget {
                         ? Icon(Icons.arrow_right_alt, color: colors.primary)
                         : null,
                     onTap: () {
-                      onSectionTap(section);
+                      widget.onSectionTap(section);
                       Navigator.pop(context); // Close drawer
                     },
                   );
@@ -131,27 +174,37 @@ class Sidebar extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: sections.map((section) {
-                  final isActive =
-                      activeSection.toLowerCase() == section.toLowerCase();
-                  return GestureDetector(
-                    onTap: () {
-                      onSectionTap(section);
+                  final isActive = widget.activeSection.toLowerCase() ==
+                      section.toLowerCase();
+                  return MouseRegion(
+                    onEnter: (_) => _controllers[section]?.forward(),
+                    onExit: (_) {
+                      if (!isActive) {
+                        _controllers[section]?.reverse();
+                      }
                     },
-                    child: Container(
-                      margin: const EdgeInsets.symmetric(vertical: 8),
-                      child: RotatedBox(
-                        quarterTurns: 1,
-                        child: Text(
-                          section,
-                          style:
-                              AppTextStyles.navItem(context, isActive: isActive)
-                                  .copyWith(
-                            color: isActive ? colors.accent : colors.secondary,
-                            decoration: isActive
-                                ? TextDecoration.underline
-                                : TextDecoration.none,
-                            decorationColor: colors.accent,
-                            decorationThickness: 2,
+                    child: GestureDetector(
+                      onTap: () {
+                        widget.onSectionTap(section);
+                      },
+                      child: Container(
+                        margin: const EdgeInsets.symmetric(vertical: 8),
+                        child: RotatedBox(
+                          quarterTurns: 1,
+                          child: FlickerTextAnimation(
+                            controller: _controllers[section]!,
+                            text: section,
+                            textColor: colors.secondary,
+                            fadeInColor: colors.accent,
+                            textStyle: AppTextStyles.navItem(context,
+                                    isActive: isActive)
+                                .copyWith(
+                              decoration: isActive
+                                  ? TextDecoration.underline
+                                  : TextDecoration.none,
+                              decorationColor: colors.accent,
+                              decorationThickness: 2,
+                            ),
                           ),
                         ),
                       ),
