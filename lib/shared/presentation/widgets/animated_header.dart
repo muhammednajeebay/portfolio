@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:portfolio/shared/presentation/widgets/slide_box_reveal_text.dart';
 
 class AnimatedHeader extends StatefulWidget {
   const AnimatedHeader({
@@ -130,16 +131,28 @@ class _AnimatedLineThroughTextState extends State<AnimatedLineThroughText>
 
   @override
   Widget build(BuildContext context) {
+    final textWidget = Text(
+      widget.text,
+      style: widget.textStyle.copyWith(
+        decoration: widget.isUnderlinedOnHover
+            ? TextDecoration.underline
+            : TextDecoration.none,
+      ),
+    );
+
+    // Use slide box animation if enabled
+    if (widget.hasSlideBoxAnimation) {
+      return SlideBoxRevealTextOnScroll(
+        duration: const Duration(milliseconds: 800),
+        curve: Curves.easeInOut,
+        child: textWidget,
+      );
+    }
+
+    // Otherwise use the original fade animation
     return FadeTransition(
       opacity: _opacity,
-      child: Text(
-        widget.text,
-        style: widget.textStyle.copyWith(
-          decoration: widget.isUnderlinedOnHover
-              ? TextDecoration.underline
-              : TextDecoration.none,
-        ),
-      ),
+      child: textWidget,
     );
   }
 

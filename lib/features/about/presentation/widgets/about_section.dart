@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import '../../../../core/theme/app_theme.dart';
 import '../../../../shared/domain/entities/about.dart';
+import 'package:portfolio/shared/presentation/widgets/slide_box_reveal_text.dart';
 
 class AboutSection extends StatelessWidget {
   final About aboutInfo;
@@ -26,13 +27,13 @@ class AboutSection extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Quiet Heading
-          Text(
-            aboutInfo.title,
-            style: GoogleFonts.outfit(
-              fontSize: 16,
-              fontWeight: FontWeight.w400,
-              letterSpacing: 1.0,
-              color: colors.onSurface.withOpacity(0.5),
+          SlideBoxRevealTextOnScroll(
+            child: Text(
+              aboutInfo.title,
+              style: AppTextStyles.titleMedium(context).copyWith(
+                letterSpacing: 1.0,
+                color: colors.onSurface.withOpacity(0.5),
+              ),
             ),
           ),
           const SizedBox(height: 60),
@@ -103,11 +104,9 @@ class AboutSection extends StatelessWidget {
                 width: 500, // Reduced text width
                 child: Text(
                   aboutInfo.descriptions[0],
-                  style: GoogleFonts.outfit(
-                    fontSize: 22,
+                  style: AppTextStyles.titleLarge(context).copyWith(
                     fontWeight: FontWeight.w500,
                     height: 1.4,
-                    color: colors.onSurface,
                   ),
                 ),
               ),
@@ -118,9 +117,7 @@ class AboutSection extends StatelessWidget {
                 width: 480,
                 child: Text(
                   aboutInfo.descriptions[1],
-                  style: GoogleFonts.outfit(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w400,
+                  style: AppTextStyles.bodyLarge(context).copyWith(
                     height: 1.6,
                     color: colors.onSurface.withOpacity(0.8),
                   ),
@@ -131,11 +128,9 @@ class AboutSection extends StatelessWidget {
               // Block 3: Values
               Text(
                 aboutInfo.descriptions[2],
-                style: GoogleFonts.outfit(
-                  fontSize: 14, // Small size
-                  fontWeight: FontWeight.w400,
-                  height: 1.8, // Generous line height
-                  color: colors.onSurface.withOpacity(0.4), // Low contrast
+                style: AppTextStyles.bodyMedium(context).copyWith(
+                  height: 1.8,
+                  color: colors.onSurface.withOpacity(0.4),
                 ),
               ),
             ],
@@ -190,19 +185,16 @@ class AboutSection extends StatelessWidget {
         // Text Blocks
         Text(
           aboutInfo.descriptions[0],
-          style: GoogleFonts.outfit(
+          style: AppTextStyles.titleLarge(context).copyWith(
             fontSize: 20,
             fontWeight: FontWeight.w500,
             height: 1.4,
-            color: colors.onSurface,
           ),
         ),
         const SizedBox(height: 32),
         Text(
           aboutInfo.descriptions[1],
-          style: GoogleFonts.outfit(
-            fontSize: 16,
-            fontWeight: FontWeight.w400,
+          style: AppTextStyles.bodyLarge(context).copyWith(
             height: 1.6,
             color: colors.onSurface.withOpacity(0.8),
           ),
@@ -210,9 +202,7 @@ class AboutSection extends StatelessWidget {
         const SizedBox(height: 32),
         Text(
           aboutInfo.descriptions[2],
-          style: GoogleFonts.outfit(
-            fontSize: 14,
-            fontWeight: FontWeight.w400,
+          style: AppTextStyles.bodyMedium(context).copyWith(
             height: 1.8,
             color: colors.onSurface.withOpacity(0.4),
           ),

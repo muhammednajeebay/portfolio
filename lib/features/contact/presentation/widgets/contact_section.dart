@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:url_launcher/url_launcher_string.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:portfolio/core/theme/app_theme.dart';
+import 'package:portfolio/shared/presentation/widgets/slide_box_reveal_text.dart';
 
 class ContactSection extends StatelessWidget {
   const ContactSection({super.key});
@@ -15,21 +16,20 @@ class ContactSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     final isMobile = MediaQuery.of(context).size.width < 1024;
 
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text(
-            "Connect.",
-            style: GoogleFonts.outfit(
-              fontSize: isMobile ? 32 : 48,
-              fontWeight: FontWeight.bold,
-              color: theme.colorScheme.onSurface,
+          SlideBoxRevealTextOnScroll(
+            child: Text(
+              "Connect.",
+              style: AppTextStyles.displaySmall(context).copyWith(
+                fontSize: isMobile ? 32 : 48,
+              ),
             ),
-          ).animate().fadeIn(duration: 600.ms).slideY(begin: 0.1),
+          ),
           const SizedBox(height: 48),
           _EmailElement(
             email: 'muhammednajeeb.ay@gmail.com',
@@ -46,10 +46,8 @@ class ContactSection extends StatelessWidget {
             child: Text(
               "Currently open to meaningful opportunities and collaborations.",
               textAlign: TextAlign.center,
-              style: GoogleFonts.outfit(
-                fontSize: 14,
+              style: AppTextStyles.bodyMedium(context).copyWith(
                 letterSpacing: 0.5,
-                color: theme.colorScheme.onSurface,
               ),
             ),
           ).animate().fadeIn(delay: 600.ms),
@@ -58,10 +56,8 @@ class ContactSection extends StatelessWidget {
             opacity: 0.3,
             child: Text(
               "© 2026 · Built with Flutter Web",
-              style: GoogleFonts.outfit(
-                fontSize: 12,
+              style: AppTextStyles.bodySmall(context).copyWith(
                 letterSpacing: 0.5,
-                color: theme.colorScheme.onSurface,
               ),
             ),
           ).animate().fadeIn(delay: 800.ms),
@@ -88,8 +84,6 @@ class _EmailElementState extends State<_EmailElement> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
     return MouseRegion(
       onEnter: (_) => setState(() => _isHovered = true),
       onExit: (_) => setState(() => _isHovered = false),
@@ -97,11 +91,9 @@ class _EmailElementState extends State<_EmailElement> {
         onTap: widget.onTap,
         child: AnimatedDefaultTextStyle(
           duration: const Duration(milliseconds: 200),
-          style: GoogleFonts.outfit(
-            fontSize: 20,
+          style: AppTextStyles.cardTitle(context).copyWith(
             fontWeight: FontWeight.w500,
             letterSpacing: 0.5,
-            color: theme.colorScheme.onSurface,
             decoration:
                 _isHovered ? TextDecoration.underline : TextDecoration.none,
           ),
@@ -172,8 +164,6 @@ class _TextLinkState extends State<_TextLink> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
     return MouseRegion(
       onEnter: (_) => setState(() => _isHovered = true),
       onExit: (_) => setState(() => _isHovered = false),
@@ -184,11 +174,7 @@ class _TextLinkState extends State<_TextLink> {
           opacity: _isHovered ? 1.0 : 0.5,
           child: Text(
             widget.label,
-            style: GoogleFonts.outfit(
-              fontSize: 16,
-              fontWeight: FontWeight.w400,
-              color: theme.colorScheme.onSurface,
-            ),
+            style: AppTextStyles.bodyLarge(context),
           ),
         ),
       ),

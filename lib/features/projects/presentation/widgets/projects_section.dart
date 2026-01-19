@@ -21,6 +21,7 @@ class ProjectsSection extends StatelessWidget {
           padding: const EdgeInsets.only(bottom: 60.0),
           child: AnimatedHeader(
             text: "Featured Projects",
+            hasSlideBoxAnimation: true,
             style: theme.textTheme.headlineLarge!.copyWith(
               fontWeight: FontWeight.bold,
               color: theme.colorScheme.primary,

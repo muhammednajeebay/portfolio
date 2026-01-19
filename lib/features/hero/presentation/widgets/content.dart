@@ -22,6 +22,7 @@ class WallText extends StatelessWidget {
         AnimatedText(
           text: heroInfo.greeting,
           delay: 0,
+          useSlideBoxAnimation: true,
           style: AppTextStyles.heroGreeting(context).copyWith(
             fontSize: isMobile ? 18 : 22,
           ),
@@ -30,6 +31,7 @@ class WallText extends StatelessWidget {
         AnimatedText(
           text: heroInfo.name,
           delay: 100,
+          useSlideBoxAnimation: true,
           style: AppTextStyles.heroName(context).copyWith(
             fontSize: isMobile ? 32 : 48,
             letterSpacing: -1.2,
@@ -53,6 +55,7 @@ class WallText extends StatelessWidget {
         AnimatedText(
           text: heroInfo.title,
           delay: 250,
+          useSlideBoxAnimation: true,
           style: AppTextStyles.heroTitle(context).copyWith(
             fontSize: isMobile ? 18 : 21,
           ),
@@ -61,6 +64,7 @@ class WallText extends StatelessWidget {
         AnimatedText(
           text: heroInfo.subtitle,
           delay: 280,
+          useSlideBoxAnimation: true,
           style: AppTextStyles.bodyLarge(context).copyWith(
             fontSize: isMobile ? 14 : 16,
           ),
@@ -74,6 +78,7 @@ class WallText extends StatelessWidget {
                 AnimatedText(
                   text: heroInfo.descriptionLines[index],
                   delay: 350 + (index * 30),
+                  useSlideBoxAnimation: true,
                   style: AppTextStyles.bodyMedium(context).copyWith(
                     color: context.appColors.bodyText.withOpacity(0.7),
                     height: 1.7,

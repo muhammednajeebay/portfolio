@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:portfolio/core/theme/app_theme.dart';
 import 'package:portfolio/shared/domain/entities/skill.dart';
+import 'package:portfolio/shared/presentation/widgets/slide_box_reveal_text.dart';
 
 class SkillsSection extends StatelessWidget {
   final List<Skill> skills;
@@ -17,23 +18,23 @@ class SkillsSection extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          "What I use.",
-          style: GoogleFonts.outfit(
-            fontSize: isMobile ? 32 : 48,
-            fontWeight: FontWeight.bold,
-            color: theme.colorScheme.onSurface,
+        SlideBoxRevealTextOnScroll(
+          boxColor: theme.colorScheme.onSurface,
+          child: Text(
+            "What I use.",
+            style: AppTextStyles.displaySmall(context).copyWith(
+              fontSize: isMobile ? 32 : 48,
+            ),
           ),
-        ).animate().fadeIn(duration: 600.ms).slideY(begin: 0.1),
+        ),
         const SizedBox(height: 24),
         Opacity(
           opacity: 0.7,
           child: Text(
             "I use a number of tools to aid my creative process when bringing things to life. Listed below are the tools and technologies that I have used over the years.",
-            style: GoogleFonts.outfit(
+            style: AppTextStyles.bodyLarge(context).copyWith(
               fontSize: 18,
               height: 1.6,
-              color: theme.colorScheme.onSurface,
             ),
           ),
         ).animate().fadeIn(delay: 200.ms).slideY(begin: 0.1),
@@ -117,7 +118,7 @@ class _SkillGroupTileState extends State<_SkillGroupTile> {
                   children: [
                     AnimatedDefaultTextStyle(
                       duration: const Duration(milliseconds: 200),
-                      style: GoogleFonts.outfit(
+                      style: AppTextStyles.bodyLarge(context).copyWith(
                         fontSize: 18,
                         fontWeight: FontWeight.w600,
                         color: colors.onSurface
@@ -131,18 +132,15 @@ class _SkillGroupTileState extends State<_SkillGroupTile> {
                       opacity: _isHovered ? 1.0 : 0.5,
                       child: Text(
                         widget.skill.description,
-                        style: GoogleFonts.outfit(
+                        style: AppTextStyles.bodySmall(context).copyWith(
                           fontSize: 13,
-                          color: colors.onSurface,
                         ),
                       ),
                     ),
                     const Spacer(),
                     Text(
                       widget.skill.items.join(' · '),
-                      style: GoogleFonts.outfit(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w400,
+                      style: AppTextStyles.bodyMedium(context).copyWith(
                         height: 1.4,
                         color: colors.onSurface.withOpacity(0.9),
                       ),

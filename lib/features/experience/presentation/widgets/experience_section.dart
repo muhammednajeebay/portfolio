@@ -27,16 +27,17 @@ class ExperienceSection extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 40.0),
-                        child: AnimatedHeader(
-                          text: "Timeline.",
-                          style: theme.textTheme.headlineLarge!.copyWith(
-                            fontWeight: FontWeight.bold,
-                            color: colors.primary,
-                          ),
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 40.0),
+                      child: AnimatedHeader(
+                        text: "Timeline.",
+                        hasSlideBoxAnimation: true,
+                        style: theme.textTheme.headlineLarge!.copyWith(
+                          fontWeight: FontWeight.bold,
+                          color: colors.primary,
                         ),
                       ),
+                    ),
                     const SizedBox(height: 24),
                     ...experiences.asMap().entries.map((entry) {
                       final index = entry.key;
