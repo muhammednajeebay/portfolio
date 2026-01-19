@@ -34,13 +34,26 @@ class AppRouter {
       ),
       GoRoute(
         path: '/',
-        builder: (context, state) => HomePage(
-          getProjects: getProjects,
-          getSkills: getSkills,
-          getExperiences: getExperiences,
-          getAboutInfo: getAboutInfo,
-          getHeroInfo: getHeroInfo,
-        ),
+        pageBuilder: (context, state) {
+          return CustomTransitionPage(
+            key: state.pageKey,
+            child: HomePage(
+              getProjects: getProjects,
+              getSkills: getSkills,
+              getExperiences: getExperiences,
+              getAboutInfo: getAboutInfo,
+              getHeroInfo: getHeroInfo,
+            ),
+            transitionsBuilder:
+                (context, animation, secondaryAnimation, child) {
+              return FadeTransition(
+                opacity: CurveTween(curve: Curves.easeInOut).animate(animation),
+                child: child,
+              );
+            },
+            transitionDuration: const Duration(milliseconds: 1200),
+          );
+        },
       ),
       GoRoute(
         path: '/project-details',
