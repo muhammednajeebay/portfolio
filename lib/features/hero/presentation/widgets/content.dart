@@ -21,7 +21,7 @@ class WallText extends StatelessWidget {
       children: [
         AnimatedText(
           text: heroInfo.greeting,
-          delay: 0,
+          delay: 700,
           useSlideBoxAnimation: true,
           style: AppTextStyles.heroGreeting(context).copyWith(
             fontSize: isMobile ? 18 : 22,
@@ -30,7 +30,7 @@ class WallText extends StatelessWidget {
         const SizedBox(height: 6),
         AnimatedText(
           text: heroInfo.name,
-          delay: 100,
+          delay: 750,
           useSlideBoxAnimation: true,
           style: AppTextStyles.heroName(context).copyWith(
             fontSize: isMobile ? 32 : 48,
@@ -40,7 +40,7 @@ class WallText extends StatelessWidget {
         const SizedBox(height: 18),
         AnimatedText(
           text: '',
-          delay: 200,
+          delay: 800,
           style: const TextStyle(),
           child: Container(
             height: 2.5,
@@ -54,7 +54,7 @@ class WallText extends StatelessWidget {
         const SizedBox(height: 18),
         AnimatedText(
           text: heroInfo.title,
-          delay: 250,
+          delay: 800,
           useSlideBoxAnimation: true,
           style: AppTextStyles.heroTitle(context).copyWith(
             fontSize: isMobile ? 18 : 21,
@@ -63,7 +63,7 @@ class WallText extends StatelessWidget {
         const SizedBox(height: 4),
         AnimatedText(
           text: heroInfo.subtitle,
-          delay: 280,
+          delay: 800,
           useSlideBoxAnimation: true,
           style: AppTextStyles.bodyLarge(context).copyWith(
             fontSize: isMobile ? 14 : 16,
@@ -77,7 +77,7 @@ class WallText extends StatelessWidget {
               children: [
                 AnimatedText(
                   text: heroInfo.descriptionLines[index],
-                  delay: 350 + (index * 30),
+                  delay: 800 + (index * 30),
                   useSlideBoxAnimation: true,
                   style: AppTextStyles.bodyMedium(context).copyWith(
                     color: context.appColors.bodyText.withOpacity(0.7),
