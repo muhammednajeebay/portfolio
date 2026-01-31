@@ -17,6 +17,36 @@ class PortfolioLocalDataSourceImpl implements PortfolioLocalDataSource {
   Future<List<ProjectModel>> getProjects() async {
     return [
       const ProjectModel(
+        title: 'Device Info',
+        status: 'completed',
+        description:
+            'A premium device information dashboard built with Flutter, delivering real-time hardware insights through custom-rendered visualizations. Designed with Clean Architecture and BLoC to ensure native-level accuracy, high performance, and long-term maintainability.',
+        imageUrl:
+            'https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1200&q=60',
+        technologies: [
+          'Flutter',
+          'Dart',
+          'BLoC',
+          'Method Channels',
+          'Event Channels',
+          'CustomPaint',
+          'Clean Architecture',
+          'flutter_animate',
+        ],
+        features: [
+          'Real-time monitoring of battery, CPU, RAM, storage, sensors, network, and location',
+          'High-performance visualizations using CustomPaint and canvas-level rendering',
+          'Direct native data access via Method and Event Channels (Android & iOS)',
+          'Feature-based BLoCs with reactive throttling for UI and battery efficiency',
+          'Accessibility-aware UI with reduced-motion and battery-saver optimizations',
+        ],
+        links: {
+          'github': 'https://github.com/muhammednajeebay/device-intel',
+        },
+        category: 'System Utilities',
+        primaryColor: '#00E5FF',
+      ),
+      const ProjectModel(
         title: 'Task Matrix',
         status: 'in-progress',
         description:
