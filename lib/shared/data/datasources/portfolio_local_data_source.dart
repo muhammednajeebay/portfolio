@@ -41,7 +41,7 @@ class PortfolioLocalDataSourceImpl implements PortfolioLocalDataSource {
           'Accessibility-aware UI with reduced-motion and battery-saver optimizations',
         ],
         links: {
-          'github': 'https://github.com/muhammednajeebay/device-intel',
+          'github': 'https://github.com/muhammednajeebay/device_info',
         },
         category: 'System Utilities',
         primaryColor: '#00E5FF',
